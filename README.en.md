@@ -62,7 +62,9 @@ The list includes conversations available through this computer's Codex. “Sour
 
 Listing, previewing and linking neither call the model nor change research data. Sending a message or choosing **Organize and import** invokes the signed-in Codex using its existing account allowance without an API key. Refresh expired previews. Retrying the same request does not create duplicate links or import tasks; later imports still compare facts and sources against existing records. Research progress is saved only after the CLI workflow and readback succeed.
 
-### If a Windows chat cannot be read
+### If a Codex chat cannot be read
+
+The AI Assistant prefers a compatible desktop-bundled Codex CLI: Windows uses the desktop CLI already advertised in PATH; macOS checks Codex.app, then ChatGPT.app, before falling back to PATH. Linux keeps PATH discovery. To choose an installation explicitly, set the server-side `PHD_CODEX_PATH` to an existing absolute executable path before starting the workbench, for example `PHD_CODEX_PATH="/path/to/codex" node server.mjs` on macOS/Linux. An invalid explicit path does not silently select another CLI. This does not change the global PATH or install/upgrade Codex.
 
 Older workspace versions reported “Update Codex” for several different history-read failures. That message alone does not establish an outdated installation. Even a recent Codex can hold older-format chats without support for message-by-message pagination, so updating Codex alone may not resolve it. The current reader tries alternate read-only interfaces when a method is explicitly unsupported, and distinguishes unsupported reading, failed reading and oversized responses. After updating this workspace, restart its service with the original data directory and refresh the page.
 
