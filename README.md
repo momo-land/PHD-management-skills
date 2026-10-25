@@ -39,14 +39,6 @@ npm start
 
 如果页面打不开，先确认启动终端仍在运行。更新项目代码后，先停止旧服务，再重新运行启动脚本或 `npm start`，最后刷新网页；只刷新页面可能仍连着旧服务，导致新功能提示“接口不存在”。重启时继续使用原来的数据目录，无需删除数据。
 
-## 中英文切换
-
-右上角「语言 / Language」可选择 **中文** 或 **English**，浏览器会记住选择。切换时保留当前页面、课题、搜索与状态筛选；六种外观风格都支持英文。导航、表单、提示、周报、39 个技能入口和 75 条操作指令均有英文版本；10 个 GitHub 原版包的源文件保留原始语言。用户录入的研究标题、原文、结果与证据保持原样。
-
-激活 `phd-manager` 后，可以在 AI 对话中直接输入 `Update progress`、`Import progress`、`Update paper progress`、`Update experiment progress`、`Summarize advisor feedback` 或 `Generate weekly report`。技能按用户语言答复并执行同一套更新流程。
-
-命令行生成英文周报：`node cli.mjs report --lang en`；不指定语言时保持中文。
-
 ## 你可以做什么
 
 | 页面 | 用途 |
