@@ -1,0 +1,4 @@
+interface:
+  display_name: "论文精读与方法拆解"
+  short_description: "拆解真实论文的问题、假设、方法和证据，形成可回查的精读笔记"
+  default_prompt: "请使用 $phd-paper-reading，精读我提供的论文，拆解方法与证据，给出可回查位置、局限和不懂的关键点。"

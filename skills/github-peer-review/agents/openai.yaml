@@ -1,0 +1,4 @@
+interface:
+  display_name: "GitHub · 论文自查"
+  short_description: "引入 K-Dense 原版科研技能，按实际工具条件处理材料并保留证据与来源"
+  default_prompt: "请使用 $github-peer-review，读取本项目保留的 GitHub 原版技能及本次任务所需参考资料，检查实际工具条件后处理我的材料，明确已执行与未执行部分。"

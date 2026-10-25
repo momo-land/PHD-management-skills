@@ -1,0 +1,4 @@
+interface:
+  display_name: "系统综述与证据筛选"
+  short_description: "整理可追溯的检索、去重、纳排理由和证据提取，保留实际筛选范围"
+  default_prompt: "请使用 $phd-systematic-review，围绕我的研究问题制定检索与筛选方案，区分建议检索和实际已检索。"

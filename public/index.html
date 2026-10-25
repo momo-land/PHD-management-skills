@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="sage">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f6f2">
+  <meta name="description" content="PHD-management-skills，本地优先的科研工作台。管理课题、论文、实验和导师反馈，与本地 AI 共享科研状态。" data-i18n-content="PHD-management-skills，本地优先的科研工作台。管理课题、论文、实验和导师反馈，与本地 AI 共享科研状态。">
+  <title>Research Desk · PHD-management-skills</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%231e5549'/%3E%3Cpath d='M9 23V9h7a5 5 0 0 1 0 10H9m7 0 7 4' fill='none' stroke='white' stroke-width='2.5'/%3E%3C/svg%3E">
+  <script src="./file-entry.js" defer></script>
+  <script src="/theme.js"></script>
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/design-themes.css">
+  <link rel="stylesheet" href="/appearance.css">
+  <link rel="stylesheet" href="/assistant.css">
+  <script src="/app.js" type="module"></script>
+</head>
+<body>
+  <section id="file-entry-help" hidden aria-labelledby="file-entry-title">
+    <p id="file-entry-brand">Research Desk</p>
+    <h1 id="file-entry-title">请打开本地工作台</h1>
+    <p>你现在打开的是网页文件。请通过下面的地址进入工作台，才能读取研究记录和连接 Codex。</p>
+    <p lang="en"><strong>Open your local workspace</strong><br>You opened the page file. Use the link below to view your research records and connect to Codex.</p>
+    <a id="file-entry-link" href="http://127.0.0.1:4318/#assistant">打开工作台 · Open workspace</a>
+    <p id="file-entry-note">如果仍无法打开，请先启动本地工作台，再点击上面的链接。<br><span lang="en">If it still will not open, start the local workspace and try the link again.</span></p>
+  </section>
+  <a class="skip-link" href="#main" data-i18n="跳转到主要内容">跳转到主要内容</a>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="主导航" data-i18n-aria-label="主导航">
+      <a class="brand" href="#overview" aria-label="Research Desk 科研总览" data-i18n-aria-label="Research Desk 科研总览">
+        <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M9 24V8h7a5.5 5.5 0 0 1 0 11H9m7 0 8 5"/></svg></span>
+        <span><strong>Research Desk</strong><small>PHD-management-skills</small></span>
+      </a>
+      <div class="workspace-label"><span data-i18n="课题范围">课题范围</span> <span class="local-pill" data-i18n="本地">本地</span></div>
+      <label class="sr-only" for="project-select" data-i18n="按课题筛选">按课题筛选</label>
+      <select id="project-select" class="project-select"><option value="" data-i18n="全部课题">全部课题</option></select>
+      <nav id="primary-nav" class="primary-nav"></nav>
+      <div class="sidebar-bottom">
+        <button class="side-utility" data-action="navigate" data-view="projects" id="project-manage"></button>
+        <button class="side-utility" data-action="data" id="data-manage"></button>
+        <div class="local-status"><span class="status-dot" id="connection-dot"></span><span id="connection-label" data-i18n="正在连接本地工作台">正在连接本地工作台</span></div>
+        <p class="sidebar-footnote"><span data-i18n="研究记录保存在本机">研究记录保存在本机</span><br><span data-i18n="与本地 AI 共用一份进度">与本地 AI 共用一份进度</span></p>
+      </div>
+    </aside>
+    <div class="workspace">
+      <header class="topbar">
+        <div class="breadcrumb"><span id="breadcrumb-current" data-i18n="科研总览">科研总览</span></div>
+        <div class="topbar-right"><span class="top-date" id="top-date"></span><span class="sync-status" id="sync-status" data-i18n="等待同步">等待同步</span><button id="appearance-trigger" type="button" aria-haspopup="dialog" aria-controls="appearance-dialog"></button><label class="lang-picker"><span data-i18n="语言">语言</span><select id="language-select" aria-label="界面语言" data-i18n-aria-label="界面语言"><option value="zh" data-i18n="中文">中文</option><option value="en">English</option></select></label></div>
+      </header>
+      <main id="main" tabindex="-1">
+        <div id="connection-banner" class="connection-banner" hidden></div>
+        <div class="page-heading"><div><h1 id="page-title" data-i18n="科研总览">科研总览</h1><p id="page-description"></p></div><div class="heading-actions"><button class="button button-secondary" data-action="report" id="report-button"></button><button class="button button-primary" data-action="new" id="new-button"></button></div></div>
+        <div id="toolbar" class="toolbar" hidden></div>
+        <div id="content" aria-live="off"><div class="loading"><div class="loading-ring"></div><p data-i18n="正在打开你的研究空间…">正在打开你的研究空间…</p></div></div>
+        <footer class="page-footer"><span>PHD-management-skills</span><span data-i18n="每一步研究，都有迹可循。">每一步研究，都有迹可循。</span></footer>
+      </main>
+    </div>
+  </div>
+  <dialog id="editor-dialog" aria-label="编辑研究记录" data-i18n-aria-label="编辑研究记录" class="app-dialog"><div id="editor-content"></div></dialog>
+  <dialog id="detail-dialog" aria-label="研究记录详情" data-i18n-aria-label="研究记录详情" class="app-dialog"><div id="detail-content"></div></dialog>
+  <dialog id="confirm-dialog" aria-label="确认操作" data-i18n-aria-label="确认操作" class="app-dialog compact-dialog"><div id="confirm-content"></div></dialog>
+  <dialog id="data-dialog" aria-label="数据与备份" data-i18n-aria-label="数据与备份" class="app-dialog"><div id="data-content"></div></dialog>
+  <dialog id="report-dialog" aria-label="研究周报" data-i18n-aria-label="研究周报" class="app-dialog wide-dialog"><div id="report-content"></div></dialog>
+  <dialog id="skill-dialog" aria-label="科研技能详情" data-i18n-aria-label="科研技能详情" class="app-dialog wide-dialog"><div id="skill-content"></div></dialog>
+  <dialog id="command-dialog" aria-label="AI 对话指令" data-i18n-aria-label="AI 对话指令" class="app-dialog wide-dialog"><div id="command-content"></div></dialog>
+  <dialog id="appearance-dialog" class="app-dialog appearance-dialog"></dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+</body>
+</html>

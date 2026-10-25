@@ -1,0 +1,4 @@
+interface:
+  display_name: "导师指导"
+  short_description: "整理真实导师反馈与行动，或提供明确标注为 AI 的科研指导建议"
+  default_prompt: "请使用 $phd-advisor 审视当前研究状态并保存 AI 建议；真实导师意见请另行记录。"

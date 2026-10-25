@@ -1,0 +1,4 @@
+interface:
+  display_name: "开题与研究计划"
+  short_description: "将研究问题连接到方法、证据、里程碑与备选方案，形成可评审计划"
+  default_prompt: "请使用 $phd-proposal，依据现有材料起草开题计划，明确问题、方法、里程碑、风险与待补证据。"

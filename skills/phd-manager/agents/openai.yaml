@@ -1,0 +1,4 @@
+interface:
+  display_name: "科研工作台"
+  short_description: "直接响应对话内的一键更新与导入口令，持续管理真实科研进展"
+  default_prompt: "请使用 $phd-manager 管理科研工作台，并直接执行我在当前对话中的一键更新或导入口令。"

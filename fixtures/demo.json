@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "projects": [
+    {
+      "id": "project-demo", "title": "面向科研的可信 AI 工作流", "field": "人工智能 · 科研方法",
+      "description": "一个用于熟悉 Research Desk 的演示课题。所有论文、实验、会议和结果均为示例，不代表真实科研工作。",
+      "goal": "探索从文献证据到实验记录的可追溯研究流程，建立可复现的评估方法。",
+      "status": "active", "targetDate": "2027-06-30", "origin": "demo", "notes": "从左上角新建你的课题，或使用清除示例开始。"
+    }
+  ],
+  "papers": [
+    {
+      "id": "paper-evidence", "projectId": "project-demo", "title": "让科研推理回到证据：一种可追溯的研究工作流",
+      "status": "drafting", "venue": "目标会议待定", "dueDate": "2026-11-18", "progress": 58,
+      "sections": [{"name":"摘要","status":"drafting"},{"name":"引言","status":"done"},{"name":"相关工作","status":"done"},{"name":"方法","status":"drafting"},{"name":"实验","status":"todo"},{"name":"讨论","status":"todo"}],
+      "experimentIds": [], "literatureIds": [], "origin": "demo", "notes": "演示论文。当前重点是方法描述与实验协议的一致性。"
+    },
+    {
+      "id": "paper-memory", "projectId": "project-demo", "title": "跨会话科研记忆的可靠性评估",
+      "status": "outline", "venue": "研究短文", "dueDate": "2026-12-12", "progress": 22,
+      "sections": [{"name":"研究问题","status":"done"},{"name":"评估框架","status":"drafting"},{"name":"实验设计","status":"todo"}],
+      "experimentIds": [], "literatureIds": [], "origin": "demo", "notes": "演示论文。需要明确记忆质量、证据追溯和更新一致性的指标。"
+    },
+    {
+      "id": "paper-survey", "projectId": "project-demo", "title": "AI 辅助科研工具的证据与方法综述",
+      "status": "revising", "venue": "课题组内部报告", "dueDate": "2026-10-28", "progress": 82,
+      "sections": [{"name":"检索策略","status":"done"},{"name":"分类框架","status":"done"},{"name":"工具比较","status":"done"},{"name":"局限性","status":"drafting"}],
+      "experimentIds": [], "literatureIds": [], "origin": "demo", "notes": "演示论文。补充纳入/排除标准，避免将工具宣传等同于已验证能力。"
+    }
+  ],
+  "experiments": [
+    {
+      "id": "experiment-baseline", "projectId": "project-demo", "paperId": "paper-evidence", "title": "证据检索基线对照",
+      "status": "completed", "hypothesis": "带来源约束的检索流程可能改善证据可追溯性。", "method": "示例协议：固定问题集，对比两种检索流程，保留每个答案的来源记录。",
+      "metric": "证据覆盖率 / 来源可定位率", "baseline": "基础检索流程", "result": "演示结论：已形成基线记录模板，后续需用真实数据完成评估。没有实际指标。",
+      "artifactPath": "", "dueDate": "2026-10-20", "evidence": "仅为界面演示；不对应真实运行记录，不可用于论文。", "origin": "demo", "notes": "所有内容都是演示数据。"
+    },
+    {
+      "id": "experiment-ablation", "projectId": "project-demo", "paperId": "paper-evidence", "title": "来源约束的消融实验",
+      "status": "running", "hypothesis": "移除来源约束后，答案与原始证据的一致性可能降低。", "method": "保持问题集、模型和参数一致，仅改变是否启用来源约束。",
+      "metric": "可追溯率与引用准确率", "baseline": "带来源约束的完整流程", "result": "", "artifactPath": "", "dueDate": "2026-10-26", "evidence": "演示状态：没有真实后台任务运行。", "origin": "demo", "notes": "运行中仅展示状态样式，系统不会自动启动实验。"
+    },
+    {
+      "id": "experiment-memory", "projectId": "project-demo", "paperId": "paper-memory", "title": "跨会话状态恢复测试",
+      "status": "planned", "hypothesis": "结构化研究记录可以减少跨会话事实遗漏。", "method": "准备同一组科研记录，对比有无结构化状态时的恢复完整性。",
+      "metric": "状态恢复完整性", "baseline": "仅聊天上下文", "result": "", "artifactPath": "", "dueDate": "2026-11-03", "evidence": "", "origin": "demo", "notes": "待确定真实样本和评价标准。"
+    }
+  ],
+  "meetings": [
+    {
+      "id": "meeting-weekly", "projectId": "project-demo", "title": "周三课题讨论", "date": "2026-10-21", "attendees": "博士生、导师（示例）",
+      "summary": "围绕研究问题、对照设计和论文主线讨论。", "feedback": "先明确什么证据可以反驳研究假设；不要只报告有利结果。方法章节需与实验协议逐项对应。",
+      "nextSteps": "补齐消融实验的对照条件；整理下一次会议需要讨论的两个决策。", "origin": "demo", "notes": "虚构会议，仅用于演示真实导师反馈与AI建议的区别。"
+    },
+    {
+      "id": "meeting-planning", "projectId": "project-demo", "title": "月度研究计划复盘", "date": "2026-10-14", "attendees": "课题组（示例）",
+      "summary": "拆分两篇研究论文与一份方法综述的阶段目标。", "feedback": "优先推进主论文，第二篇论文暂时收敛到评估框架。",
+      "nextSteps": "将关键里程碑拆成一周内可交付的具体任务。", "origin": "demo", "notes": "虚构会议记录。"
+    }
+  ],
+  "tasks": [
+    {"id":"task-method","projectId":"project-demo","paperId":"paper-evidence","meetingId":"meeting-weekly","title":"完成方法章节的证据链说明","status":"in_progress","priority":"high","dueDate":"2026-10-23","evidence":"","origin":"demo","notes":"交付物：可审阅的方法章节草稿与一张流程图。"},
+    {"id":"task-ablation","projectId":"project-demo","experimentId":"experiment-ablation","meetingId":"meeting-weekly","title":"补齐消融实验的对照条件","status":"todo","priority":"high","dueDate":"2026-10-24","evidence":"","origin":"demo","notes":"先确认数据划分、随机种子与评估口径。"},
+    {"id":"task-survey","projectId":"project-demo","paperId":"paper-survey","title":"补充综述的文献筛选标准","status":"todo","priority":"medium","dueDate":"2026-10-26","evidence":"","origin":"demo","notes":"明确纳入与排除理由。"},
+    {"id":"task-data","projectId":"project-demo","experimentId":"experiment-memory","title":"确定状态恢复测试的样本来源","status":"blocked","priority":"high","dueDate":"2026-10-29","evidence":"","origin":"demo","notes":"阻塞：样本范围尚未确定，需要会议讨论。"},
+    {"id":"task-baseline","projectId":"project-demo","experimentId":"experiment-baseline","title":"整理基线实验记录模板","status":"done","priority":"medium","dueDate":"2026-10-20","evidence":"示例交付，未生成真实实验结果。","origin":"demo","notes":"模板包含参数、运行环境、产物路径与局限。"},
+    {"id":"task-reading","projectId":"project-demo","title":"完成首轮相关工作分类","status":"done","priority":"low","dueDate":"2026-10-19","evidence":"演示文献分类，不代表真实阅读。","origin":"demo","notes":"按研究问题、方法与证据组织阅读记录。"}
+  ],
+  "literature": [
+    {"id":"lit-evidence","projectId":"project-demo","title":"示例文献：语言模型的证据归因与验证","authors":"示例作者","year":2026,"url":"","doi":"","status":"read","relevance":"主论文的方法设计","takeaway":"阅读时区分来源存在、来源可访问和来源支持主张。","evidence":"虚构条目，请替换为核验过的真实文献。","origin":"demo","notes":"非真实出版物。"},
+    {"id":"lit-memory","projectId":"project-demo","title":"示例文献：长期科研任务中的外部记忆","authors":"示例作者","year":2026,"url":"","doi":"","status":"reading","relevance":"跨会话状态恢复研究","takeaway":"","evidence":"虚构条目。","origin":"demo","notes":"非真实出版物。"},
+    {"id":"lit-eval","projectId":"project-demo","title":"示例文献：可复现的智能体评估协议","authors":"示例作者","year":2025,"url":"","doi":"","status":"to_read","relevance":"实验评价指标","takeaway":"","evidence":"虚构条目。","origin":"demo","notes":"非真实出版物。"}
+  ],
+  "reviews": [
+    {"id":"review-design","projectId":"project-demo","title":"研究设计的第二意见","focus":"对照实验与可证伪性","assessment":"示例建议：现有设计需要更清晰地区分检索质量与生成质量。","recommendations":"明确主要评价指标；固定对照变量；预先记录失败判据；将负结果一并保留。","evidence":"基于演示记录生成的示例意见，没有实际模型评审。","origin":"demo","notes":"AI建议展示示例，不是导师真实意见。"}
+  ]
+}

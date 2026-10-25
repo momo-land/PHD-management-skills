@@ -1,0 +1,4 @@
+interface:
+  display_name: "统计分析"
+  short_description: "根据研究设计选择统计方法，检查假设、效应量与不确定性，区分分析计划和实际计算结果"
+  default_prompt: "请使用 $phd-statistics。请根据我的研究问题、数据结构和实验设计制定统计分析方案，说明假设、效应量、缺失值和多重比较的处理。"

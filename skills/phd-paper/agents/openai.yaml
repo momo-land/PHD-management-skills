@@ -1,0 +1,4 @@
+interface:
+  display_name: "论文写作"
+  short_description: "基于已有研究材料起草和修订论文，同步章节状态并标明证据缺口"
+  default_prompt: "请使用 $phd-paper 阅读当前论文和研究证据，推进我指定章节的写作或修订。"

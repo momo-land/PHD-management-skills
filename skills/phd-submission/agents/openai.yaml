@@ -1,0 +1,4 @@
+interface:
+  display_name: "投稿准备与期刊匹配"
+  short_description: "核对当前投稿要求、候选匹配与材料完整性，准备可审查的投稿文件"
+  default_prompt: "请使用 $phd-submission，结合论文内容和我的约束比较投稿候选，核验官方要求与费用，未核实项明确标出。"

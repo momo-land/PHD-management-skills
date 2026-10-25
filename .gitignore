@@ -1,0 +1,11 @@
+node_modules/
+data/
+backups/
+.DS_Store
+*.log
+.env
+.env.*
+!.env.example
+coverage/
+.playwright/
+artifacts/qa/

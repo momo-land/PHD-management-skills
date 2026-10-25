@@ -1,0 +1,4 @@
+interface:
+  display_name: "科研资料管理"
+  short_description: "整理科研资料目录、数据字典、版本与备份计划，保持来源和关联，不擅自删除或上传原始材料"
+  default_prompt: "请使用 $phd-data-management。请梳理指定课题目录，生成资料索引、版本关系和可逆整理方案，保留原始文件与现有引用。"

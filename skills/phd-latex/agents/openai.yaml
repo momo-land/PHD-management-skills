@@ -1,0 +1,4 @@
+interface:
+  display_name: "LaTeX 排版与排错"
+  short_description: "维护多文件 LaTeX 论文、参考文献和编译错误，保留模板与真实内容并核验生成结果"
+  default_prompt: "请使用 $phd-latex。请检查这个 LaTeX 项目的主文件与编译日志，保留原模板，修复根因并重新验证编译结果。"

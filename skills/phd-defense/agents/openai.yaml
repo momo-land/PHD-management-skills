@@ -1,0 +1,4 @@
+interface:
+  display_name: "答辩准备与模拟问答"
+  short_description: "依据真实论文准备答辩提纲和问答，给出明确标注的模拟演练反馈"
+  default_prompt: "请使用 $phd-defense，依据我的论文准备答辩提纲、关键追问和证据支持的回答，明确局限与待补材料。"

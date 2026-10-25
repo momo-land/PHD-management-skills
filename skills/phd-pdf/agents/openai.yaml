@@ -1,0 +1,4 @@
+interface:
+  display_name: "论文 PDF 提取"
+  short_description: "从可访问 PDF 提取带页码的段落、表格和证据，区分文本、扫描与 OCR 误差，不冒充全文阅读"
+  default_prompt: "请使用 $phd-pdf。请从这个 PDF 提取与研究问题有关的证据，标注页码、表格与实际读取范围，明确 OCR 或排版造成的不确定性。"

@@ -1,0 +1,4 @@
+interface:
+  display_name: "文献与证据"
+  short_description: "核验文献来源并整理实际阅读记录，连接论文与可追溯的研究证据"
+  default_prompt: "请使用 $phd-literature 核验我提供的文献并更新阅读台账与相关论文关联。"

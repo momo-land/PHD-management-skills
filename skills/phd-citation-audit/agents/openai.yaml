@@ -1,0 +1,4 @@
+interface:
+  display_name: "引文与参考文献核验"
+  short_description: "核验引用身份、书目一致性与正文主张支持，区分错误和待核实内容"
+  default_prompt: "请使用 $phd-citation-audit，检查稿件引用与书目，核验关键主张的来源支持，区分已确认错误和未核实项。"

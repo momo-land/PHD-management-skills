@@ -1,0 +1,4 @@
+interface:
+  display_name: "科研图表"
+  short_description: "从真实数据生成可复现科研图表，检查坐标、单位、误差线、分组与图注，保留绘图源代码"
+  default_prompt: "请使用 $phd-visualization。请用实际数据绘制适合论文的图表，保留绘图代码，标注单位、样本量与误差线含义，并检查导出效果。"

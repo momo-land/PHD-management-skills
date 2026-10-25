@@ -1,0 +1,4 @@
+interface:
+  display_name: "学术海报"
+  short_description: "依据真实研究制作会议海报，适配尺寸、阅读顺序、图表、来源和打印导出要求"
+  default_prompt: "请使用 $phd-poster。请根据我的真实论文内容和会议要求制作学术海报，突出核心发现，保留作者、来源和局限。"

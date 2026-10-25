@@ -1,0 +1,4 @@
+interface:
+  display_name: "学位论文统稿"
+  short_description: "把已有研究连成学位论文主线，核对跨章术语、结果、引用与贡献"
+  default_prompt: "请使用 $phd-thesis，根据真实研究工作规划学位论文，明确总问题、章节贡献、衔接逻辑和证据缺口。"

@@ -1,0 +1,4 @@
+interface:
+  display_name: "科研代码检查"
+  short_description: "检查实验代码中的数据泄漏、指标实现、随机性与可复现性，用小样例验证关键科研逻辑"
+  default_prompt: "请使用 $phd-research-code。请检查实验代码的数据划分、指标、随机性和可复现性，用具体位置与证据报告可能影响结论的问题。"

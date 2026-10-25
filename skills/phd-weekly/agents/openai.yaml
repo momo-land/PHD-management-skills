@@ -1,0 +1,4 @@
+interface:
+  display_name: "科研周报"
+  short_description: "依据实际进展生成科研周报，区分本期变化、累计状态与下期建议"
+  default_prompt: "请使用 $phd-weekly 为当前项目生成一份有证据、注明报告期的科研周报。"

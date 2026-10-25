@@ -1,0 +1,4 @@
+interface:
+  display_name: "实验设计与结果"
+  short_description: "设计可检验的实验并登记实际结果，保留运行条件、基线和证据"
+  default_prompt: "请使用 $phd-experiment 为当前研究问题整理实验方案，或登记我提供的真实结果。"

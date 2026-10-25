@@ -1,0 +1,4 @@
+interface:
+  display_name: "数据质量检查"
+  short_description: "检查科研数据的缺失、重复、单位、泄漏和异常，产出可追溯问题清单与清洗建议"
+  default_prompt: "请使用 $phd-data-quality。请检查这份科研数据，保留原件，输出缺失、重复、单位、数据泄漏与异常问题及实际检查范围。"

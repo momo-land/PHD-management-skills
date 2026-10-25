@@ -1,0 +1,4 @@
+interface:
+  display_name: "组会与学术汇报"
+  short_description: "将真实研究材料组织成适合组会、会议或报告的演示文稿，按时长安排论点、图表和讲稿"
+  default_prompt: "请使用 $phd-slides。请把已有研究材料整理为组会汇报，突出真实进展、证据、阻塞和希望讨论的问题，并准备讲稿。"

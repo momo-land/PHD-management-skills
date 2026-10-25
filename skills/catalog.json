@@ -1,0 +1,1754 @@
+[
+  {
+    "id": "phd-manager",
+    "name": "科研工作台",
+    "description": "启动本地科研工作台，整理研究目标并进入合适的科研工作流程",
+    "category": "项目管理",
+    "prompt": "一键更新。请从当前可见对话提取真实科研新进展，匹配已有项目和记录，预检、批量保存并回读；没有新信息时直接说明。",
+    "path": "skills/phd-manager/SKILL.md",
+    "commands": [
+      {
+        "id": "update",
+        "label": "一键更新",
+        "description": "直接整理当前对话并同步真实科研进度",
+        "prompt": "一键更新。请从当前可见对话提取真实科研新进展，匹配已有项目和记录，预检、批量保存并回读；没有新信息时直接说明。",
+        "placeholder": "已有对话包含进展时可直接执行；也可补充项目名称或今天的工作。"
+      },
+      {
+        "id": "import",
+        "label": "一键导入",
+        "description": "将当前材料去重后合并到工作台",
+        "prompt": "一键导入。请读取我当前提供的科研材料，匹配现有记录，跳过重复事实，预检后合并保存并回读。",
+        "placeholder": "粘贴科研记录，或提供 Markdown、CSV、文件路径。"
+      },
+      {
+        "id": "overview",
+        "label": "查看科研状态",
+        "description": "汇总项目、待办与目前阻塞",
+        "prompt": "请读取当前科研状态，汇总论文、实验、待办与阻塞，并给出明确标注的下一步建议。",
+        "placeholder": "可补充项目名称；未指定时先查看已有真实项目。"
+      }
+    ],
+    "en": {
+      "name": "Research workspace",
+      "description": "Use chat shortcuts to update and import genuine research progress into the local workspace.",
+      "category": "Project management",
+      "prompt": "Update progress. Extract genuine research updates from the visible conversation, match existing projects and records, validate, apply a batch and read it back. If there is no new information, say so.",
+      "commands": [
+        {
+          "id": "update",
+          "label": "Update progress",
+          "description": "Use the visible chat to save genuine research updates.",
+          "prompt": "Update progress. Extract genuine research updates from the visible conversation, match existing projects and records, validate, apply a batch and read it back. If there is no new information, say so.",
+          "placeholder": "Use the progress already in this chat, or add a project name and a brief work update."
+        },
+        {
+          "id": "import",
+          "label": "Import progress",
+          "description": "Deduplicate supplied material and merge it into the workspace.",
+          "prompt": "Import progress. Read the research material I have provided, match existing records, skip duplicate facts, validate, merge and read back the saved changes.",
+          "placeholder": "Paste research notes or provide Markdown, CSV or file paths."
+        },
+        {
+          "id": "overview",
+          "label": "View research status",
+          "description": "Summarize projects, pending work and current blockers.",
+          "prompt": "Read the current research records and summarize papers, experiments, pending work and blockers, with clearly labeled suggestions for the next step.",
+          "placeholder": "Optionally name a project; otherwise inspect existing real projects first."
+        }
+      ]
+    }
+  },
+  {
+    "id": "phd-progress",
+    "name": "进度与任务",
+    "description": "在当前 AI 对话中一键更新科研进度，整理聊天或批量材料并自动同步工作台",
+    "category": "项目管理",
+    "prompt": "一键更新。请整理当前可见对话中的真实科研进展，匹配已有任务、论文和实验，只写入新变化，预检后批量保存并回读。",
+    "path": "skills/phd-progress/SKILL.md",
+    "commands": [
+      {
+        "id": "update",
+        "label": "一键更新",
+        "description": "使用当前聊天中的进展，直接完成同步",
+        "prompt": "一键更新。请整理当前可见对话中的真实科研进展，匹配已有任务、论文和实验，只写入新变化，预检后批量保存并回读。",
+        "placeholder": "例如：初稿已完成，数据划分说明待补，消融实验尚未运行。"
+      },
+      {
+        "id": "import",
+        "label": "一键导入材料",
+        "description": "遇到文件或结构化材料时进入导入工作流",
+        "prompt": "一键导入。请按导入工作流处理我当前提供的聊天记录、Markdown、CSV 或文件材料，去重匹配已有项，再预检并保存真实进度。",
+        "placeholder": "粘贴材料或提供文件路径；可注明目标项目。"
+      },
+      {
+        "id": "bulk",
+        "label": "批量更新进度",
+        "description": "将多条明确变化作为同一批次更新",
+        "prompt": "请批量更新这些科研进度：先读取相关记录和版本，保留旧备注与关联，预检后整体保存明确项并回读，仅询问不能判定的冲突项。",
+        "placeholder": "逐条列出任务、论文或实验的变化；可同时提供多个材料。"
+      }
+    ],
+    "en": {
+      "name": "Progress and tasks",
+      "description": "Update research progress from the visible chat or supplied material, then verify the saved changes.",
+      "category": "Project management",
+      "prompt": "Update progress. Organize genuine research updates from the visible conversation, match existing tasks, papers and experiments, and save only new changes after validating the batch. Read back the results.",
+      "commands": [
+        {
+          "id": "update",
+          "label": "Update progress",
+          "description": "Save progress already described in the current chat.",
+          "prompt": "Update progress. Organize genuine research updates from the visible conversation, match existing tasks, papers and experiments, and save only new changes after validating the batch. Read back the results.",
+          "placeholder": "For example: the first draft is complete, the data-split description needs work, and the ablation has not run."
+        },
+        {
+          "id": "import",
+          "label": "Import research material",
+          "description": "Route files and structured material through the import workflow.",
+          "prompt": "Import progress. Use the import workflow for the chat records, Markdown, CSV or files I have supplied. Deduplicate and match existing records, then validate and save genuine research updates.",
+          "placeholder": "Paste material or provide file paths; specify the project if needed."
+        },
+        {
+          "id": "bulk",
+          "label": "Update multiple records",
+          "description": "Apply several clear progress changes in one batch.",
+          "prompt": "Update these research records in a batch. Read current records and versions, preserve existing notes and links, validate, save the clear changes together and read them back. Ask only about unresolved conflicts.",
+          "placeholder": "List changes to tasks, papers or experiments, or supply several sources."
+        }
+      ]
+    }
+  },
+  {
+    "id": "phd-import",
+    "name": "一键导入",
+    "description": "从聊天、Markdown、CSV 或文件材料提取科研进度，去重并批量合并保存",
+    "category": "项目管理",
+    "prompt": "一键导入。请整理我当前提供的科研材料，匹配已有记录并去重合并，预检后保存明确事项，再回读确认。",
+    "path": "skills/phd-import/SKILL.md",
+    "commands": [
+      {
+        "id": "import",
+        "label": "一键导入",
+        "description": "将粘贴文本或当前聊天转为科研记录",
+        "prompt": "一键导入。请整理我当前提供的科研材料，匹配已有记录并去重合并，预检后保存明确事项，再回读确认。",
+        "placeholder": "粘贴研究笔记、进度表、组会记录或当前对话中的材料。"
+      },
+      {
+        "id": "files",
+        "label": "导入文件材料",
+        "description": "读取指定范围内可访问的文件",
+        "prompt": "请读取我提供的 Markdown、CSV 或其他可访问文件，提取真实科研信息并保留来源；匹配已有项、去重、预检后批量保存，无法读取的文件单独说明。",
+        "placeholder": "提供文件或目录路径，以及需要处理的范围和目标项目。"
+      },
+      {
+        "id": "merge",
+        "label": "再次导入与合并",
+        "description": "重复材料只合并新增事实，不重复建档",
+        "prompt": "请把这些材料与工作台已有记录合并：相同事实跳过，新增事实保留来源，旧值与材料有冲突时只询问不确定项，明确变化预检后保存。",
+        "placeholder": "提供更新后的同一材料或补充记录；可注明明确更正的字段。"
+      }
+    ],
+    "en": {
+      "name": "Import progress",
+      "description": "Extract research updates from chat, Markdown, CSV or files, deduplicate and merge them into existing records.",
+      "category": "Project management",
+      "prompt": "Import progress. Organize the research material I have provided, match existing records, deduplicate and merge it, then validate, save clear changes and read them back.",
+      "commands": [
+        {
+          "id": "import",
+          "label": "Import progress",
+          "description": "Turn supplied text or the visible chat into research records.",
+          "prompt": "Import progress. Organize the research material I have provided, match existing records, deduplicate and merge it, then validate, save clear changes and read them back.",
+          "placeholder": "Paste research notes, a progress table, meeting notes or material from this chat."
+        },
+        {
+          "id": "files",
+          "label": "Import files",
+          "description": "Read accessible files within the specified scope.",
+          "prompt": "Read the Markdown, CSV or other accessible files I have supplied. Extract genuine research facts with their sources, match existing records, deduplicate, validate and save a batch. Identify any files you could not read.",
+          "placeholder": "Provide file or directory paths, the intended scope and the target project."
+        },
+        {
+          "id": "merge",
+          "label": "Merge updated material",
+          "description": "Add new facts without duplicating previously imported records.",
+          "prompt": "Merge this material with existing workspace records. Skip identical facts, preserve sources for new information, and ask only about unresolved conflicts. Validate and save the clear changes.",
+          "placeholder": "Provide a revised source or additional notes, identifying any explicit corrections."
+        }
+      ]
+    }
+  },
+  {
+    "id": "phd-weekly",
+    "name": "科研周报",
+    "description": "依据实际进展生成科研周报，区分本期变化、累计状态与下期建议",
+    "category": "项目管理",
+    "prompt": "生成周报。请根据当前项目的真实记录生成最近七个日历日的科研周报，区分本期变化与累计状态，保留证据和待确认事项。",
+    "path": "skills/phd-weekly/SKILL.md",
+    "commands": [
+      {
+        "id": "weekly",
+        "label": "生成周报",
+        "description": "区分本期新增变化与当前累计状态",
+        "prompt": "生成周报。请根据当前项目的真实记录生成最近七个日历日的科研周报，区分本期变化与累计状态，保留证据和待确认事项。",
+        "placeholder": "可补充项目名称、报告期及周报保存位置。"
+      },
+      {
+        "id": "meeting",
+        "label": "准备组会汇报",
+        "description": "把实际进展与待讨论问题整理成汇报",
+        "prompt": "请基于当前科研记录准备组会汇报，写清实际进展、证据、阻塞和需要导师讨论的问题，建议与事实分别标注。",
+        "placeholder": "可补充汇报时长、听众和需要讨论的问题。"
+      }
+    ],
+    "en": {
+      "name": "Weekly report",
+      "description": "Build evidence-based reports that distinguish period changes, current status and suggested next steps.",
+      "category": "Project management",
+      "prompt": "Generate weekly report. Use the current project records to report the last seven calendar days, distinguishing period changes from cumulative status and preserving evidence and open questions.",
+      "commands": [
+        {
+          "id": "weekly",
+          "label": "Generate weekly report",
+          "description": "Separate changes this period from the current cumulative state.",
+          "prompt": "Generate weekly report. Use the current project records to report the last seven calendar days, distinguishing period changes from cumulative status and preserving evidence and open questions.",
+          "placeholder": "Optionally specify the project, reporting period and output location."
+        },
+        {
+          "id": "meeting",
+          "label": "Prepare a group update",
+          "description": "Present actual progress and questions for discussion.",
+          "prompt": "Prepare a group-meeting update from the current research records. Include actual progress, evidence, blockers and questions for the advisor, keeping facts and suggestions separate.",
+          "placeholder": "Optionally specify the presentation length, audience and questions to discuss."
+        }
+      ]
+    }
+  },
+  {
+    "id": "phd-paper",
+    "name": "论文写作",
+    "description": "基于已有研究材料起草和修订论文，同步章节状态并标明证据缺口",
+    "category": "论文写作",
+    "prompt": "请阅读当前论文和已有研究证据，起草我指定的章节；没有依据的结果或引用明确待补，并保存稿件与实际写作状态。",
+    "path": "skills/phd-paper/SKILL.md",
+    "commands": [
+      {
+        "id": "draft",
+        "label": "起草论文",
+        "description": "依照实际研究证据推进指定章节",
+        "prompt": "请阅读当前论文和已有研究证据，起草我指定的章节；没有依据的结果或引用明确待补，并保存稿件与实际写作状态。",
+        "placeholder": "指定论文、章节、目标语言和现有稿件路径。"
+      },
+      {
+        "id": "revise",
+        "label": "修订论文",
+        "description": "保留科学主张与来源，落实明确修改",
+        "prompt": "请根据我提供的意见修订当前论文，保留可追踪事实，解释涉及科学主张的变化，保存稿件并同步实际章节状态。",
+        "placeholder": "提供稿件路径、修改意见或审稿反馈。"
+      },
+      {
+        "id": "progress",
+        "label": "更新论文进度",
+        "description": "依据用户确认同步阶段和人工百分比",
+        "prompt": "更新论文进度。请使用当前可见对话中已确认的写作变化，匹配论文记录，保留章节和关联，预检后保存并回读；不自行估计百分比。",
+        "placeholder": "例如：方法部分完成，初稿进入修改阶段，自估进度 60%。"
+      }
+    ],
+    "en": {
+      "name": "Paper writing",
+      "description": "Draft and revise papers using actual research material, update sections and identify evidence gaps.",
+      "category": "Paper writing",
+      "prompt": "Read the current paper and available research evidence, then draft the section I specify. Mark unsupported results or citations as missing, save the manuscript and record its actual writing status.",
+      "commands": [
+        {
+          "id": "draft",
+          "label": "Draft a paper section",
+          "description": "Use actual research evidence to develop the requested section.",
+          "prompt": "Read the current paper and available research evidence, then draft the section I specify. Mark unsupported results or citations as missing, save the manuscript and record its actual writing status.",
+          "placeholder": "Specify the paper, section, target language and existing manuscript path."
+        },
+        {
+          "id": "revise",
+          "label": "Revise a paper",
+          "description": "Implement requested changes while preserving claims and sources.",
+          "prompt": "Revise the current paper using the feedback I provide. Preserve traceable facts, explain changes to scientific claims, save the manuscript and synchronize its actual section status.",
+          "placeholder": "Provide the manuscript path and revision requests or reviewer feedback."
+        },
+        {
+          "id": "progress",
+          "label": "Update paper progress",
+          "description": "Save confirmed stages and the user’s own progress estimate.",
+          "prompt": "Update paper progress. Use confirmed writing updates from the visible conversation to match the paper, preserve its sections and associations, validate, save and read it back. Do not invent a percentage.",
+          "placeholder": "For example: the methods section is complete, revision has started, and I estimate overall progress at 60%."
+        }
+      ]
+    }
+  },
+  {
+    "id": "phd-experiment",
+    "name": "实验设计与结果",
+    "description": "设计可检验的实验并登记实际结果，保留运行条件、基线和证据",
+    "category": "实验研究",
+    "prompt": "请依据当前研究问题整理可检验的实验方案，说明假设、基线、指标、条件和失败判定，将方案登记为计划而非已执行结果。",
+    "path": "skills/phd-experiment/SKILL.md",
+    "commands": [
+      {
+        "id": "plan",
+        "label": "设计实验",
+        "description": "将研究问题转为可验证方案",
+        "prompt": "请依据当前研究问题整理可检验的实验方案，说明假设、基线、指标、条件和失败判定，将方案登记为计划而非已执行结果。",
+        "placeholder": "补充研究问题、已有方法、数据和资源约束。"
+      },
+      {
+        "id": "results",
+        "label": "登记实验结果",
+        "description": "从真实结果材料中保存指标与证据",
+        "prompt": "请读取我提供的实验结果和日志，核对指标、基线、运行条件和来源，登记实际结果；没有结果证据时不要标记完成。",
+        "placeholder": "提供结果表、运行日志或明确的实验结果说明。"
+      },
+      {
+        "id": "progress",
+        "label": "更新实验进度",
+        "description": "区分计划、运行、受阻与实际完成",
+        "prompt": "更新实验进度。请根据当前对话和已有记录同步实验状态，明确实际运行到哪一步，保留来源；预检后保存并回读。",
+        "placeholder": "例如：协议已写好但尚未运行；或因数据缺失而受阻。"
+      }
+    ],
+    "en": {
+      "name": "Experiments and results",
+      "description": "Design testable experiments and record actual results with conditions, baselines and evidence.",
+      "category": "Experiments",
+      "prompt": "Use the current research question to develop a testable experimental plan with a hypothesis, baseline, metrics, conditions and failure criteria. Record it as planned work, not an executed result.",
+      "commands": [
+        {
+          "id": "plan",
+          "label": "Design an experiment",
+          "description": "Turn a research question into a testable plan.",
+          "prompt": "Use the current research question to develop a testable experimental plan with a hypothesis, baseline, metrics, conditions and failure criteria. Record it as planned work, not an executed result.",
+          "placeholder": "Add the research question, existing method, available data and resource constraints."
+        },
+        {
+          "id": "results",
+          "label": "Record experiment results",
+          "description": "Save metrics and evidence from actual result material.",
+          "prompt": "Read the results and logs I provide, check metrics, baselines, run conditions and sources, and record the actual outcomes. Do not mark an experiment complete without results and evidence.",
+          "placeholder": "Provide result tables, run logs or an explicit account of the experimental outcome."
+        },
+        {
+          "id": "progress",
+          "label": "Update experiment progress",
+          "description": "Distinguish planned, running, blocked and completed work.",
+          "prompt": "Update experiment progress. Use the current conversation and existing records to save the actual experimental status, explain what has run and preserve sources. Validate, save and read back.",
+          "placeholder": "For example: the protocol is written but the run has not started, or missing data is blocking the run."
+        }
+      ]
+    }
+  },
+  {
+    "id": "phd-advisor",
+    "name": "导师指导",
+    "description": "整理真实导师反馈与行动，或提供明确标注为 AI 的科研指导建议",
+    "category": "导师指导",
+    "prompt": "请整理我提供的真实导师反馈并保存，保留原意和来源；把已确认的行动建立为关联任务，不补造导师身份、日期或意见。",
+    "path": "skills/phd-advisor/SKILL.md",
+    "commands": [
+      {
+        "id": "feedback",
+        "label": "记录导师反馈",
+        "description": "保留真实意见并关联落实任务",
+        "prompt": "请整理我提供的真实导师反馈并保存，保留原意和来源；把已确认的行动建立为关联任务，不补造导师身份、日期或意见。",
+        "placeholder": "粘贴导师意见、会议纪要或提供记录文件。"
+      },
+      {
+        "id": "advice",
+        "label": "获取 AI 指导",
+        "description": "独立保存明确标注的研究建议",
+        "prompt": "请审视当前研究状态，给出有依据且可落实的 AI 研究建议，独立保存到建议记录，不归因为真实导师意见。",
+        "placeholder": "补充想解决的研究问题或当前最困难的决定。"
+      },
+      {
+        "id": "actions",
+        "label": "跟进导师任务",
+        "description": "检查真实反馈对应行动的实际进展",
+        "prompt": "请读取现有导师反馈与关联任务，根据当前对话核对落实进展，更新明确变化，列出尚待处理的事项。",
+        "placeholder": "可提供反馈记录名称和已完成工作的说明。"
+      }
+    ],
+    "en": {
+      "name": "Advisor guidance",
+      "description": "Record genuine advisor feedback and follow-up actions, or save clearly labeled AI research advice.",
+      "category": "Advisory",
+      "prompt": "Summarize advisor feedback. Organize and save the genuine feedback I provide, preserving its meaning and source. Create linked tasks for confirmed actions without inventing identities, dates or opinions.",
+      "commands": [
+        {
+          "id": "feedback",
+          "label": "Summarize advisor feedback",
+          "description": "Preserve genuine feedback and link confirmed follow-up tasks.",
+          "prompt": "Summarize advisor feedback. Organize and save the genuine feedback I provide, preserving its meaning and source. Create linked tasks for confirmed actions without inventing identities, dates or opinions.",
+          "placeholder": "Paste advisor comments or meeting notes, or provide a source file."
+        },
+        {
+          "id": "advice",
+          "label": "Get AI research advice",
+          "description": "Save research suggestions clearly identified as AI advice.",
+          "prompt": "Assess the current research state and provide reasoned, actionable AI research advice. Save it separately as AI suggestions, without attributing it to my actual advisor.",
+          "placeholder": "Describe the research question or decision you most need help with."
+        },
+        {
+          "id": "actions",
+          "label": "Track advisor actions",
+          "description": "Check actual progress against feedback and linked tasks.",
+          "prompt": "Read existing advisor feedback and linked tasks, use the current conversation to check follow-up progress, save clear changes and list remaining actions.",
+          "placeholder": "Optionally name the feedback record and describe work already completed."
+        }
+      ]
+    }
+  },
+  {
+    "id": "phd-literature",
+    "name": "文献与证据",
+    "description": "核验文献来源并整理实际阅读记录，连接论文与可追溯的研究证据",
+    "category": "论文写作",
+    "prompt": "请核验我提供的文献标题、作者、年份、DOI 或链接，去重后加入阅读台账，并准确说明核验与阅读范围。",
+    "path": "skills/phd-literature/SKILL.md",
+    "commands": [
+      {
+        "id": "register",
+        "label": "登记文献",
+        "description": "核验来源后加入阅读台账",
+        "prompt": "请核验我提供的文献标题、作者、年份、DOI 或链接，去重后加入阅读台账，并准确说明核验与阅读范围。",
+        "placeholder": "提供 DOI、论文链接、标题或本地 PDF 路径。"
+      },
+      {
+        "id": "read",
+        "label": "整理阅读笔记",
+        "description": "提炼实际阅读材料支持的结论和局限",
+        "prompt": "请读取我提供的文献材料与笔记，整理主要方法、结论、局限和与课题的关系，保存实际阅读范围及来源。",
+        "placeholder": "提供可读取的文献、笔记和当前研究问题。"
+      },
+      {
+        "id": "relate",
+        "label": "关联论文证据",
+        "description": "把已核验文献连接到目标论文",
+        "prompt": "请从已有文献中选择与目标论文相关的真实证据，解释关联理由并保存关联，保留原有文献列表，不虚构引用内容。",
+        "placeholder": "指定目标论文及相关文献名称或 ID。"
+      }
+    ],
+    "en": {
+      "name": "Literature and evidence",
+      "description": "Verify sources, organize actual reading notes and connect papers to traceable research evidence.",
+      "category": "Paper writing",
+      "prompt": "Verify the titles, authors, years, DOIs or links I provide, deduplicate them and add the papers to the reading record. State the actual verification and reading scope.",
+      "commands": [
+        {
+          "id": "register",
+          "label": "Add literature",
+          "description": "Verify sources and add them to the reading record.",
+          "prompt": "Verify the titles, authors, years, DOIs or links I provide, deduplicate them and add the papers to the reading record. State the actual verification and reading scope.",
+          "placeholder": "Provide DOIs, paper links, titles or local PDF paths."
+        },
+        {
+          "id": "read",
+          "label": "Organize reading notes",
+          "description": "Extract findings and limitations supported by the material read.",
+          "prompt": "Read the literature and notes I provide. Summarize methods, findings, limitations and relevance to the project, then save the actual reading scope and sources.",
+          "placeholder": "Provide accessible papers, notes and the current research question."
+        },
+        {
+          "id": "relate",
+          "label": "Link paper evidence",
+          "description": "Connect verified literature to the target paper.",
+          "prompt": "Select relevant evidence from existing literature records for the target paper, explain and save the associations, preserve existing links and avoid inventing citation content.",
+          "placeholder": "Specify the target paper and relevant literature titles or IDs."
+        }
+      ]
+    }
+  },
+  {
+    "id": "phd-review",
+    "name": "论文审查",
+    "description": "结合真实稿件和证据进行模拟审查，提出可核查的问题与修订顺序",
+    "category": "论文写作",
+    "prompt": "请审查当前实际稿件的论证、方法、基线、证据和可复现性，给出具体位置与可行改进，并独立保存为 AI 审查建议。",
+    "path": "skills/phd-review/SKILL.md",
+    "commands": [
+      {
+        "id": "audit",
+        "label": "审查论文",
+        "description": "检查论证、方法、证据与可复现性",
+        "prompt": "请审查当前实际稿件的论证、方法、基线、证据和可复现性，给出具体位置与可行改进，并独立保存为 AI 审查建议。",
+        "placeholder": "提供稿件路径、论文名称或重点关注的章节。"
+      },
+      {
+        "id": "revision",
+        "label": "整理修订顺序",
+        "description": "把已审查问题转为有依据的优先事项",
+        "prompt": "请依据现有稿件和审查意见整理修订优先级，区分材料已显示的问题、缺失信息和待实验验证事项，保存明确标注的 AI 建议。",
+        "placeholder": "提供审查意见或希望优先解决的问题。"
+      }
+    ],
+    "en": {
+      "name": "Critical paper review",
+      "description": "Review real manuscripts and evidence, then prioritize specific issues and feasible revisions.",
+      "category": "Paper writing",
+      "prompt": "Review the actual manuscript’s argument, methods, baselines, evidence and reproducibility. Provide specific locations and feasible improvements, and save them separately as AI review suggestions.",
+      "commands": [
+        {
+          "id": "audit",
+          "label": "Review a paper",
+          "description": "Examine arguments, methods, evidence and reproducibility.",
+          "prompt": "Review the actual manuscript’s argument, methods, baselines, evidence and reproducibility. Provide specific locations and feasible improvements, and save them separately as AI review suggestions.",
+          "placeholder": "Provide a manuscript path, paper name or sections to focus on."
+        },
+        {
+          "id": "revision",
+          "label": "Prioritize revisions",
+          "description": "Turn supported review findings into ordered next steps.",
+          "prompt": "Use the manuscript and review feedback to prioritize revisions, separating demonstrated problems, missing information and issues requiring experiments. Save the output as clearly labeled AI suggestions.",
+          "placeholder": "Provide review feedback or the issues you want to address first."
+        }
+      ]
+    }
+  },
+  {
+    "id": "phd-ideation",
+    "name": "选题与研究假设",
+    "description": "结合真实资源与已有证据筛选研究问题，形成可证伪假设和最小验证路径，适用于选题、缩小方向和比较研究方案。",
+    "category": "导师指导",
+    "prompt": "请使用 $phd-ideation，结合我现有资料和资源，提出可验证的研究方向，比较风险，并推荐最小验证路径。",
+    "path": "skills/phd-ideation/SKILL.md",
+    "commands": [
+      {
+        "id": "ideas",
+        "label": "帮我选题",
+        "description": "依据真实资源提出并比较可验证方向",
+        "prompt": "请使用 $phd-ideation，结合我现有资料和资源，提出可验证的研究方向，比较风险，并推荐最小验证路径。",
+        "placeholder": "补充研究方向、已有结果、数据/设备与时间约束。"
+      },
+      {
+        "id": "falsify",
+        "label": "检查研究假设",
+        "description": "找出反证条件与关键对照",
+        "prompt": "请使用 $phd-ideation，检查当前研究假设的可证伪性、替代解释与关键对照，区分证据和构想。",
+        "placeholder": "粘贴假设、依据和当前验证思路。"
+      }
+    ],
+    "en": {
+      "name": "Research ideas and hypotheses",
+      "description": "Turn a research area and actual constraints into testable questions, falsifiable hypotheses and small validation plans; use for topic selection and comparing directions.",
+      "category": "Advisory",
+      "prompt": "Use $phd-ideation to propose testable directions from my material and resources, compare risks and recommend a small validation plan.",
+      "commands": [
+        {
+          "id": "ideas",
+          "label": "Explore research ideas",
+          "description": "Compare testable directions using actual resources.",
+          "prompt": "Use $phd-ideation to propose testable directions from my material and resources, compare risks and recommend a small validation plan.",
+          "placeholder": "Provide the field, existing findings, data/equipment and time constraints."
+        },
+        {
+          "id": "falsify",
+          "label": "Challenge a hypothesis",
+          "description": "Find falsifiers, alternatives and decisive controls.",
+          "prompt": "Use $phd-ideation to examine this hypothesis for falsifiability, alternative explanations and decisive controls, separating evidence from ideas.",
+          "placeholder": "Provide the hypothesis, evidence and proposed validation."
+        }
+      ]
+    }
+  },
+  {
+    "id": "phd-proposal",
+    "name": "开题与研究计划",
+    "description": "将研究问题整理成可评审的开题或研究计划，连接证据、方法、里程碑和备选方案，适用于开题报告与计划修订。",
+    "category": "项目管理",
+    "prompt": "请使用 $phd-proposal，依据现有材料起草开题计划，明确问题、方法、里程碑、风险与待补证据。",
+    "path": "skills/phd-proposal/SKILL.md",
+    "commands": [
+      {
+        "id": "draft",
+        "label": "写开题计划",
+        "description": "把现有依据转成可评审的研究计划",
+        "prompt": "请使用 $phd-proposal，依据现有材料起草开题计划，明确问题、方法、里程碑、风险与待补证据。",
+        "placeholder": "提供课题、初稿或学校模板，以及期限和资源。"
+      },
+      {
+        "id": "feasibility",
+        "label": "检查计划可行性",
+        "description": "检查资源、依赖与备选路径",
+        "prompt": "请使用 $phd-proposal，检查当前研究计划的目标、方法、资源和时间是否匹配，提出具体可行的修订。",
+        "placeholder": "粘贴计划或提供文件路径，注明不可变的条件。"
+      }
+    ],
+    "en": {
+      "name": "Research proposal",
+      "description": "Build or revise a research proposal with linked questions, evidence, methods, milestones and alternatives; use for proposal drafts and feasibility review.",
+      "category": "Project management",
+      "prompt": "Use $phd-proposal to draft a research proposal from my material with questions, methods, milestones, risks and evidence gaps.",
+      "commands": [
+        {
+          "id": "draft",
+          "label": "Draft a proposal",
+          "description": "Connect questions, methods, milestones and evidence.",
+          "prompt": "Use $phd-proposal to draft a research proposal from my material with questions, methods, milestones, risks and evidence gaps.",
+          "placeholder": "Provide the topic, draft or institutional template, deadline and resources."
+        },
+        {
+          "id": "feasibility",
+          "label": "Review feasibility",
+          "description": "Check resources, dependencies and alternatives.",
+          "prompt": "Use $phd-proposal to assess whether my objectives, methods, resources and schedule fit, then propose concrete revisions.",
+          "placeholder": "Provide the plan or file path and non-negotiable constraints."
+        }
+      ]
+    }
+  },
+  {
+    "id": "phd-systematic-review",
+    "name": "系统综述与证据筛选",
+    "description": "制定透明的文献检索与筛选方案，维护去重、纳排理由及证据提取表，适用于系统综述、范围综述和可追溯检索。",
+    "category": "论文写作",
+    "prompt": "请使用 $phd-systematic-review，围绕我的研究问题制定检索与筛选方案，区分建议检索和实际已检索。",
+    "path": "skills/phd-systematic-review/SKILL.md",
+    "commands": [
+      {
+        "id": "protocol",
+        "label": "制定综述检索方案",
+        "description": "生成检索式、纳排标准与提取表",
+        "prompt": "请使用 $phd-systematic-review，围绕我的研究问题制定检索与筛选方案，区分建议检索和实际已检索。",
+        "placeholder": "提供研究问题、数据库范围、时间/语言边界及已有方案。"
+      },
+      {
+        "id": "screen",
+        "label": "整理筛选与证据表",
+        "description": "对实际导出材料去重并记录纳排理由",
+        "prompt": "请使用 $phd-systematic-review，整理我提供的文献导出，保留去重映射、筛选理由和可追溯证据表，待核实项单列。",
+        "placeholder": "提供导出文件、纳排标准与可访问的全文。"
+      }
+    ],
+    "en": {
+      "name": "Systematic review workflow",
+      "description": "Plan and document transparent searches, deduplication, eligibility decisions and evidence extraction for systematic or scoping reviews.",
+      "category": "Paper writing",
+      "prompt": "Use $phd-systematic-review to plan searches and screening for my question, distinguishing proposed searches from searches actually run.",
+      "commands": [
+        {
+          "id": "protocol",
+          "label": "Plan a systematic search",
+          "description": "Create queries, eligibility criteria and extraction fields.",
+          "prompt": "Use $phd-systematic-review to plan searches and screening for my question, distinguishing proposed searches from searches actually run.",
+          "placeholder": "Provide the question, databases, date/language limits and existing protocol."
+        },
+        {
+          "id": "screen",
+          "label": "Screen supplied literature",
+          "description": "Deduplicate exports and trace eligibility decisions.",
+          "prompt": "Use $phd-systematic-review to organize my exports with a deduplication map, eligibility reasons and traceable extraction tables; keep uncertain cases separate.",
+          "placeholder": "Provide exports, eligibility criteria and available full text."
+        }
+      ]
+    }
+  },
+  {
+    "id": "phd-paper-reading",
+    "name": "论文精读与方法拆解",
+    "description": "精读可访问论文，拆解问题、假设、方法与实验论证，形成带页码的阅读笔记和复现缺口，适用于理解复杂论文与组会讲解。",
+    "category": "论文写作",
+    "prompt": "请使用 $phd-paper-reading，精读我提供的论文，拆解方法与证据，给出可回查位置、局限和不懂的关键点。",
+    "path": "skills/phd-paper-reading/SKILL.md",
+    "commands": [
+      {
+        "id": "read",
+        "label": "精读这篇论文",
+        "description": "按原文拆解问题、方法和实验证据",
+        "prompt": "请使用 $phd-paper-reading，精读我提供的论文，拆解方法与证据，给出可回查位置、局限和不懂的关键点。",
+        "placeholder": "提供可读论文或路径，注明重点关注的方法/章节。"
+      },
+      {
+        "id": "explain",
+        "label": "准备论文讲解",
+        "description": "生成组会讲述顺序与关键问答",
+        "prompt": "请使用 $phd-paper-reading，基于实际可读论文准备组会讲解，说明核心假设、关键图表、证据边界和可能问题。",
+        "placeholder": "提供论文、听众背景和讲解时长。"
+      }
+    ],
+    "en": {
+      "name": "Close reading of papers",
+      "description": "Read accessible papers closely, reconstruct methods and evidence, and produce source-located notes and reproduction gaps for understanding or discussion.",
+      "category": "Paper writing",
+      "prompt": "Use $phd-paper-reading to closely read the supplied paper, explaining methods, evidence, source locations, limitations and difficult points.",
+      "commands": [
+        {
+          "id": "read",
+          "label": "Read this paper closely",
+          "description": "Reconstruct its method and supporting evidence.",
+          "prompt": "Use $phd-paper-reading to closely read the supplied paper, explaining methods, evidence, source locations, limitations and difficult points.",
+          "placeholder": "Provide readable text or a file path and the sections or methods of interest."
+        },
+        {
+          "id": "explain",
+          "label": "Prepare a paper discussion",
+          "description": "Explain assumptions, figures and evidence boundaries.",
+          "prompt": "Use $phd-paper-reading to prepare a discussion of the accessible paper with assumptions, key figures, evidence boundaries and likely questions.",
+          "placeholder": "Provide the paper, audience background and presentation length."
+        }
+      ]
+    }
+  },
+  {
+    "id": "phd-citation-audit",
+    "name": "引文与参考文献核验",
+    "description": "核对正文引用与书目匹配、元信息及来源能否支撑主张，适用于投稿前引文检查、BibTeX 清理和可疑引用核验。",
+    "category": "论文写作",
+    "prompt": "请使用 $phd-citation-audit，检查稿件引用与书目，核验关键主张的来源支持，区分已确认错误和未核实项。",
+    "path": "skills/phd-citation-audit/SKILL.md",
+    "commands": [
+      {
+        "id": "audit",
+        "label": "核验论文引文",
+        "description": "检查参考文献身份与正文证据支持",
+        "prompt": "请使用 $phd-citation-audit，检查稿件引用与书目，核验关键主张的来源支持，区分已确认错误和未核实项。",
+        "placeholder": "提供稿件、参考文献库与优先核验的主张。"
+      },
+      {
+        "id": "bib",
+        "label": "整理参考文献库",
+        "description": "清理重复项与缺失元信息并保留引用键",
+        "prompt": "请使用 $phd-citation-audit，检查我的参考文献库，找出重复和缺失信息，保留引用键并提供可追踪修订。",
+        "placeholder": "提供 BibTeX 或可读书目文件，以及引用格式要求。"
+      }
+    ],
+    "en": {
+      "name": "Citation and reference audit",
+      "description": "Audit in-text citations, bibliography matching, metadata and claim support; use for submission checks, BibTeX cleanup and suspicious references.",
+      "category": "Paper writing",
+      "prompt": "Use $phd-citation-audit to check citations and bibliography entries, verify support for key claims and separate errors from unresolved checks.",
+      "commands": [
+        {
+          "id": "audit",
+          "label": "Audit manuscript citations",
+          "description": "Check reference identity and support for claims.",
+          "prompt": "Use $phd-citation-audit to check citations and bibliography entries, verify support for key claims and separate errors from unresolved checks.",
+          "placeholder": "Provide the manuscript, bibliography and priority claims."
+        },
+        {
+          "id": "bib",
+          "label": "Clean a bibliography",
+          "description": "Find duplicates and missing metadata while preserving keys.",
+          "prompt": "Use $phd-citation-audit to identify duplicates and missing bibliography metadata while preserving citation keys and traceable corrections.",
+          "placeholder": "Provide BibTeX or readable bibliography files and the required style."
+        }
+      ]
+    }
+  },
+  {
+    "id": "phd-academic-translation",
+    "name": "学术翻译与语言润色",
+    "description": "在不改变科学含义的前提下翻译或润色学术文本，维护术语、公式与引用，适用于中英互译、摘要和段落改写。",
+    "category": "论文写作",
+    "prompt": "请使用 $phd-academic-translation，将我提供的学术文本翻译成目标语言，保留科学含义、术语、公式与引用，标出歧义。",
+    "path": "skills/phd-academic-translation/SKILL.md",
+    "commands": [
+      {
+        "id": "translate",
+        "label": "学术翻译",
+        "description": "保留术语、数字与证据强度",
+        "prompt": "请使用 $phd-academic-translation，将我提供的学术文本翻译成目标语言，保留科学含义、术语、公式与引用，标出歧义。",
+        "placeholder": "粘贴文本并说明目标语言、已有术语表和用途。"
+      },
+      {
+        "id": "polish",
+        "label": "润色学术语言",
+        "description": "改善表达但不扩大结论",
+        "prompt": "请使用 $phd-academic-translation，润色当前学术段落，提高清晰度并保留原有证据强度，解释影响含义的修改。",
+        "placeholder": "提供原文，注明保守润色或较大幅度语言改写。"
+      }
+    ],
+    "en": {
+      "name": "Academic translation and editing",
+      "description": "Translate or edit academic text while preserving scientific meaning, terminology, equations and references; use for bilingual drafts, abstracts and paragraph revision.",
+      "category": "Paper writing",
+      "prompt": "Use $phd-academic-translation to translate my text into the target language while preserving meaning, terminology, equations and citations; flag ambiguities.",
+      "commands": [
+        {
+          "id": "translate",
+          "label": "Translate academic text",
+          "description": "Preserve terminology, values and evidential strength.",
+          "prompt": "Use $phd-academic-translation to translate my text into the target language while preserving meaning, terminology, equations and citations; flag ambiguities.",
+          "placeholder": "Paste the text and specify the target language, glossary and purpose."
+        },
+        {
+          "id": "polish",
+          "label": "Polish academic language",
+          "description": "Improve clarity without strengthening claims.",
+          "prompt": "Use $phd-academic-translation to improve this passage while preserving evidential strength, explaining changes that affect meaning.",
+          "placeholder": "Provide the text and desired level of language editing."
+        }
+      ]
+    }
+  },
+  {
+    "id": "phd-rebuttal",
+    "name": "审稿回复与返修",
+    "description": "将真实审稿意见拆成可追踪修订任务并撰写逐点回复，适用于返修计划、回复信和稿件修改核对，不把计划写成完成。",
+    "category": "论文写作",
+    "prompt": "请使用 $phd-rebuttal，整理真实审稿意见与当前稿件，形成逐点返修矩阵，标出需要补实验或澄清的事项。",
+    "path": "skills/phd-rebuttal/SKILL.md",
+    "commands": [
+      {
+        "id": "plan",
+        "label": "整理返修任务",
+        "description": "逐点拆解意见并区分完成和待执行",
+        "prompt": "请使用 $phd-rebuttal，整理真实审稿意见与当前稿件，形成逐点返修矩阵，标出需要补实验或澄清的事项。",
+        "placeholder": "提供审稿意见、决定信、稿件和已有修改。"
+      },
+      {
+        "id": "response",
+        "label": "写逐点回复",
+        "description": "仅按真实修改撰写可核对回复",
+        "prompt": "请使用 $phd-rebuttal，根据真实修改与证据起草逐点回复，核对位置，未完成事项保持待办表述。",
+        "placeholder": "提供意见、修改稿、变更记录和实际补充结果。"
+      }
+    ],
+    "en": {
+      "name": "Reviewer response and revision",
+      "description": "Turn actual reviewer comments into traceable revision actions and point-by-point responses; use for rebuttals, revision plans and change verification.",
+      "category": "Paper writing",
+      "prompt": "Use $phd-rebuttal to map reviewer comments and my draft into a revision matrix, identifying required experiments and clarifications.",
+      "commands": [
+        {
+          "id": "plan",
+          "label": "Plan a revision",
+          "description": "Map real comments to completed and pending actions.",
+          "prompt": "Use $phd-rebuttal to map reviewer comments and my draft into a revision matrix, identifying required experiments and clarifications.",
+          "placeholder": "Provide comments, the decision letter, manuscript and existing changes."
+        },
+        {
+          "id": "response",
+          "label": "Draft point-by-point responses",
+          "description": "Write responses grounded in actual changes.",
+          "prompt": "Use $phd-rebuttal to draft responses from actual changes and evidence, verify locations and leave unfinished work explicitly pending.",
+          "placeholder": "Provide comments, revised files, change notes and actual additional results."
+        }
+      ]
+    }
+  },
+  {
+    "id": "phd-submission",
+    "name": "投稿准备与期刊匹配",
+    "description": "依据已核验期刊或会议要求比较匹配度、检查投稿材料并起草附信，适用于选刊、投稿前自查和材料整理，不自动投稿。",
+    "category": "论文写作",
+    "prompt": "请使用 $phd-submission，结合论文内容和我的约束比较投稿候选，核验官方要求与费用，未核实项明确标出。",
+    "path": "skills/phd-submission/SKILL.md",
+    "commands": [
+      {
+        "id": "venues",
+        "label": "比较投稿目标",
+        "description": "按当前范围与真实约束比较候选",
+        "prompt": "请使用 $phd-submission，结合论文内容和我的约束比较投稿候选，核验官方要求与费用，未核实项明确标出。",
+        "placeholder": "提供摘要、候选期刊/会议、预算和时间要求。"
+      },
+      {
+        "id": "check",
+        "label": "投稿前检查",
+        "description": "核对材料并起草附信，不自动投递",
+        "prompt": "请使用 $phd-submission，按目标官方指南检查现有材料并起草附信，列出必须补齐的内容和未验证项。",
+        "placeholder": "提供目标、官方指南、稿件和已有投稿材料。"
+      }
+    ],
+    "en": {
+      "name": "Submission preparation",
+      "description": "Compare venue fit using verified requirements, check submission files and draft cover letters; use for venue selection and pre-submission preparation without automatic submission.",
+      "category": "Paper writing",
+      "prompt": "Use $phd-submission to compare venues for my paper and constraints, verifying official requirements and fees and flagging unknowns.",
+      "commands": [
+        {
+          "id": "venues",
+          "label": "Compare venues",
+          "description": "Compare verified scope against real constraints.",
+          "prompt": "Use $phd-submission to compare venues for my paper and constraints, verifying official requirements and fees and flagging unknowns.",
+          "placeholder": "Provide the abstract, candidate venues, budget and timing needs."
+        },
+        {
+          "id": "check",
+          "label": "Check submission materials",
+          "description": "Check files and draft a cover letter without sending.",
+          "prompt": "Use $phd-submission to check my files against official requirements, draft a cover letter and list missing or unverified items.",
+          "placeholder": "Provide the venue, official guidelines, manuscript and submission files."
+        }
+      ]
+    }
+  },
+  {
+    "id": "phd-thesis",
+    "name": "学位论文统稿",
+    "description": "将多篇工作组织成连贯学位论文，检查章节贡献、术语、证据与交叉引用，适用于章节规划、统稿和学位论文修订。",
+    "category": "论文写作",
+    "prompt": "请使用 $phd-thesis，根据真实研究工作规划学位论文，明确总问题、章节贡献、衔接逻辑和证据缺口。",
+    "path": "skills/phd-thesis/SKILL.md",
+    "commands": [
+      {
+        "id": "outline",
+        "label": "规划学位论文",
+        "description": "把已有研究串成总问题与章节结构",
+        "prompt": "请使用 $phd-thesis，根据真实研究工作规划学位论文，明确总问题、章节贡献、衔接逻辑和证据缺口。",
+        "placeholder": "提供学校要求、已有论文/章节和研究主线。"
+      },
+      {
+        "id": "integrate",
+        "label": "检查跨章一致性",
+        "description": "核对术语、结果与章节衔接",
+        "prompt": "请使用 $phd-thesis，检查当前学位论文的术语、跨章结果、交叉引用与逻辑衔接，给出或实施我要求的修订。",
+        "placeholder": "提供可读章节、主文件和希望修订的范围。"
+      }
+    ],
+    "en": {
+      "name": "Thesis integration",
+      "description": "Integrate multiple studies into a coherent thesis and check chapter contributions, terminology, evidence and cross-references; use for thesis planning and revision.",
+      "category": "Paper writing",
+      "prompt": "Use $phd-thesis to plan a thesis from my actual studies, identifying the central question, chapter contributions, transitions and evidence gaps.",
+      "commands": [
+        {
+          "id": "outline",
+          "label": "Plan a thesis",
+          "description": "Connect studies into an overarching argument.",
+          "prompt": "Use $phd-thesis to plan a thesis from my actual studies, identifying the central question, chapter contributions, transitions and evidence gaps.",
+          "placeholder": "Provide institutional requirements, papers/chapters and the research theme."
+        },
+        {
+          "id": "integrate",
+          "label": "Check thesis consistency",
+          "description": "Check terminology, results and chapter connections.",
+          "prompt": "Use $phd-thesis to check terminology, cross-chapter results, references and logical connections, then make the revisions I request.",
+          "placeholder": "Provide readable chapters, the main file and the requested revision scope."
+        }
+      ]
+    }
+  },
+  {
+    "id": "phd-defense",
+    "name": "答辩准备与模拟问答",
+    "description": "依据真实论文与结果准备答辩论证、追问和限时回答，适用于开题或毕业答辩演练，明确区分 AI 模拟与真实评委意见。",
+    "category": "导师指导",
+    "prompt": "请使用 $phd-defense，依据我的论文准备答辩提纲、关键追问和证据支持的回答，明确局限与待补材料。",
+    "path": "skills/phd-defense/SKILL.md",
+    "commands": [
+      {
+        "id": "prepare",
+        "label": "准备答辩问答",
+        "description": "围绕真实贡献与证据准备回答",
+        "prompt": "请使用 $phd-defense，依据我的论文准备答辩提纲、关键追问和证据支持的回答，明确局限与待补材料。",
+        "placeholder": "提供论文或提纲、答辩类型、时长和听众背景。"
+      },
+      {
+        "id": "rehearse",
+        "label": "开始模拟答辩",
+        "description": "逐步提问并针对实际回答追问",
+        "prompt": "请使用 $phd-defense，开始 AI 模拟答辩，基于真实材料逐步提问，依据我的回答追问并给出明确标注的练习反馈。",
+        "placeholder": "提供可读材料并说明先演练哪个章节或贡献。"
+      }
+    ],
+    "en": {
+      "name": "Defense preparation",
+      "description": "Prepare evidence-grounded defense arguments, follow-up questions and timed answers for proposal or thesis defenses, clearly labeling AI simulation.",
+      "category": "Advisory",
+      "prompt": "Use $phd-defense to prepare an outline, challenging questions and evidence-grounded answers from my thesis, with limits and missing material.",
+      "commands": [
+        {
+          "id": "prepare",
+          "label": "Prepare defense questions",
+          "description": "Ground answers in actual contributions and evidence.",
+          "prompt": "Use $phd-defense to prepare an outline, challenging questions and evidence-grounded answers from my thesis, with limits and missing material.",
+          "placeholder": "Provide the thesis or outline, defense type, duration and audience."
+        },
+        {
+          "id": "rehearse",
+          "label": "Start a defense rehearsal",
+          "description": "Ask questions and follow up on my answers.",
+          "prompt": "Use $phd-defense to run an AI defense rehearsal from my actual material, asking questions, following up on my answers and clearly labeling practice feedback.",
+          "placeholder": "Provide readable material and the chapter or contribution to rehearse."
+        }
+      ]
+    }
+  },
+  {
+    "id": "phd-data-quality",
+    "name": "数据质量检查",
+    "description": "检查科研数据的缺失、重复、单位、泄漏和异常，产出可追溯问题清单与清洗建议",
+    "category": "实验研究",
+    "prompt": "请使用 $phd-data-quality。请检查这份科研数据，保留原件，输出缺失、重复、单位、数据泄漏与异常问题及实际检查范围。",
+    "path": "skills/phd-data-quality/SKILL.md",
+    "commands": [
+      {
+        "id": "audit",
+        "label": "检查数据质量",
+        "description": "检查数据质量，按实际材料交付并说明检查范围",
+        "prompt": "请使用 $phd-data-quality。请检查这份科研数据，保留原件，输出缺失、重复、单位、数据泄漏与异常问题及实际检查范围。",
+        "placeholder": "提供相关文件路径或粘贴材料；沿用当前对话已有信息。"
+      },
+      {
+        "id": "clean",
+        "label": "生成清洗方案",
+        "description": "生成清洗方案，按实际材料交付并说明检查范围",
+        "prompt": "请使用 $phd-data-quality。请依据已发现的问题制定可复核的清洗方案，列出每条规则的依据和受影响范围，先不删除或覆盖原始数据。",
+        "placeholder": "提供相关文件路径或粘贴材料；沿用当前对话已有信息。"
+      }
+    ],
+    "en": {
+      "name": "Data quality",
+      "description": "Inspect research data for missing values, duplicates, units, leakage and anomalies; produce a traceable quality report.",
+      "category": "Experiments",
+      "prompt": "Use $phd-data-quality. Inspect this research dataset while preserving the original. Report missingness, duplicates, units, leakage, anomalies and the actual inspection scope.",
+      "commands": [
+        {
+          "id": "audit",
+          "label": "Audit data quality",
+          "description": "Audit data quality using supplied evidence and state the inspection scope.",
+          "prompt": "Use $phd-data-quality. Inspect this research dataset while preserving the original. Report missingness, duplicates, units, leakage, anomalies and the actual inspection scope.",
+          "placeholder": "Provide file paths or paste material; reuse information already in this chat."
+        },
+        {
+          "id": "clean",
+          "label": "Plan data cleaning",
+          "description": "Plan data cleaning using supplied evidence and state the inspection scope.",
+          "prompt": "Use $phd-data-quality. Prepare a reproducible cleaning plan based on observed issues, explaining each rule and affected scope without deleting or overwriting raw data.",
+          "placeholder": "Provide file paths or paste material; reuse information already in this chat."
+        }
+      ]
+    }
+  },
+  {
+    "id": "phd-statistics",
+    "name": "统计分析",
+    "description": "根据研究设计选择统计方法，检查假设、效应量与不确定性，区分分析计划和实际计算结果",
+    "category": "实验研究",
+    "prompt": "请使用 $phd-statistics。请根据我的研究问题、数据结构和实验设计制定统计分析方案，说明假设、效应量、缺失值和多重比较的处理。",
+    "path": "skills/phd-statistics/SKILL.md",
+    "commands": [
+      {
+        "id": "plan",
+        "label": "制定统计方案",
+        "description": "制定统计方案，按实际材料交付并说明检查范围",
+        "prompt": "请使用 $phd-statistics。请根据我的研究问题、数据结构和实验设计制定统计分析方案，说明假设、效应量、缺失值和多重比较的处理。",
+        "placeholder": "提供相关文件路径或粘贴材料；沿用当前对话已有信息。"
+      },
+      {
+        "id": "analyze",
+        "label": "分析实际数据",
+        "description": "分析实际数据，按实际材料交付并说明检查范围",
+        "prompt": "请使用 $phd-statistics。请分析我提供的实际数据，保留脚本和计算依据，报告效应量、不确定性与诊断，区分未执行的部分。",
+        "placeholder": "提供相关文件路径或粘贴材料；沿用当前对话已有信息。"
+      }
+    ],
+    "en": {
+      "name": "Statistical analysis",
+      "description": "Choose methods from the study design, check assumptions, effect sizes and uncertainty, and separate planned from executed analysis.",
+      "category": "Experiments",
+      "prompt": "Use $phd-statistics. Plan an analysis for my question, data structure and study design, including assumptions, effect sizes, missingness and multiplicity.",
+      "commands": [
+        {
+          "id": "plan",
+          "label": "Plan an analysis",
+          "description": "Plan an analysis using supplied evidence and state the inspection scope.",
+          "prompt": "Use $phd-statistics. Plan an analysis for my question, data structure and study design, including assumptions, effect sizes, missingness and multiplicity.",
+          "placeholder": "Provide file paths or paste material; reuse information already in this chat."
+        },
+        {
+          "id": "analyze",
+          "label": "Analyze real data",
+          "description": "Analyze real data using supplied evidence and state the inspection scope.",
+          "prompt": "Use $phd-statistics. Analyze the supplied data, retaining scripts and computational evidence; report effect sizes, uncertainty, diagnostics and unexecuted portions.",
+          "placeholder": "Provide file paths or paste material; reuse information already in this chat."
+        }
+      ]
+    }
+  },
+  {
+    "id": "phd-visualization",
+    "name": "科研图表",
+    "description": "从真实数据生成可复现科研图表，检查坐标、单位、误差线、分组与图注，保留绘图源代码",
+    "category": "实验研究",
+    "prompt": "请使用 $phd-visualization。请用实际数据绘制适合论文的图表，保留绘图代码，标注单位、样本量与误差线含义，并检查导出效果。",
+    "path": "skills/phd-visualization/SKILL.md",
+    "commands": [
+      {
+        "id": "plot",
+        "label": "绘制科研图表",
+        "description": "绘制科研图表，按实际材料交付并说明检查范围",
+        "prompt": "请使用 $phd-visualization。请用实际数据绘制适合论文的图表，保留绘图代码，标注单位、样本量与误差线含义，并检查导出效果。",
+        "placeholder": "提供相关文件路径或粘贴材料；沿用当前对话已有信息。"
+      },
+      {
+        "id": "review",
+        "label": "检查已有图表",
+        "description": "检查已有图表，按实际材料交付并说明检查范围",
+        "prompt": "请使用 $phd-visualization。请检查这张科研图的表达是否准确，重点看数据来源、坐标、误差线、图注和可读性，并给出修改版。",
+        "placeholder": "提供相关文件路径或粘贴材料；沿用当前对话已有信息。"
+      }
+    ],
+    "en": {
+      "name": "Scientific figures",
+      "description": "Create reproducible scientific figures from real data with checked axes, units, uncertainty, grouping and captions.",
+      "category": "Experiments",
+      "prompt": "Use $phd-visualization. Create a publication figure from actual data, retaining plotting code, units, sample sizes and uncertainty definitions, and inspect the export.",
+      "commands": [
+        {
+          "id": "plot",
+          "label": "Create a scientific figure",
+          "description": "Create a scientific figure using supplied evidence and state the inspection scope.",
+          "prompt": "Use $phd-visualization. Create a publication figure from actual data, retaining plotting code, units, sample sizes and uncertainty definitions, and inspect the export.",
+          "placeholder": "Provide file paths or paste material; reuse information already in this chat."
+        },
+        {
+          "id": "review",
+          "label": "Review a figure",
+          "description": "Review a figure using supplied evidence and state the inspection scope.",
+          "prompt": "Use $phd-visualization. Review this scientific figure for provenance, axes, uncertainty, captions and legibility, then produce a supported revision.",
+          "placeholder": "Provide file paths or paste material; reuse information already in this chat."
+        }
+      ]
+    }
+  },
+  {
+    "id": "phd-reproduce",
+    "name": "论文复现",
+    "description": "对照论文和代码核对复现条件，执行有范围的复现实验，逐项比较结果与差异来源",
+    "category": "实验研究",
+    "prompt": "请使用 $phd-reproduce。请对照论文与代码制定复现计划，锁定版本、数据划分、指标、资源需求和最小验证步骤。",
+    "path": "skills/phd-reproduce/SKILL.md",
+    "commands": [
+      {
+        "id": "plan",
+        "label": "制定复现计划",
+        "description": "制定复现计划，按实际材料交付并说明检查范围",
+        "prompt": "请使用 $phd-reproduce。请对照论文与代码制定复现计划，锁定版本、数据划分、指标、资源需求和最小验证步骤。",
+        "placeholder": "提供相关文件路径或粘贴材料；沿用当前对话已有信息。"
+      },
+      {
+        "id": "compare",
+        "label": "核对复现差异",
+        "description": "核对复现差异，按实际材料交付并说明检查范围",
+        "prompt": "请使用 $phd-reproduce。请比较我已有的复现日志与论文结果，列出可比指标和差异，区分已经证实的原因与待验证假设。",
+        "placeholder": "提供相关文件路径或粘贴材料；沿用当前对话已有信息。"
+      }
+    ],
+    "en": {
+      "name": "Paper reproduction",
+      "description": "Compare a paper with its code, establish reproducibility conditions, run scoped reproductions and explain measured discrepancies.",
+      "category": "Experiments",
+      "prompt": "Use $phd-reproduce. Compare the paper and code to plan reproduction, fixing versions, splits, metrics, resources and a minimal verification.",
+      "commands": [
+        {
+          "id": "plan",
+          "label": "Plan reproduction",
+          "description": "Plan reproduction using supplied evidence and state the inspection scope.",
+          "prompt": "Use $phd-reproduce. Compare the paper and code to plan reproduction, fixing versions, splits, metrics, resources and a minimal verification.",
+          "placeholder": "Provide file paths or paste material; reuse information already in this chat."
+        },
+        {
+          "id": "compare",
+          "label": "Compare reproduction results",
+          "description": "Compare reproduction results using supplied evidence and state the inspection scope.",
+          "prompt": "Use $phd-reproduce. Compare my existing reproduction logs with the paper, separating comparable metrics, differences, confirmed causes and hypotheses.",
+          "placeholder": "Provide file paths or paste material; reuse information already in this chat."
+        }
+      ]
+    }
+  },
+  {
+    "id": "phd-research-code",
+    "name": "科研代码检查",
+    "description": "检查实验代码中的数据泄漏、指标实现、随机性与可复现性，用小样例验证关键科研逻辑",
+    "category": "实验研究",
+    "prompt": "请使用 $phd-research-code。请检查实验代码的数据划分、指标、随机性和可复现性，用具体位置与证据报告可能影响结论的问题。",
+    "path": "skills/phd-research-code/SKILL.md",
+    "commands": [
+      {
+        "id": "audit",
+        "label": "检查实验代码",
+        "description": "检查实验代码，按实际材料交付并说明检查范围",
+        "prompt": "请使用 $phd-research-code。请检查实验代码的数据划分、指标、随机性和可复现性，用具体位置与证据报告可能影响结论的问题。",
+        "placeholder": "提供相关文件路径或粘贴材料；沿用当前对话已有信息。"
+      },
+      {
+        "id": "fix",
+        "label": "修复科研代码问题",
+        "description": "修复科研代码问题，按实际材料交付并说明检查范围",
+        "prompt": "请使用 $phd-research-code。请修复已确认的科研代码问题，用可人工复核的小样例验证，并说明哪些旧结果需要重新运行。",
+        "placeholder": "提供相关文件路径或粘贴材料；沿用当前对话已有信息。"
+      }
+    ],
+    "en": {
+      "name": "Research code review",
+      "description": "Review scientific code for leakage, metric correctness, randomness and reproducibility, verifying critical logic with small examples.",
+      "category": "Experiments",
+      "prompt": "Use $phd-research-code. Review the experiment code for splitting, metrics, randomness and reproducibility, reporting locations and evidence for issues affecting conclusions.",
+      "commands": [
+        {
+          "id": "audit",
+          "label": "Review experiment code",
+          "description": "Review experiment code using supplied evidence and state the inspection scope.",
+          "prompt": "Use $phd-research-code. Review the experiment code for splitting, metrics, randomness and reproducibility, reporting locations and evidence for issues affecting conclusions.",
+          "placeholder": "Provide file paths or paste material; reuse information already in this chat."
+        },
+        {
+          "id": "fix",
+          "label": "Fix a research-code issue",
+          "description": "Fix a research-code issue using supplied evidence and state the inspection scope.",
+          "prompt": "Use $phd-research-code. Fix the confirmed research-code issue, verify it with hand-checkable examples and identify prior results needing reruns.",
+          "placeholder": "Provide file paths or paste material; reuse information already in this chat."
+        }
+      ]
+    }
+  },
+  {
+    "id": "phd-latex",
+    "name": "LaTeX 排版与排错",
+    "description": "维护多文件 LaTeX 论文、参考文献和编译错误，保留模板与真实内容并核验生成结果",
+    "category": "论文写作",
+    "prompt": "请使用 $phd-latex。请检查这个 LaTeX 项目的主文件与编译日志，保留原模板，修复根因并重新验证编译结果。",
+    "path": "skills/phd-latex/SKILL.md",
+    "commands": [
+      {
+        "id": "repair",
+        "label": "修复 LaTeX 编译",
+        "description": "修复 LaTeX 编译，按实际材料交付并说明检查范围",
+        "prompt": "请使用 $phd-latex。请检查这个 LaTeX 项目的主文件与编译日志，保留原模板，修复根因并重新验证编译结果。",
+        "placeholder": "提供相关文件路径或粘贴材料；沿用当前对话已有信息。"
+      },
+      {
+        "id": "format",
+        "label": "整理论文排版",
+        "description": "整理论文排版，按实际材料交付并说明检查范围",
+        "prompt": "请使用 $phd-latex。请按我提供的模板整理 LaTeX 论文的章节、图表与参考文献，并说明实际编译和版面检查情况。",
+        "placeholder": "提供相关文件路径或粘贴材料；沿用当前对话已有信息。"
+      }
+    ],
+    "en": {
+      "name": "LaTeX preparation",
+      "description": "Maintain multifile LaTeX papers, bibliography and build errors while preserving templates and verifying compiled output.",
+      "category": "Paper writing",
+      "prompt": "Use $phd-latex. Inspect the LaTeX main file and build log, preserve the template, repair the root cause and verify compilation.",
+      "commands": [
+        {
+          "id": "repair",
+          "label": "Repair a LaTeX build",
+          "description": "Repair a LaTeX build using supplied evidence and state the inspection scope.",
+          "prompt": "Use $phd-latex. Inspect the LaTeX main file and build log, preserve the template, repair the root cause and verify compilation.",
+          "placeholder": "Provide file paths or paste material; reuse information already in this chat."
+        },
+        {
+          "id": "format",
+          "label": "Prepare paper layout",
+          "description": "Prepare paper layout using supplied evidence and state the inspection scope.",
+          "prompt": "Use $phd-latex. Prepare the LaTeX sections, figures, tables and bibliography using my template, reporting actual compilation and layout inspection.",
+          "placeholder": "Provide file paths or paste material; reuse information already in this chat."
+        }
+      ]
+    }
+  },
+  {
+    "id": "phd-slides",
+    "name": "组会与学术汇报",
+    "description": "将真实研究材料组织成适合组会、会议或报告的演示文稿，按时长安排论点、图表和讲稿",
+    "category": "导师指导",
+    "prompt": "请使用 $phd-slides。请把已有研究材料整理为组会汇报，突出真实进展、证据、阻塞和希望讨论的问题，并准备讲稿。",
+    "path": "skills/phd-slides/SKILL.md",
+    "commands": [
+      {
+        "id": "create",
+        "label": "制作组会汇报",
+        "description": "制作组会汇报，按实际材料交付并说明检查范围",
+        "prompt": "请使用 $phd-slides。请把已有研究材料整理为组会汇报，突出真实进展、证据、阻塞和希望讨论的问题，并准备讲稿。",
+        "placeholder": "提供相关文件路径或粘贴材料；沿用当前对话已有信息。"
+      },
+      {
+        "id": "conference",
+        "label": "制作会议报告",
+        "description": "制作会议报告，按实际材料交付并说明检查范围",
+        "prompt": "请使用 $phd-slides。请根据我的论文与报告时长制作学术会议报告，保留来源和局限，给出讲稿与可能的问题。",
+        "placeholder": "提供相关文件路径或粘贴材料；沿用当前对话已有信息。"
+      }
+    ],
+    "en": {
+      "name": "Research presentations",
+      "description": "Turn real research material into lab-meeting or conference presentations with timing, claims, figures and speaker notes.",
+      "category": "Advisory",
+      "prompt": "Use $phd-slides. Turn the available research into lab-meeting slides emphasizing real progress, evidence, blockers and discussion questions, with speaker notes.",
+      "commands": [
+        {
+          "id": "create",
+          "label": "Create lab-meeting slides",
+          "description": "Create lab-meeting slides using supplied evidence and state the inspection scope.",
+          "prompt": "Use $phd-slides. Turn the available research into lab-meeting slides emphasizing real progress, evidence, blockers and discussion questions, with speaker notes.",
+          "placeholder": "Provide file paths or paste material; reuse information already in this chat."
+        },
+        {
+          "id": "conference",
+          "label": "Create a conference talk",
+          "description": "Create a conference talk using supplied evidence and state the inspection scope.",
+          "prompt": "Use $phd-slides. Create a conference talk from my paper for the stated duration, retaining sources and limitations, with notes and likely questions.",
+          "placeholder": "Provide file paths or paste material; reuse information already in this chat."
+        }
+      ]
+    }
+  },
+  {
+    "id": "phd-poster",
+    "name": "学术海报",
+    "description": "依据真实研究制作会议海报，适配尺寸、阅读顺序、图表、来源和打印导出要求",
+    "category": "论文写作",
+    "prompt": "请使用 $phd-poster。请根据我的真实论文内容和会议要求制作学术海报，突出核心发现，保留作者、来源和局限。",
+    "path": "skills/phd-poster/SKILL.md",
+    "commands": [
+      {
+        "id": "create",
+        "label": "制作学术海报",
+        "description": "制作学术海报，按实际材料交付并说明检查范围",
+        "prompt": "请使用 $phd-poster。请根据我的真实论文内容和会议要求制作学术海报，突出核心发现，保留作者、来源和局限。",
+        "placeholder": "提供相关文件路径或粘贴材料；沿用当前对话已有信息。"
+      },
+      {
+        "id": "check",
+        "label": "检查海报交付",
+        "description": "检查海报交付，按实际材料交付并说明检查范围",
+        "prompt": "请使用 $phd-poster。请检查海报的尺寸、阅读顺序、图表来源、文字可读性和打印输出要求，修复可确认的问题。",
+        "placeholder": "提供相关文件路径或粘贴材料；沿用当前对话已有信息。"
+      }
+    ],
+    "en": {
+      "name": "Academic posters",
+      "description": "Create conference posters from real research, respecting dimensions, reading order, figures, sources and print requirements.",
+      "category": "Paper writing",
+      "prompt": "Use $phd-poster. Create an academic poster from my actual paper and conference requirements, emphasizing the main finding with authors, sources and limitations.",
+      "commands": [
+        {
+          "id": "create",
+          "label": "Create an academic poster",
+          "description": "Create an academic poster using supplied evidence and state the inspection scope.",
+          "prompt": "Use $phd-poster. Create an academic poster from my actual paper and conference requirements, emphasizing the main finding with authors, sources and limitations.",
+          "placeholder": "Provide file paths or paste material; reuse information already in this chat."
+        },
+        {
+          "id": "check",
+          "label": "Check a poster for delivery",
+          "description": "Check a poster for delivery using supplied evidence and state the inspection scope.",
+          "prompt": "Use $phd-poster. Check poster dimensions, reading order, figure sources, text legibility and print requirements, repairing confirmed issues.",
+          "placeholder": "Provide file paths or paste material; reuse information already in this chat."
+        }
+      ]
+    }
+  },
+  {
+    "id": "phd-data-management",
+    "name": "科研资料管理",
+    "description": "整理科研资料目录、数据字典、版本与备份计划，保持来源和关联，不擅自删除或上传原始材料",
+    "category": "项目管理",
+    "prompt": "请使用 $phd-data-management。请梳理指定课题目录，生成资料索引、版本关系和可逆整理方案，保留原始文件与现有引用。",
+    "path": "skills/phd-data-management/SKILL.md",
+    "commands": [
+      {
+        "id": "organize",
+        "label": "整理科研资料",
+        "description": "整理科研资料，按实际材料交付并说明检查范围",
+        "prompt": "请使用 $phd-data-management。请梳理指定课题目录，生成资料索引、版本关系和可逆整理方案，保留原始文件与现有引用。",
+        "placeholder": "提供相关文件路径或粘贴材料；沿用当前对话已有信息。"
+      },
+      {
+        "id": "dictionary",
+        "label": "制作数据字典",
+        "description": "制作数据字典，按实际材料交付并说明检查范围",
+        "prompt": "请使用 $phd-data-management。请根据已有数据与说明制作数据字典，标明字段、单位、缺失编码、来源、许可和待确认项。",
+        "placeholder": "提供相关文件路径或粘贴材料；沿用当前对话已有信息。"
+      }
+    ],
+    "en": {
+      "name": "Research data management",
+      "description": "Organize research files, dictionaries, versions and backup plans while preserving provenance and links without unrequested deletion or upload.",
+      "category": "Project management",
+      "prompt": "Use $phd-data-management. Inventory the specified project and propose reversible organization with version relationships, preserving originals and references.",
+      "commands": [
+        {
+          "id": "organize",
+          "label": "Organize research files",
+          "description": "Organize research files using supplied evidence and state the inspection scope.",
+          "prompt": "Use $phd-data-management. Inventory the specified project and propose reversible organization with version relationships, preserving originals and references.",
+          "placeholder": "Provide file paths or paste material; reuse information already in this chat."
+        },
+        {
+          "id": "dictionary",
+          "label": "Create a data dictionary",
+          "description": "Create a data dictionary using supplied evidence and state the inspection scope.",
+          "prompt": "Use $phd-data-management. Create a dictionary from the data and documentation, specifying fields, units, missing codes, provenance, licenses and unknowns.",
+          "placeholder": "Provide file paths or paste material; reuse information already in this chat."
+        }
+      ]
+    }
+  },
+  {
+    "id": "phd-pdf",
+    "name": "论文 PDF 提取",
+    "description": "从可访问 PDF 提取带页码的段落、表格和证据，区分文本、扫描与 OCR 误差，不冒充全文阅读",
+    "category": "论文写作",
+    "prompt": "请使用 $phd-pdf。请从这个 PDF 提取与研究问题有关的证据，标注页码、表格与实际读取范围，明确 OCR 或排版造成的不确定性。",
+    "path": "skills/phd-pdf/SKILL.md",
+    "commands": [
+      {
+        "id": "extract",
+        "label": "提取论文证据",
+        "description": "提取论文证据，按实际材料交付并说明检查范围",
+        "prompt": "请使用 $phd-pdf。请从这个 PDF 提取与研究问题有关的证据，标注页码、表格与实际读取范围，明确 OCR 或排版造成的不确定性。",
+        "placeholder": "提供相关文件路径或粘贴材料；沿用当前对话已有信息。"
+      },
+      {
+        "id": "tables",
+        "label": "整理论文表格",
+        "description": "整理论文表格，按实际材料交付并说明检查范围",
+        "prompt": "请使用 $phd-pdf。请提取指定 PDF 表格，保留表头、单位、脚注和页码，逐项标出无法可靠识别的数字。",
+        "placeholder": "提供相关文件路径或粘贴材料；沿用当前对话已有信息。"
+      }
+    ],
+    "en": {
+      "name": "Research PDF extraction",
+      "description": "Extract page-linked text, tables and evidence from accessible PDFs, distinguishing text, scans and OCR uncertainty from full-paper reading.",
+      "category": "Paper writing",
+      "prompt": "Use $phd-pdf. Extract evidence relevant to the question from this PDF, recording pages, tables, actual reading scope and OCR/layout uncertainty.",
+      "commands": [
+        {
+          "id": "extract",
+          "label": "Extract paper evidence",
+          "description": "Extract paper evidence using supplied evidence and state the inspection scope.",
+          "prompt": "Use $phd-pdf. Extract evidence relevant to the question from this PDF, recording pages, tables, actual reading scope and OCR/layout uncertainty.",
+          "placeholder": "Provide file paths or paste material; reuse information already in this chat."
+        },
+        {
+          "id": "tables",
+          "label": "Extract research tables",
+          "description": "Extract research tables using supplied evidence and state the inspection scope.",
+          "prompt": "Use $phd-pdf. Extract the specified PDF tables with headers, units, footnotes and page locations, marking values that cannot be reliably recognized.",
+          "placeholder": "Provide file paths or paste material; reuse information already in this chat."
+        }
+      ]
+    }
+  },
+  {
+    "id": "github-literature-review",
+    "name": "GitHub · 文献综述",
+    "description": "K-Dense 原版：整理检索、筛选与证据综合。检索需联网，PDF导出需排版工具。",
+    "category": "论文写作",
+    "prompt": "请使用 $github-literature-review，读取本项目保留的 GitHub 原版技能及本次任务所需参考资料，检查实际工具条件后处理我的材料，明确已执行与未执行部分。",
+    "path": "skills/github-literature-review/SKILL.md",
+    "commands": [
+      {
+        "id": "use-upstream",
+        "label": "使用文献综述",
+        "description": "读取 K-Dense 原版流程，按实际能力执行",
+        "prompt": "请使用 $github-literature-review，读取本项目保留的 GitHub 原版技能及本次任务所需参考资料，检查实际工具条件后处理我的材料，明确已执行与未执行部分。",
+        "placeholder": "提供研究问题、材料或文件路径；沿用当前对话已有信息。"
+      }
+    ],
+    "en": {
+      "name": "GitHub · Literature review",
+      "description": "K-Dense original: organize searches, screening and evidence synthesis. Search needs network; PDF export needs typesetting tools.",
+      "category": "Paper writing",
+      "prompt": "Use $github-literature-review: read the vendored GitHub skill and task-relevant references, check available tools, and work on my material while reporting completed and unexecuted steps.",
+      "commands": [
+        {
+          "id": "use-upstream",
+          "label": "Use Literature review",
+          "description": "Read the original K-Dense workflow and execute supported steps.",
+          "prompt": "Use $github-literature-review: read the vendored GitHub skill and task-relevant references, check available tools, and work on my material while reporting completed and unexecuted steps.",
+          "placeholder": "Provide the research question, material or file paths; reuse current context."
+        }
+      ]
+    }
+  },
+  {
+    "id": "github-citation-management",
+    "name": "GitHub · 引文管理",
+    "description": "K-Dense 原版：核验书目并整理 BibTeX。Python工具；公共元数据查询需联网。",
+    "category": "论文写作",
+    "prompt": "请使用 $github-citation-management，读取本项目保留的 GitHub 原版技能及本次任务所需参考资料，检查实际工具条件后处理我的材料，明确已执行与未执行部分。",
+    "path": "skills/github-citation-management/SKILL.md",
+    "commands": [
+      {
+        "id": "use-upstream",
+        "label": "使用引文管理",
+        "description": "读取 K-Dense 原版流程，按实际能力执行",
+        "prompt": "请使用 $github-citation-management，读取本项目保留的 GitHub 原版技能及本次任务所需参考资料，检查实际工具条件后处理我的材料，明确已执行与未执行部分。",
+        "placeholder": "提供研究问题、材料或文件路径；沿用当前对话已有信息。"
+      }
+    ],
+    "en": {
+      "name": "GitHub · Citation management",
+      "description": "K-Dense original: verify bibliographic metadata and organize BibTeX. Python tools; public metadata queries need network.",
+      "category": "Paper writing",
+      "prompt": "Use $github-citation-management: read the vendored GitHub skill and task-relevant references, check available tools, and work on my material while reporting completed and unexecuted steps.",
+      "commands": [
+        {
+          "id": "use-upstream",
+          "label": "Use Citation management",
+          "description": "Read the original K-Dense workflow and execute supported steps.",
+          "prompt": "Use $github-citation-management: read the vendored GitHub skill and task-relevant references, check available tools, and work on my material while reporting completed and unexecuted steps.",
+          "placeholder": "Provide the research question, material or file paths; reuse current context."
+        }
+      ]
+    }
+  },
+  {
+    "id": "github-statistical-analysis",
+    "name": "GitHub · 统计方法",
+    "description": "K-Dense 原版：选择统计方法、检查假设与报告不确定性。计算需本地科学计算环境。",
+    "category": "实验研究",
+    "prompt": "请使用 $github-statistical-analysis，读取本项目保留的 GitHub 原版技能及本次任务所需参考资料，检查实际工具条件后处理我的材料，明确已执行与未执行部分。",
+    "path": "skills/github-statistical-analysis/SKILL.md",
+    "commands": [
+      {
+        "id": "use-upstream",
+        "label": "使用统计方法",
+        "description": "读取 K-Dense 原版流程，按实际能力执行",
+        "prompt": "请使用 $github-statistical-analysis，读取本项目保留的 GitHub 原版技能及本次任务所需参考资料，检查实际工具条件后处理我的材料，明确已执行与未执行部分。",
+        "placeholder": "提供研究问题、材料或文件路径；沿用当前对话已有信息。"
+      }
+    ],
+    "en": {
+      "name": "GitHub · Statistical analysis",
+      "description": "K-Dense original: select statistical methods, check assumptions and report uncertainty. Computation requires local scientific libraries.",
+      "category": "Experiments",
+      "prompt": "Use $github-statistical-analysis: read the vendored GitHub skill and task-relevant references, check available tools, and work on my material while reporting completed and unexecuted steps.",
+      "commands": [
+        {
+          "id": "use-upstream",
+          "label": "Use Statistical analysis",
+          "description": "Read the original K-Dense workflow and execute supported steps.",
+          "prompt": "Use $github-statistical-analysis: read the vendored GitHub skill and task-relevant references, check available tools, and work on my material while reporting completed and unexecuted steps.",
+          "placeholder": "Provide the research question, material or file paths; reuse current context."
+        }
+      ]
+    }
+  },
+  {
+    "id": "github-scientific-visualization",
+    "name": "GitHub · 论文绘图工具",
+    "description": "K-Dense 原版：规划与导出有来源的论文图表。绘图需 Matplotlib 等本地工具。",
+    "category": "实验研究",
+    "prompt": "请使用 $github-scientific-visualization，读取本项目保留的 GitHub 原版技能及本次任务所需参考资料，检查实际工具条件后处理我的材料，明确已执行与未执行部分。",
+    "path": "skills/github-scientific-visualization/SKILL.md",
+    "commands": [
+      {
+        "id": "use-upstream",
+        "label": "使用论文绘图工具",
+        "description": "读取 K-Dense 原版流程，按实际能力执行",
+        "prompt": "请使用 $github-scientific-visualization，读取本项目保留的 GitHub 原版技能及本次任务所需参考资料，检查实际工具条件后处理我的材料，明确已执行与未执行部分。",
+        "placeholder": "提供研究问题、材料或文件路径；沿用当前对话已有信息。"
+      }
+    ],
+    "en": {
+      "name": "GitHub · Scientific visualization",
+      "description": "K-Dense original: plan and export traceable scientific figures. Plotting needs local tools such as Matplotlib.",
+      "category": "Experiments",
+      "prompt": "Use $github-scientific-visualization: read the vendored GitHub skill and task-relevant references, check available tools, and work on my material while reporting completed and unexecuted steps.",
+      "commands": [
+        {
+          "id": "use-upstream",
+          "label": "Use Scientific visualization",
+          "description": "Read the original K-Dense workflow and execute supported steps.",
+          "prompt": "Use $github-scientific-visualization: read the vendored GitHub skill and task-relevant references, check available tools, and work on my material while reporting completed and unexecuted steps.",
+          "placeholder": "Provide the research question, material or file paths; reuse current context."
+        }
+      ]
+    }
+  },
+  {
+    "id": "github-peer-review",
+    "name": "GitHub · 论文自查",
+    "description": "K-Dense 原版：用证据矩阵和检查表审查稿件。附本地校验脚本，建议标为 AI。",
+    "category": "导师指导",
+    "prompt": "请使用 $github-peer-review，读取本项目保留的 GitHub 原版技能及本次任务所需参考资料，检查实际工具条件后处理我的材料，明确已执行与未执行部分。",
+    "path": "skills/github-peer-review/SKILL.md",
+    "commands": [
+      {
+        "id": "use-upstream",
+        "label": "使用论文自查",
+        "description": "读取 K-Dense 原版流程，按实际能力执行",
+        "prompt": "请使用 $github-peer-review，读取本项目保留的 GitHub 原版技能及本次任务所需参考资料，检查实际工具条件后处理我的材料，明确已执行与未执行部分。",
+        "placeholder": "提供研究问题、材料或文件路径；沿用当前对话已有信息。"
+      }
+    ],
+    "en": {
+      "name": "GitHub · Peer review",
+      "description": "K-Dense original: review manuscripts using evidence matrices and checklists. Includes local validators; advice remains AI-generated.",
+      "category": "Advisory",
+      "prompt": "Use $github-peer-review: read the vendored GitHub skill and task-relevant references, check available tools, and work on my material while reporting completed and unexecuted steps.",
+      "commands": [
+        {
+          "id": "use-upstream",
+          "label": "Use Peer review",
+          "description": "Read the original K-Dense workflow and execute supported steps.",
+          "prompt": "Use $github-peer-review: read the vendored GitHub skill and task-relevant references, check available tools, and work on my material while reporting completed and unexecuted steps.",
+          "placeholder": "Provide the research question, material or file paths; reuse current context."
+        }
+      ]
+    }
+  },
+  {
+    "id": "github-experimental-design",
+    "name": "GitHub · 实验设计工具",
+    "description": "K-Dense 原版：设计随机化、分块与因子实验。生成设计需 Python、NumPy/pandas，部分需 pydoe。",
+    "category": "实验研究",
+    "prompt": "请使用 $github-experimental-design，读取本项目保留的 GitHub 原版技能及本次任务所需参考资料，检查实际工具条件后处理我的材料，明确已执行与未执行部分。",
+    "path": "skills/github-experimental-design/SKILL.md",
+    "commands": [
+      {
+        "id": "use-upstream",
+        "label": "使用实验设计工具",
+        "description": "读取 K-Dense 原版流程，按实际能力执行",
+        "prompt": "请使用 $github-experimental-design，读取本项目保留的 GitHub 原版技能及本次任务所需参考资料，检查实际工具条件后处理我的材料，明确已执行与未执行部分。",
+        "placeholder": "提供研究问题、材料或文件路径；沿用当前对话已有信息。"
+      }
+    ],
+    "en": {
+      "name": "GitHub · Experimental design",
+      "description": "K-Dense original: plan randomization, blocking and factorial experiments. Design generation needs Python/NumPy/pandas, optionally pydoe.",
+      "category": "Experiments",
+      "prompt": "Use $github-experimental-design: read the vendored GitHub skill and task-relevant references, check available tools, and work on my material while reporting completed and unexecuted steps.",
+      "commands": [
+        {
+          "id": "use-upstream",
+          "label": "Use Experimental design",
+          "description": "Read the original K-Dense workflow and execute supported steps.",
+          "prompt": "Use $github-experimental-design: read the vendored GitHub skill and task-relevant references, check available tools, and work on my material while reporting completed and unexecuted steps.",
+          "placeholder": "Provide the research question, material or file paths; reuse current context."
+        }
+      ]
+    }
+  },
+  {
+    "id": "github-huggingface-papers",
+    "name": "GitHub · HF 论文查询",
+    "description": "Hugging Face 原版：读取公开论文资料与相关模型数据链接。需要联网；如仅读摘要会明确标注。",
+    "category": "论文写作",
+    "prompt": "请使用 $github-huggingface-papers，读取本项目保留的 GitHub 原版技能及本次任务所需参考资料，检查实际工具条件后处理我的材料，明确已执行与未执行部分。",
+    "path": "skills/github-huggingface-papers/SKILL.md",
+    "commands": [
+      {
+        "id": "use-upstream",
+        "label": "使用HF 论文查询",
+        "description": "读取 Hugging Face 原版流程，按实际能力执行",
+        "prompt": "请使用 $github-huggingface-papers，读取本项目保留的 GitHub 原版技能及本次任务所需参考资料，检查实际工具条件后处理我的材料，明确已执行与未执行部分。",
+        "placeholder": "提供研究问题、材料或文件路径；沿用当前对话已有信息。"
+      }
+    ],
+    "en": {
+      "name": "GitHub · HF Papers",
+      "description": "Hugging Face original: read public papers and associated model/data links. Network required; abstract-only access is disclosed.",
+      "category": "Paper writing",
+      "prompt": "Use $github-huggingface-papers: read the vendored GitHub skill and task-relevant references, check available tools, and work on my material while reporting completed and unexecuted steps.",
+      "commands": [
+        {
+          "id": "use-upstream",
+          "label": "Use HF Papers",
+          "description": "Read the original Hugging Face workflow and execute supported steps.",
+          "prompt": "Use $github-huggingface-papers: read the vendored GitHub skill and task-relevant references, check available tools, and work on my material while reporting completed and unexecuted steps.",
+          "placeholder": "Provide the research question, material or file paths; reuse current context."
+        }
+      ]
+    }
+  },
+  {
+    "id": "github-huggingface-trackio",
+    "name": "GitHub · 本地实验日志",
+    "description": "Hugging Face 原版：整理用户指定的本地实验指标与日志。需 Python/Trackio，默认不云同步。",
+    "category": "实验研究",
+    "prompt": "请使用 $github-huggingface-trackio，读取本项目保留的 GitHub 原版技能及本次任务所需参考资料，检查实际工具条件后处理我的材料，明确已执行与未执行部分。",
+    "path": "skills/github-huggingface-trackio/SKILL.md",
+    "commands": [
+      {
+        "id": "use-upstream",
+        "label": "使用本地实验日志",
+        "description": "读取 Hugging Face 原版流程，按实际能力执行",
+        "prompt": "请使用 $github-huggingface-trackio，读取本项目保留的 GitHub 原版技能及本次任务所需参考资料，检查实际工具条件后处理我的材料，明确已执行与未执行部分。",
+        "placeholder": "提供研究问题、材料或文件路径；沿用当前对话已有信息。"
+      }
+    ],
+    "en": {
+      "name": "GitHub · Trackio experiment logs",
+      "description": "Hugging Face original: organize user-designated local experiment metrics and logs. Needs Python/Trackio; no cloud sync by default.",
+      "category": "Experiments",
+      "prompt": "Use $github-huggingface-trackio: read the vendored GitHub skill and task-relevant references, check available tools, and work on my material while reporting completed and unexecuted steps.",
+      "commands": [
+        {
+          "id": "use-upstream",
+          "label": "Use Trackio experiment logs",
+          "description": "Read the original Hugging Face workflow and execute supported steps.",
+          "prompt": "Use $github-huggingface-trackio: read the vendored GitHub skill and task-relevant references, check available tools, and work on my material while reporting completed and unexecuted steps.",
+          "placeholder": "Provide the research question, material or file paths; reuse current context."
+        }
+      ]
+    }
+  },
+  {
+    "id": "github-humanizer",
+    "name": "GitHub · 自然表达润色",
+    "description": "Humanizer 原版：减少套话并保留科学含义与引用。文字工作流，无额外运行包。",
+    "category": "论文写作",
+    "prompt": "请使用 $github-humanizer，读取本项目保留的 GitHub 原版技能及本次任务所需参考资料，检查实际工具条件后处理我的材料，明确已执行与未执行部分。",
+    "path": "skills/github-humanizer/SKILL.md",
+    "commands": [
+      {
+        "id": "use-upstream",
+        "label": "使用自然表达润色",
+        "description": "读取 Humanizer 原版流程，按实际能力执行",
+        "prompt": "请使用 $github-humanizer，读取本项目保留的 GitHub 原版技能及本次任务所需参考资料，检查实际工具条件后处理我的材料，明确已执行与未执行部分。",
+        "placeholder": "提供研究问题、材料或文件路径；沿用当前对话已有信息。"
+      }
+    ],
+    "en": {
+      "name": "GitHub · Natural prose editing",
+      "description": "Humanizer original: reduce formulaic prose while preserving scientific meaning and citations. Text workflow; no extra runtime package.",
+      "category": "Paper writing",
+      "prompt": "Use $github-humanizer: read the vendored GitHub skill and task-relevant references, check available tools, and work on my material while reporting completed and unexecuted steps.",
+      "commands": [
+        {
+          "id": "use-upstream",
+          "label": "Use Natural prose editing",
+          "description": "Read the original Humanizer workflow and execute supported steps.",
+          "prompt": "Use $github-humanizer: read the vendored GitHub skill and task-relevant references, check available tools, and work on my material while reporting completed and unexecuted steps.",
+          "placeholder": "Provide the research question, material or file paths; reuse current context."
+        }
+      ]
+    }
+  },
+  {
+    "id": "github-brainstorming-research-ideas",
+    "name": "GitHub · 研究选题构思",
+    "description": "Orchestra Research 原版：比较研究问题、假设与验证路径。新颖性仍需文献核查。",
+    "category": "项目管理",
+    "prompt": "请使用 $github-brainstorming-research-ideas，读取本项目保留的 GitHub 原版技能及本次任务所需参考资料，检查实际工具条件后处理我的材料，明确已执行与未执行部分。",
+    "path": "skills/github-brainstorming-research-ideas/SKILL.md",
+    "commands": [
+      {
+        "id": "use-upstream",
+        "label": "使用研究选题构思",
+        "description": "读取 Orchestra Research 原版流程，按实际能力执行",
+        "prompt": "请使用 $github-brainstorming-research-ideas，读取本项目保留的 GitHub 原版技能及本次任务所需参考资料，检查实际工具条件后处理我的材料，明确已执行与未执行部分。",
+        "placeholder": "提供研究问题、材料或文件路径；沿用当前对话已有信息。"
+      }
+    ],
+    "en": {
+      "name": "GitHub · Research ideation",
+      "description": "Orchestra Research original: compare research questions, hypotheses and validation paths. Novelty still requires literature verification.",
+      "category": "Project management",
+      "prompt": "Use $github-brainstorming-research-ideas: read the vendored GitHub skill and task-relevant references, check available tools, and work on my material while reporting completed and unexecuted steps.",
+      "commands": [
+        {
+          "id": "use-upstream",
+          "label": "Use Research ideation",
+          "description": "Read the original Orchestra Research workflow and execute supported steps.",
+          "prompt": "Use $github-brainstorming-research-ideas: read the vendored GitHub skill and task-relevant references, check available tools, and work on my material while reporting completed and unexecuted steps.",
+          "placeholder": "Provide the research question, material or file paths; reuse current context."
+        }
+      ]
+    }
+  }
+]

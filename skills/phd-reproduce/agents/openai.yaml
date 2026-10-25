@@ -1,0 +1,4 @@
+interface:
+  display_name: "论文复现"
+  short_description: "对照论文和代码核对复现条件，执行有范围的复现实验，逐项比较结果与差异来源"
+  default_prompt: "请使用 $phd-reproduce。请对照论文与代码制定复现计划，锁定版本、数据划分、指标、资源需求和最小验证步骤。"

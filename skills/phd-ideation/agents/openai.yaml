@@ -1,0 +1,4 @@
+interface:
+  display_name: "选题与研究假设"
+  short_description: "依据真实资源比较选题，形成可证伪假设、关键对照与最小验证路径"
+  default_prompt: "请使用 $phd-ideation，结合我现有资料和资源，提出可验证的研究方向，比较风险，并推荐最小验证路径。"

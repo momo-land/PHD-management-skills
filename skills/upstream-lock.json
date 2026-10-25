@@ -1,0 +1,952 @@
+{
+  "schemaVersion": 1,
+  "installedAt": "2026-10-25",
+  "entries": [
+    {
+      "id": "github-literature-review",
+      "repo": "K-Dense-AI/scientific-agent-skills",
+      "revision": "593377bb048752abb0152deab9fbb1083a6087df",
+      "upstreamPath": "skills/literature-review",
+      "sourceUrl": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/593377bb048752abb0152deab9fbb1083a6087df/skills/literature-review",
+      "upstreamSkill": "vendor/skills/github-literature-review/upstream/SKILL.md",
+      "license": {
+        "spdx": "MIT",
+        "files": [
+          "vendor/skills/github-literature-review/upstream-licenses/LICENSE.txt"
+        ]
+      },
+      "requirements": {
+        "zh": "方法指导可直接阅读；DOI检查需 Python 3.10+、requests、网络。PDF导出另需 Pandoc/XeLaTeX；Parallel检索与OpenRouter示意图是可选账号/API功能。",
+        "en": "Guidance can be read directly; DOI checks need Python 3.10+, requests and network access. PDF export additionally needs Pandoc/XeLaTeX; Parallel search and OpenRouter schematics are optional account/API features."
+      },
+      "review": {
+        "level": "source-inspected-not-executed",
+        "notesZh": "仅接入检索、筛选、证据综合和本地文档路径。示意图明确可选；不自动运行两个generate_schematic脚本，不扫描.env，不安装Parallel或调用付费API。公开检索可使用当前可用工具。 本入口不运行 scripts/generate_schematic.py、scripts/generate_schematic_ai.py，这些原文件只作为完整来源保留。 原文要求对有实质贡献的Scientific Agent Skills论文进行引用；本项目保留该说明，但科研引用仍应基于实际使用与核验，不自动插入无关引用。",
+        "notesEn": "Use search, screening, synthesis and local document workflows. Schematics are explicitly optional. Do not automatically run either generate_schematic script, scan .env files, install Parallel or call paid APIs. Public discovery may use available host tools. This entry does not run scripts/generate_schematic.py or scripts/generate_schematic_ai.py; these files are retained only as part of the complete source. Upstream requests citation of Scientific Agent Skills where it materially contributes. Preserve that note; research citations should reflect actual use and verification rather than automatic unrelated insertion.",
+        "restrictedScripts": [
+          "scripts/generate_schematic.py",
+          "scripts/generate_schematic_ai.py"
+        ],
+        "crossSkillDependencies": [
+          "parallel-web (optional supplementary search)",
+          "citation-management",
+          "pubmed-database / paper-lookup (optional retrieval)",
+          "matplotlib / seaborn (optional plots)",
+          "venue-templates (optional venue formatting)"
+        ],
+        "scriptEffects": [
+          "scripts/search_databases.py reads normalized local records and writes deduplicated/formatted outputs; it is not a live database search engine.",
+          "scripts/verify_citations.py sends DOI identifiers to doi.org and api.crossref.org and writes an optional JSON report.",
+          "scripts/generate_pdf.py invokes local pandoc and xelatex using argument lists; writes/overwrites the specified PDF and reads sibling bibliography/resources.",
+          "scripts/generate_schematic.py and scripts/generate_schematic_ai.py search OPENROUTER_API_KEY in environment and .env files at cwd, ancestor directories and script directory; send prompt/images to OpenRouter, save images/review logs. These paths should be disabled in local adapter."
+        ],
+        "commitEvidence": "https://api.github.com/repos/K-Dense-AI/scientific-agent-skills/commits/main; top-level sha; distinct commit.tree.sha=d4d202beb151c1f1c6c15738be0692d65e0447af"
+      },
+      "files": [
+        {
+          "path": "vendor/skills/github-literature-review/upstream-licenses/LICENSE.txt",
+          "sha256": "09b02a3c9df3053c55531d503357a9c7cde275970e6c3ceaa1ddf5f0e90b40c1",
+          "bytes": 1068
+        },
+        {
+          "path": "vendor/skills/github-literature-review/upstream/assets/review_template.md",
+          "sha256": "08671516976d01a7004f8ae7c944a50c253877504720c15d5fa24eed90889819",
+          "bytes": 13769
+        },
+        {
+          "path": "vendor/skills/github-literature-review/upstream/references/citation_styles.md",
+          "sha256": "2a50e43b18c2fff781e04406deb66186ba8f91ed28af32004aba63c63dcc1789",
+          "bytes": 7627
+        },
+        {
+          "path": "vendor/skills/github-literature-review/upstream/references/core_workflow.md",
+          "sha256": "4d63f1087c98efeec7c7bf622bed6e0456a9c7c3defe584995917f2de6f2c601",
+          "bytes": 11876
+        },
+        {
+          "path": "vendor/skills/github-literature-review/upstream/references/database_strategies.md",
+          "sha256": "24b56cd88128a9016520ed6b5e2abb79e19dc9b86cbf064927e9056aa1504f48",
+          "bytes": 10431
+        },
+        {
+          "path": "vendor/skills/github-literature-review/upstream/references/example_workflow.md",
+          "sha256": "86336c42f78ff282430a6cdd2282a99562cc9d5e46b62e70a33bd839f9ab726a",
+          "bytes": 3078
+        },
+        {
+          "path": "vendor/skills/github-literature-review/upstream/references/search_and_citation.md",
+          "sha256": "f33d671351989ee86066b9a21bdbf630a1f60001ada92fda4c942006d37b74fe",
+          "bytes": 4685
+        },
+        {
+          "path": "vendor/skills/github-literature-review/upstream/scripts/generate_pdf.py",
+          "sha256": "0ba1b16b196b64d4966e5f055a289f0c17e3579a84254abe47ff63be95b4f136",
+          "bytes": 4990
+        },
+        {
+          "path": "vendor/skills/github-literature-review/upstream/scripts/generate_schematic_ai.py",
+          "sha256": "7316f2df92f442b8c60a5dd2bd8b504e17449d4be89352e5af24be2239700046",
+          "bytes": 35684
+        },
+        {
+          "path": "vendor/skills/github-literature-review/upstream/scripts/generate_schematic.py",
+          "sha256": "0c81ce099d5ab9aa3d3c486aa9bd3e81ee1117e18a54db14bb0a68de61eaa4bc",
+          "bytes": 7782
+        },
+        {
+          "path": "vendor/skills/github-literature-review/upstream/scripts/search_databases.py",
+          "sha256": "76f47fd18ca28df4985ffc6d30d5ad659e67c8058bb3de8f385c2443752f4eaf",
+          "bytes": 8769
+        },
+        {
+          "path": "vendor/skills/github-literature-review/upstream/scripts/verify_citations.py",
+          "sha256": "4c8e8377718ddd47e9cd7cef706935b04910af5d13bfd920970dcf41d4ef3706",
+          "bytes": 9960
+        },
+        {
+          "path": "vendor/skills/github-literature-review/upstream/SKILL.md",
+          "sha256": "16a9e85bcdcb9bb859e1646bf836e51b22900445ba2e367d8d75be05b5a5cba8",
+          "bytes": 12869
+        }
+      ]
+    },
+    {
+      "id": "github-citation-management",
+      "repo": "K-Dense-AI/scientific-agent-skills",
+      "revision": "593377bb048752abb0152deab9fbb1083a6087df",
+      "upstreamPath": "skills/citation-management",
+      "sourceUrl": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/593377bb048752abb0152deab9fbb1083a6087df/skills/citation-management",
+      "upstreamSkill": "vendor/skills/github-citation-management/upstream/SKILL.md",
+      "license": {
+        "spdx": "MIT",
+        "files": [
+          "vendor/skills/github-citation-management/upstream-licenses/LICENSE.txt"
+        ]
+      },
+      "requirements": {
+        "zh": "Python 3.9+；BibTeX格式化仅标准库；校验与检索需requests；Google Scholar补充检索需scholarly并可能被限流。基础检索无模型API密钥要求，NCBI/OpenAlex账号密钥可选。",
+        "en": "Python 3.9+; BibTeX formatting uses the standard library. Validation/search need requests. Optional Google Scholar discovery needs scholarly and may be rate-limited. Basic use does not require a model API key; NCBI/OpenAlex credentials are optional."
+      },
+      "review": {
+        "level": "source-inspected-not-executed",
+        "notesZh": "可优先使用本地BibTeX格式化或公共文献元数据检索；源文件保留，改写输出到新文件。不得把DOI存在等同于引用支持论点。仅按请求查询公开书目信息，不传未发表稿件。 原文要求对有实质贡献的Scientific Agent Skills论文进行引用；本项目保留该说明，但科研引用仍应基于实际使用与核验，不自动插入无关引用。",
+        "notesEn": "Prefer local BibTeX formatting or public bibliographic metadata. Preserve originals and write new output files. DOI existence does not prove claim support. Query public bibliographic information for the requested task; do not send unpublished manuscripts. Upstream requests citation of Scientific Agent Skills where it materially contributes. Preserve that note; research citations should reflect actual use and verification rather than automatic unrelated insertion.",
+        "restrictedScripts": [],
+        "crossSkillDependencies": [
+          "literature-review",
+          "scientific-schematics (optional diagrams; not installed)",
+          "scientific-writing (optional writing)",
+          "venue-templates (optional venue style)"
+        ],
+        "scriptEffects": [
+          "scripts/format_bibtex.py reads local bibliography; stdout by default, writes output or overwrites input only with --output/--in-place.",
+          "scripts/validate_citations.py reads local bibliography/manuscript, writes optional report; --check-dois sends DOI identifiers to Crossref, DataCite or doi.org.",
+          "scripts/search_openalex.py sends public search query and optional OPENALEX_API_KEY/email only to api.openalex.org; writes chosen output.",
+          "scripts/search_pubmed.py queries eutils.ncbi.nlm.nih.gov; optional NCBI_API_KEY/email, chosen output.",
+          "scripts/extract_metadata.py queries Crossref, NCBI, arXiv, PMC and supplied publisher URLs; reads identifier input and writes requested bibliography.",
+          "scripts/doi_to_bibtex.py resolves DOI metadata through doi.org; reads optional identifier file and writes output.",
+          "scripts/search_google_scholar.py uses scholarly scraping and writes output; blocking/rate limits possible.",
+          "Optional service credential variables are accessed by their specific scripts; no broad .env scan found in this skill."
+        ],
+        "commitEvidence": "https://api.github.com/repos/K-Dense-AI/scientific-agent-skills/commits/main; top-level sha; distinct commit.tree.sha=d4d202beb151c1f1c6c15738be0692d65e0447af"
+      },
+      "files": [
+        {
+          "path": "vendor/skills/github-citation-management/upstream-licenses/LICENSE.txt",
+          "sha256": "09b02a3c9df3053c55531d503357a9c7cde275970e6c3ceaa1ddf5f0e90b40c1",
+          "bytes": 1068
+        },
+        {
+          "path": "vendor/skills/github-citation-management/upstream/assets/bibtex_template.bib",
+          "sha256": "08e21647fa68cad1aa1658264798c7d24775ba89bfbd2723ea6bfe4b562e2be1",
+          "bytes": 9305
+        },
+        {
+          "path": "vendor/skills/github-citation-management/upstream/assets/citation_checklist.md",
+          "sha256": "ce7317f2983f8b7fd02949aad726ebd6188319c7e57c929fffe689d5ae18ce36",
+          "bytes": 10434
+        },
+        {
+          "path": "vendor/skills/github-citation-management/upstream/references/api_contracts.md",
+          "sha256": "3e82a14f77133a215831d2627b65c93199589782f6907fc42af3c75f2ab3c5a8",
+          "bytes": 6712
+        },
+        {
+          "path": "vendor/skills/github-citation-management/upstream/references/best_practices.md",
+          "sha256": "df90d19c8f639590a6a430a889160b478dce61f4a5c0a5a36df5ab1be749b6b1",
+          "bytes": 2723
+        },
+        {
+          "path": "vendor/skills/github-citation-management/upstream/references/bibtex_formatting.md",
+          "sha256": "6337a8d2b87de96bf0f72c076feb0fc5d61ed9c342d9c8f19b3633efbfec6fed",
+          "bytes": 19394
+        },
+        {
+          "path": "vendor/skills/github-citation-management/upstream/references/citation_validation.md",
+          "sha256": "f235f82e02db282f0abdd23fd8d2973d870d427d355979e869f736259ba95774",
+          "bytes": 18996
+        },
+        {
+          "path": "vendor/skills/github-citation-management/upstream/references/core_workflow.md",
+          "sha256": "19e8b52c43f5822163c79904236016616dc4515d21a01d29073d968c9251af8d",
+          "bytes": 20986
+        },
+        {
+          "path": "vendor/skills/github-citation-management/upstream/references/example_workflows.md",
+          "sha256": "01c0a15e08e8115e10a07623f63565d119812fd2bb68c669eac413db2f9cd482",
+          "bytes": 3382
+        },
+        {
+          "path": "vendor/skills/github-citation-management/upstream/references/google_scholar_search.md",
+          "sha256": "5b705ec8d6276ef83b819b737ed10bd991815ccb413de27e046b7bfdf4da8399",
+          "bytes": 17993
+        },
+        {
+          "path": "vendor/skills/github-citation-management/upstream/references/metadata_extraction.md",
+          "sha256": "68c27886aff0d4efbf3a6f7e0a318dedd706d4cfd0f55dd859466de36ed78d46",
+          "bytes": 21419
+        },
+        {
+          "path": "vendor/skills/github-citation-management/upstream/references/pubmed_search.md",
+          "sha256": "fab82cda700a0dfc6dccc9465c9cc60b9df68cb58d0bec9abe7b2d8748a49cd1",
+          "bytes": 19233
+        },
+        {
+          "path": "vendor/skills/github-citation-management/upstream/references/script_reference.md",
+          "sha256": "bd23683cb3a7edb932fc5a13bb9215969a834a778a8765eea82553bf1b8b3417",
+          "bytes": 7536
+        },
+        {
+          "path": "vendor/skills/github-citation-management/upstream/references/search_strategies.md",
+          "sha256": "776c0dd1cbaf0432004ae80273640ff324b570401c569413c674829436385c85",
+          "bytes": 2727
+        },
+        {
+          "path": "vendor/skills/github-citation-management/upstream/scripts/_common.py",
+          "sha256": "87540160163671b972c2fccb4d0a42db3cca2603c664d26d5da3ca5dbc7dfdd2",
+          "bytes": 10912
+        },
+        {
+          "path": "vendor/skills/github-citation-management/upstream/scripts/doi_to_bibtex.py",
+          "sha256": "1b7d1ab2e8bf9bcf5a7d49bf45496e0f8b7d8e0d0cda8efd8fce4e527082dc4b",
+          "bytes": 6783
+        },
+        {
+          "path": "vendor/skills/github-citation-management/upstream/scripts/extract_metadata.py",
+          "sha256": "bebc7835b5e659cdeee0087980e881635894330bac5eda4ce01f490fd41df781",
+          "bytes": 29650
+        },
+        {
+          "path": "vendor/skills/github-citation-management/upstream/scripts/format_bibtex.py",
+          "sha256": "cc74fdc4d5819df8db3999e59f96469cebfb353ecf406a49a5a0fc60896707cb",
+          "bytes": 11075
+        },
+        {
+          "path": "vendor/skills/github-citation-management/upstream/scripts/search_google_scholar.py",
+          "sha256": "05cfd67aea6475029d017f1b4ff68e7ba727e1fa9b52f1e614c80287940b4985",
+          "bytes": 8746
+        },
+        {
+          "path": "vendor/skills/github-citation-management/upstream/scripts/search_openalex.py",
+          "sha256": "538b2f086625fd1e9a2cb2fe8bd46ee852d888f17d2d1e889b8f50592594f693",
+          "bytes": 12055
+        },
+        {
+          "path": "vendor/skills/github-citation-management/upstream/scripts/search_pubmed.py",
+          "sha256": "4543b74bf773747bae47a2bbb18acf2a4a050071119d88d1711db6049d157116",
+          "bytes": 14912
+        },
+        {
+          "path": "vendor/skills/github-citation-management/upstream/scripts/validate_citations.py",
+          "sha256": "a08e8e0774287e9aca2bd87c3a66cd3dfc751018eafb6cdee37987e3f416d2b5",
+          "bytes": 28361
+        },
+        {
+          "path": "vendor/skills/github-citation-management/upstream/SKILL.md",
+          "sha256": "dc79fe1e8438dcf598040615d5323360c6a7ed0b868fc3ffc82512c871a1e3ff",
+          "bytes": 16630
+        }
+      ]
+    },
+    {
+      "id": "github-statistical-analysis",
+      "repo": "K-Dense-AI/scientific-agent-skills",
+      "revision": "593377bb048752abb0152deab9fbb1083a6087df",
+      "upstreamPath": "skills/statistical-analysis",
+      "sourceUrl": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/593377bb048752abb0152deab9fbb1083a6087df/skills/statistical-analysis",
+      "upstreamSkill": "vendor/skills/github-statistical-analysis/upstream/SKILL.md",
+      "license": {
+        "spdx": "MIT",
+        "files": [
+          "vendor/skills/github-statistical-analysis/upstream-licenses/LICENSE.txt"
+        ]
+      },
+      "requirements": {
+        "zh": "Python 3.12+；实际计算需NumPy/pandas/SciPy/Matplotlib，按分析选择Pingouin、statsmodels；贝叶斯另需PyMC/ArviZ。依赖使用隔离环境，需检查实际版本兼容性。",
+        "en": "Python 3.12+; calculations need NumPy/pandas/SciPy/Matplotlib with Pingouin or statsmodels as appropriate. Bayesian examples additionally need PyMC/ArviZ. Use an isolated environment and check actual version compatibility."
+      },
+      "review": {
+        "level": "source-inspected-not-executed",
+        "notesZh": "可先选方法、核对假设与报告格式；只有完成真实计算才能输出数值结果。上游版本示例是指定快照，不代表本机已安装。无需模型API密钥。 原文要求对有实质贡献的Scientific Agent Skills论文进行引用；本项目保留该说明，但科研引用仍应基于实际使用与核验，不自动插入无关引用。",
+        "notesEn": "Method selection, assumption review and reporting guidance work before package installation. Report numerical results only after actual computation. Upstream pinned examples do not imply those packages are installed locally. No model API key is required. Upstream requests citation of Scientific Agent Skills where it materially contributes. Preserve that note; research citations should reflect actual use and verification rather than automatic unrelated insertion.",
+        "restrictedScripts": [],
+        "crossSkillDependencies": [
+          "statsmodels (specialist guidance, optional)",
+          "pymc (Bayesian guidance, optional)"
+        ],
+        "scriptEffects": [
+          "scripts/assumption_checks.py imports plotting and scientific libraries, computes diagnostics from supplied arrays/dataframes, returns reports and creates Matplotlib figures.",
+          "No network call, credential access, subprocess invocation or arbitrary deletion found in the bundled assumption helper.",
+          "Documentation installation examples create a separate virtual environment and install packages; they were not executed."
+        ],
+        "commitEvidence": "https://api.github.com/repos/K-Dense-AI/scientific-agent-skills/commits/main; top-level sha; distinct commit.tree.sha=d4d202beb151c1f1c6c15738be0692d65e0447af"
+      },
+      "files": [
+        {
+          "path": "vendor/skills/github-statistical-analysis/upstream-licenses/LICENSE.txt",
+          "sha256": "09b02a3c9df3053c55531d503357a9c7cde275970e6c3ceaa1ddf5f0e90b40c1",
+          "bytes": 1068
+        },
+        {
+          "path": "vendor/skills/github-statistical-analysis/upstream/references/assumptions_and_diagnostics.md",
+          "sha256": "6e1ebc110c092845b93e5c6d28f38c8a990780105ba1865f0bd47c007620b073",
+          "bytes": 14654
+        },
+        {
+          "path": "vendor/skills/github-statistical-analysis/upstream/references/bayesian_statistics.md",
+          "sha256": "34d62e1b20dd82a11497be40e07c93e4fdb555d56e4944e200f881c1b7629cbf",
+          "bytes": 14557
+        },
+        {
+          "path": "vendor/skills/github-statistical-analysis/upstream/references/effect_sizes_and_power.md",
+          "sha256": "5e1321c9058b2931a1bd2a753c7a8f4295f58274412d62e99a34eabd478e42b2",
+          "bytes": 20907
+        },
+        {
+          "path": "vendor/skills/github-statistical-analysis/upstream/references/reporting_standards.md",
+          "sha256": "0a30a1bec63231c94c9c285977acaa4218c50a34c8385857d18f62c61ac817b7",
+          "bytes": 21469
+        },
+        {
+          "path": "vendor/skills/github-statistical-analysis/upstream/references/test_selection_guide.md",
+          "sha256": "e72e00b6ebe9450e5e84849503db223c4908a8d9a68c3b87cf0ab8ec3254fe83",
+          "bytes": 6950
+        },
+        {
+          "path": "vendor/skills/github-statistical-analysis/upstream/scripts/assumption_checks.py",
+          "sha256": "3e37a4e04407b5f040f103962ed0e73935d114d3892ee45b5a06a1da42c10341",
+          "bytes": 18387
+        },
+        {
+          "path": "vendor/skills/github-statistical-analysis/upstream/SKILL.md",
+          "sha256": "e112848726b3713267cac65e4e2c15491a0a26ee1ed628db01195f7e43f97997",
+          "bytes": 23585
+        }
+      ]
+    },
+    {
+      "id": "github-scientific-visualization",
+      "repo": "K-Dense-AI/scientific-agent-skills",
+      "revision": "593377bb048752abb0152deab9fbb1083a6087df",
+      "upstreamPath": "skills/scientific-visualization",
+      "sourceUrl": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/593377bb048752abb0152deab9fbb1083a6087df/skills/scientific-visualization",
+      "upstreamSkill": "vendor/skills/github-scientific-visualization/upstream/SKILL.md",
+      "license": {
+        "spdx": "MIT",
+        "files": [
+          "vendor/skills/github-scientific-visualization/upstream-licenses/LICENSE.txt"
+        ]
+      },
+      "requirements": {
+        "zh": "Python 3.11+；配色和导出规划部分用标准库。作图需Matplotlib，图像检查需Pillow，PDF检查需pypdf；Seaborn/Plotly按需，Plotly静态导出另需Kaleido与Chrome/Chromium。",
+        "en": "Python 3.11+; palette and export-planning functions partly use the standard library. Plotting needs Matplotlib, raster inspection Pillow, and PDF inspection pypdf. Seaborn/Plotly are optional; Plotly static export additionally needs Kaleido and Chrome/Chromium."
+      },
+      "review": {
+        "level": "source-inspected-not-executed",
+        "notesZh": "优先本地Matplotlib/静态图，不引入网站浏览器依赖。需要查看实际成图后才声称已完成视觉检查。期刊规格是日期快照，投稿前重新核验。 原文要求对有实质贡献的Scientific Agent Skills论文进行引用；本项目保留该说明，但科研引用仍应基于实际使用与核验，不自动插入无关引用。",
+        "notesEn": "Prefer local Matplotlib/static figures without adding browser dependencies to the dashboard. Claim visual verification only after examining the actual rendered figure. Publisher profiles are dated snapshots and need rechecking before submission. Upstream requests citation of Scientific Agent Skills where it materially contributes. Preserve that note; research citations should reflect actual use and verification rather than automatic unrelated insertion.",
+        "restrictedScripts": [],
+        "crossSkillDependencies": [],
+        "scriptEffects": [
+          "scripts/image_metadata.py reads specified images/PDF/SVG/EPS metadata; optional JSON output via shared helper.",
+          "scripts/palette_audit.py reads bundled color palette definitions and emits contrast/grayscale diagnostics.",
+          "scripts/export_plan.py reads bundled publisher profiles and optional input image, then emits plan/screening report.",
+          "scripts/style_presets.py/style_preview.py read bundled style/palette assets; preview renders and writes selected outputs.",
+          "scripts/figure_export.py renders to temporary files, publishes selected image formats/manifest, removes only its temporary files; refuses implicit overwrite unless force is explicit.",
+          "scripts/_common.py performs bounded reads and atomic local output writes; removes only its own temporary files. No network or credential access found in bundled CLIs."
+        ],
+        "commitEvidence": "https://api.github.com/repos/K-Dense-AI/scientific-agent-skills/commits/main; top-level sha; distinct commit.tree.sha=d4d202beb151c1f1c6c15738be0692d65e0447af"
+      },
+      "files": [
+        {
+          "path": "vendor/skills/github-scientific-visualization/upstream-licenses/LICENSE.txt",
+          "sha256": "09b02a3c9df3053c55531d503357a9c7cde275970e6c3ceaa1ddf5f0e90b40c1",
+          "bytes": 1068
+        },
+        {
+          "path": "vendor/skills/github-scientific-visualization/upstream/assets/color_palettes.py",
+          "sha256": "98ee4aa4b9bbb010996d55144ea6bf45a0ab294009b9bb0ef6d9c5ec9fed5154",
+          "bytes": 6756
+        },
+        {
+          "path": "vendor/skills/github-scientific-visualization/upstream/assets/nature.mplstyle",
+          "sha256": "f37a361cdda8846da0794fd879cc8173402094f110239d57e0227fdd8299a4f6",
+          "bytes": 1624
+        },
+        {
+          "path": "vendor/skills/github-scientific-visualization/upstream/assets/presentation.mplstyle",
+          "sha256": "d0e5a768e5965aa3893b12c0f7decd4c3b09502044391a840ebdee37dfea44da",
+          "bytes": 1465
+        },
+        {
+          "path": "vendor/skills/github-scientific-visualization/upstream/assets/publication.mplstyle",
+          "sha256": "eba3001f346649a9e41d9ac1d56101abbae10aefecdad3be9530f4c9cd9269b3",
+          "bytes": 1822
+        },
+        {
+          "path": "vendor/skills/github-scientific-visualization/upstream/assets/publisher_profiles.json",
+          "sha256": "1e1b1b5a4e0e3dfc57877f2abf1e96888fe6b65617234b078f193b8f76e0ebe9",
+          "bytes": 10870
+        },
+        {
+          "path": "vendor/skills/github-scientific-visualization/upstream/references/color_palettes.md",
+          "sha256": "c9b6a596dd1dd1e08050fdcbb304a0268ee515bce2120a9bbd3fba31cd7fa119",
+          "bytes": 9094
+        },
+        {
+          "path": "vendor/skills/github-scientific-visualization/upstream/references/journal_requirements.md",
+          "sha256": "f7c4b6660eb70f7c5778d13908409e1dc690f00e3dfc8314f430feb89781740c",
+          "bytes": 11200
+        },
+        {
+          "path": "vendor/skills/github-scientific-visualization/upstream/references/matplotlib_examples.md",
+          "sha256": "74fd5977ce57b09b476285309559bbcbe3b1748943b719844b28a6b61378c041",
+          "bytes": 12165
+        },
+        {
+          "path": "vendor/skills/github-scientific-visualization/upstream/references/publication_guidelines.md",
+          "sha256": "5f70c6b22dbb5e0fae18b0f1197b8794896bf7afc059874bcf7afbd5aa86bbe5",
+          "bytes": 12853
+        },
+        {
+          "path": "vendor/skills/github-scientific-visualization/upstream/references/sources.md",
+          "sha256": "3ff34759c0fed3baf33286a8005fd81f0c3466a554c8b0d45f43ad30b1e5b505",
+          "bytes": 10697
+        },
+        {
+          "path": "vendor/skills/github-scientific-visualization/upstream/scripts/_common.py",
+          "sha256": "e4eea2c2e5f5d8cfa544c6bed152cdb88a3d7c7952df99bcd74b45077fd6f707",
+          "bytes": 4618
+        },
+        {
+          "path": "vendor/skills/github-scientific-visualization/upstream/scripts/export_plan.py",
+          "sha256": "c20962bf4c624b9939c80bd16815fc0a18fe2be285f0654a6a53704c663add0e",
+          "bytes": 19682
+        },
+        {
+          "path": "vendor/skills/github-scientific-visualization/upstream/scripts/figure_export.py",
+          "sha256": "fe9c77878da61297ce55224b67282d128631deb628d930aa1929c9eb7330bf79",
+          "bytes": 23652
+        },
+        {
+          "path": "vendor/skills/github-scientific-visualization/upstream/scripts/image_metadata.py",
+          "sha256": "45f79cefd99b8e5dabcbfd1a29b7346363f383411cc43540bf9f73e67fed634e",
+          "bytes": 26596
+        },
+        {
+          "path": "vendor/skills/github-scientific-visualization/upstream/scripts/palette_audit.py",
+          "sha256": "3a90b3c9a4a39dde6a341dc3de7b99cd2bca4773c66564fc90cdc2706a5a8165",
+          "bytes": 11654
+        },
+        {
+          "path": "vendor/skills/github-scientific-visualization/upstream/scripts/style_presets.py",
+          "sha256": "8413cfae7f2cbc4a5dd9d4301d74b051fd8eb0c7a4b3375ae59e1da91db3a985",
+          "bytes": 16173
+        },
+        {
+          "path": "vendor/skills/github-scientific-visualization/upstream/scripts/style_preview.py",
+          "sha256": "ca14e714dc2fb32541ff80292db97b3acbac074a65c4f2fb290f38354f880ba7",
+          "bytes": 7762
+        },
+        {
+          "path": "vendor/skills/github-scientific-visualization/upstream/SKILL.md",
+          "sha256": "8cbde7cdc10d959cf72cfd08335cc8ce996247eee6ebdb900eb64a4cb0ff34a3",
+          "bytes": 15478
+        }
+      ]
+    },
+    {
+      "id": "github-peer-review",
+      "repo": "K-Dense-AI/scientific-agent-skills",
+      "revision": "593377bb048752abb0152deab9fbb1083a6087df",
+      "upstreamPath": "skills/peer-review",
+      "sourceUrl": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/593377bb048752abb0152deab9fbb1083a6087df/skills/peer-review",
+      "upstreamSkill": "vendor/skills/github-peer-review/upstream/SKILL.md",
+      "license": {
+        "spdx": "MIT",
+        "files": [
+          "vendor/skills/github-peer-review/upstream-licenses/LICENSE.txt"
+        ]
+      },
+      "requirements": {
+        "zh": "Python 3.11+标准库；附带本地JSON/CSV/Markdown校验器，无模型API、外部账号或联网要求。",
+        "en": "Python 3.11+ standard library; bundled JSON/CSV/Markdown validators are local and require no model API, external account or network."
+      },
+      "review": {
+        "level": "source-inspected-not-executed",
+        "notesZh": "适合自查或已授权材料审读；上游有严格授权/期刊政策入口。本人稿件已有审查授权时沿用，不重复索取。建议仍标为AI草稿，不代表真实评审或编辑决定；不根据上游留存建议擅自删文件。 原文要求对有实质贡献的Scientific Agent Skills论文进行引用；本项目保留该说明，但科研引用仍应基于实际使用与核验，不自动插入无关引用。",
+        "notesEn": "Suitable for self-review or authorized material. Upstream has an explicit authorization/venue-policy intake. Reuse existing authorization for the user’s own manuscript. Label output as an AI working draft, not an official review or editorial decision; do not delete files merely because upstream discusses retention. Upstream requests citation of Scientific Agent Skills where it materially contributes. Preserve that note; research citations should reflect actual use and verification rather than automatic unrelated insertion.",
+        "restrictedScripts": [],
+        "crossSkillDependencies": [],
+        "scriptEffects": [
+          "scripts/validate_review_intake.py validates bounded local JSON declarations; reads no secrets and makes no network calls.",
+          "scripts/select_reporting_guidelines.py reads local study profile/coverage and bundled reporting catalog.",
+          "scripts/validate_claim_evidence.py/audit_statistics_reproducibility.py/audit_citations.py/lint_review.py inspect supplied local CSV/JSON/Markdown and output diagnostics.",
+          "scripts/generate_review_scaffold.py writes requested local Markdown scaffold after intake checks.",
+          "scripts/_common.py writes reports atomically and deletes only its own temporary files. Documentation mentions policy-driven deletion/retention, but no user-material deletion helper was found."
+        ],
+        "commitEvidence": "https://api.github.com/repos/K-Dense-AI/scientific-agent-skills/commits/main; top-level sha; distinct commit.tree.sha=d4d202beb151c1f1c6c15738be0692d65e0447af"
+      },
+      "files": [
+        {
+          "path": "vendor/skills/github-peer-review/upstream-licenses/LICENSE.txt",
+          "sha256": "09b02a3c9df3053c55531d503357a9c7cde275970e6c3ceaa1ddf5f0e90b40c1",
+          "bytes": 1068
+        },
+        {
+          "path": "vendor/skills/github-peer-review/upstream/assets/citation_references_template.csv",
+          "sha256": "e00b259742a0716661d8adba1e81fc7ca722cea32c3cfe5a5e29509844ed742b",
+          "bytes": 196
+        },
+        {
+          "path": "vendor/skills/github-peer-review/upstream/assets/claim_evidence_matrix_template.csv",
+          "sha256": "06e1215c998a978bdbbe30008040536902abe138e0f790b243ecaee1f21b7da7",
+          "bytes": 745
+        },
+        {
+          "path": "vendor/skills/github-peer-review/upstream/assets/reporting_checklist_template.csv",
+          "sha256": "02709793bc1702fadc760e7089398eb28351b22885a08cbea6c85f135e931ee1",
+          "bytes": 968
+        },
+        {
+          "path": "vendor/skills/github-peer-review/upstream/assets/reporting_guidelines.json",
+          "sha256": "cf95b9a4e1f54016c800e8b3ff02191e7bc60593e30c043231d47d91259250ac",
+          "bytes": 14452
+        },
+        {
+          "path": "vendor/skills/github-peer-review/upstream/assets/review_intake_template.json",
+          "sha256": "14d7e00cdc710b8235c80faa71f4c5712c1db1a0a2d734fd4fa9807bbc960438",
+          "bytes": 1290
+        },
+        {
+          "path": "vendor/skills/github-peer-review/upstream/assets/review_scaffold_template.md",
+          "sha256": "4e320c9a6238ac7ea2494a4c486e93d1eaf2c5239aab80fcd8eea70a6e359102",
+          "bytes": 3025
+        },
+        {
+          "path": "vendor/skills/github-peer-review/upstream/assets/source_ledger.csv",
+          "sha256": "9226c94f1066b8c8f9a2a65d6aea08a3471ec36e19f835908573690282a8e737",
+          "bytes": 13407
+        },
+        {
+          "path": "vendor/skills/github-peer-review/upstream/assets/statistical_reproducibility_template.json",
+          "sha256": "071bfc0b1e1edb9d09c539b5c6e291e43e8d719cbe50cfdeac1044fe8f0b69a3",
+          "bytes": 7281
+        },
+        {
+          "path": "vendor/skills/github-peer-review/upstream/assets/study_profile_template.json",
+          "sha256": "bc0c19b9ad478c78c4b5111bcd913faca8046e0833815b1bd579a046f737df40",
+          "bytes": 197
+        },
+        {
+          "path": "vendor/skills/github-peer-review/upstream/references/common_issues.md",
+          "sha256": "6a0979d6d64e07f769db8ee9ab82ad3190aebaca4294838f338f5c4b51b596f6",
+          "bytes": 13999
+        },
+        {
+          "path": "vendor/skills/github-peer-review/upstream/references/ethical_review_practice.md",
+          "sha256": "d61f27a471f9b42160ae303cb13df2b034085e037b5647cbc0bbf2de8435b1d7",
+          "bytes": 12209
+        },
+        {
+          "path": "vendor/skills/github-peer-review/upstream/references/reporting_standards.md",
+          "sha256": "19ececda52568269987be1dff81900471433353dee8bb8a28a06f3691cb051c2",
+          "bytes": 15438
+        },
+        {
+          "path": "vendor/skills/github-peer-review/upstream/references/security_validation.md",
+          "sha256": "3d24c7aa7d7b1d1a7df410307d95993b63dff79bf01c400a1c154df19fcf737d",
+          "bytes": 4166
+        },
+        {
+          "path": "vendor/skills/github-peer-review/upstream/references/statistical_reproducibility.md",
+          "sha256": "aab5c13d19525fc4626a4153a90ba63231324d609e16bbf569d874c974731bd6",
+          "bytes": 11755
+        },
+        {
+          "path": "vendor/skills/github-peer-review/upstream/references/tool_reference.md",
+          "sha256": "d765fa7a03712049174b2c288718a602c623fd2233b6fa451bbd6854eb0c46c1",
+          "bytes": 9670
+        },
+        {
+          "path": "vendor/skills/github-peer-review/upstream/scripts/_common.py",
+          "sha256": "78e751bd8024d4df69a6a7ab82497424d58da06d751f4cb97ba4fc75eb9044db",
+          "bytes": 13896
+        },
+        {
+          "path": "vendor/skills/github-peer-review/upstream/scripts/audit_citations.py",
+          "sha256": "9521d624dce092b93f36e3c4c7dd9cab151b24d2e623d0b299adbef239100e47",
+          "bytes": 7097
+        },
+        {
+          "path": "vendor/skills/github-peer-review/upstream/scripts/audit_statistics_reproducibility.py",
+          "sha256": "8daf60d78a2758665b5c676d1d68e52c57c5c1988249fdbbaba62d31a49c495b",
+          "bytes": 10455
+        },
+        {
+          "path": "vendor/skills/github-peer-review/upstream/scripts/generate_review_scaffold.py",
+          "sha256": "3c2d6dc36e8e5fdd0313422d30da8c31a7ca808618818db376e348fe8d38fd2c",
+          "bytes": 2634
+        },
+        {
+          "path": "vendor/skills/github-peer-review/upstream/scripts/lint_review.py",
+          "sha256": "623878c26ede3d74f2ddf0e0a15acbade40d10009c66ab334550b814b2361e75",
+          "bytes": 9085
+        },
+        {
+          "path": "vendor/skills/github-peer-review/upstream/scripts/select_reporting_guidelines.py",
+          "sha256": "9ccbbdeca6df01f2f4e1c86b98db0e9ab0a43685c6726e1abfdb9bbaa2b92ae3",
+          "bytes": 13594
+        },
+        {
+          "path": "vendor/skills/github-peer-review/upstream/scripts/validate_claim_evidence.py",
+          "sha256": "93490b289f288ed686a8eb300bf40693e7caf148b5022b180077f0db22acbe2b",
+          "bytes": 7083
+        },
+        {
+          "path": "vendor/skills/github-peer-review/upstream/scripts/validate_review_intake.py",
+          "sha256": "0ad9038d96a7867fa8268b70aff4f69ec1e2472b6399bbc04feb5c6fd842d5fa",
+          "bytes": 14486
+        },
+        {
+          "path": "vendor/skills/github-peer-review/upstream/SKILL.md",
+          "sha256": "a042ccdc76d3399431b9a6c4cd4f98968eab964b1c14baeea4d9e73de82c7d19",
+          "bytes": 13853
+        }
+      ]
+    },
+    {
+      "id": "github-experimental-design",
+      "repo": "K-Dense-AI/scientific-agent-skills",
+      "revision": "593377bb048752abb0152deab9fbb1083a6087df",
+      "upstreamPath": "skills/experimental-design",
+      "sourceUrl": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/593377bb048752abb0152deab9fbb1083a6087df/skills/experimental-design",
+      "upstreamSkill": "vendor/skills/github-experimental-design/upstream/SKILL.md",
+      "license": {
+        "spdx": "MIT",
+        "files": [
+          "vendor/skills/github-experimental-design/upstream-licenses/LICENSE.txt"
+        ]
+      },
+      "requirements": {
+        "zh": "Python 3.12+与NumPy/pandas；生成DOE矩阵另需pydoe 1.5.0。仅安装依赖时需要网络，不需要API密钥。",
+        "en": "Python 3.12+ with NumPy/pandas; DOE matrix generation additionally needs pydoe 1.5.0. Network is needed only for dependency installation; no API key is required."
+      },
+      "review": {
+        "level": "source-inspected-not-executed",
+        "notesZh": "用于真实采集前的随机化、分块、因子设计和批次规划；计划不能标为已执行。样本量或模型细节引用未收录的statistical-power/statsmodels/pymc时，使用本机可用工具并说明能力范围。 原文要求对有实质贡献的Scientific Agent Skills论文进行引用；本项目保留该说明，但科研引用仍应基于实际使用与核验，不自动插入无关引用。",
+        "notesEn": "Use for randomization, blocking, factorial layouts and batch planning before real data collection. A plan is not an executed experiment. When upstream references absent statistical-power/statsmodels/pymc skills, use available tools and disclose scope. Upstream requests citation of Scientific Agent Skills where it materially contributes. Preserve that note; research citations should reflect actual use and verification rather than automatic unrelated insertion.",
+        "restrictedScripts": [],
+        "crossSkillDependencies": [
+          "statistical-power (sample-size workflow; not installed)",
+          "statistical-analysis",
+          "statsmodels / pymc (optional model-specific guidance)"
+        ],
+        "scriptEffects": [
+          "scripts/randomization.py generates NumPy/pandas allocation schedules in memory; example calls export CSV files chosen by the user.",
+          "scripts/doe_designs.py generates factorial/screening/response-surface/space-filling designs via pydoe; demonstration path prints sample plans.",
+          "Static inspection found no model/network calls, credential access, subprocess invocation or deletion in the two bundled scripts. They compute in-memory dataframes; their direct-run demonstrations print designs."
+        ],
+        "commitEvidence": "https://api.github.com/repos/K-Dense-AI/scientific-agent-skills/commits/main; top-level sha; distinct commit.tree.sha=d4d202beb151c1f1c6c15738be0692d65e0447af"
+      },
+      "files": [
+        {
+          "path": "vendor/skills/github-experimental-design/upstream-licenses/LICENSE.txt",
+          "sha256": "09b02a3c9df3053c55531d503357a9c7cde275970e6c3ceaa1ddf5f0e90b40c1",
+          "bytes": 1068
+        },
+        {
+          "path": "vendor/skills/github-experimental-design/upstream/references/design_types.md",
+          "sha256": "1f36f14160bc9895773a2922402869202866410c9130f2b32c5a54e5f5a6e71b",
+          "bytes": 7972
+        },
+        {
+          "path": "vendor/skills/github-experimental-design/upstream/references/factorial_and_doe.md",
+          "sha256": "a59fa2279c439c096a66955b4923ad68c00d6046570665e6f6d36e807fa1de63",
+          "bytes": 9069
+        },
+        {
+          "path": "vendor/skills/github-experimental-design/upstream/references/randomization_and_blocking.md",
+          "sha256": "fabcfae913397fb8c3018b959b67ddf8fe47322b40cbf4155d898fa11738e9ae",
+          "bytes": 7831
+        },
+        {
+          "path": "vendor/skills/github-experimental-design/upstream/references/sequential_and_adaptive.md",
+          "sha256": "83085e2cde0942de23670d3aabb30768fb576a6aa99c2e4ac6f7790b00977051",
+          "bytes": 6530
+        },
+        {
+          "path": "vendor/skills/github-experimental-design/upstream/scripts/doe_designs.py",
+          "sha256": "916996b5e6a5dbb9a408aa1e755a95800af70231e46d12c8c5efddb9e3e30683",
+          "bytes": 9575
+        },
+        {
+          "path": "vendor/skills/github-experimental-design/upstream/scripts/randomization.py",
+          "sha256": "c7c2eab469618a4b27548058b924ec3f4aafaf635d3797af920b9058e700bce4",
+          "bytes": 9592
+        },
+        {
+          "path": "vendor/skills/github-experimental-design/upstream/SKILL.md",
+          "sha256": "db2de0f3d29b7729776a91e923c9c83801298f5ad8e88fe44570045fbefcc248",
+          "bytes": 16328
+        }
+      ]
+    },
+    {
+      "id": "github-huggingface-papers",
+      "repo": "huggingface/skills",
+      "revision": "fabc634a893f62ad5c2039830397efa35fa62715",
+      "upstreamPath": "skills/huggingface-papers",
+      "sourceUrl": "https://github.com/huggingface/skills/tree/fabc634a893f62ad5c2039830397efa35fa62715/skills/huggingface-papers",
+      "upstreamSkill": "vendor/skills/github-huggingface-papers/upstream/SKILL.md",
+      "license": {
+        "spdx": "Apache-2.0",
+        "files": [
+          "vendor/skills/github-huggingface-papers/upstream-licenses/LICENSE.txt"
+        ]
+      },
+      "requirements": {
+        "zh": "公开论文页面读取需要联网及 HTTP/网页读取能力，无必需模型 API 密钥。搜索/列表示例使用 HF_TOKEN；账号写操作需要 Hugging Face 授权。",
+        "en": "Public paper reading requires network and HTTP/web tools, with no required model API key. Search/list examples use HF_TOKEN; account writes require Hugging Face authorization."
+      },
+      "review": {
+        "level": "source-inspected-not-executed",
+        "notesZh": "默认仅读取公开论文；作者认领、索引和链接修改需用户明确要求。Markdown 端点在没有 arXiv HTML 时可能仅返回 HF 页面，不能当作已阅读全文。API 返回的 AI 摘要不能作为原始研究证据。无跨目录文件依赖。",
+        "notesEn": "Default to public read-only paper access. Authorship claims, indexing and link updates require explicit user intent. Markdown can fall back to an HF landing page when arXiv HTML is absent; do not claim full-text reading. AI summaries are not primary research evidence. No cross-directory file dependencies.",
+        "restrictedScripts": [],
+        "crossSkillDependencies": [],
+        "scriptEffects": [],
+        "commitEvidence": "GitHub codeload branch ZIP git archive comment; downloaded again at exact SHA with trusted skill installer; byte comparison against branch archive passed."
+      },
+      "files": [
+        {
+          "path": "vendor/skills/github-huggingface-papers/upstream-licenses/LICENSE.txt",
+          "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+          "bytes": 11357
+        },
+        {
+          "path": "vendor/skills/github-huggingface-papers/upstream/SKILL.md",
+          "sha256": "985c2d5c7261aba2b157811cde0c2b30134663694a4ab701280de28f941eb3b2",
+          "bytes": 9348
+        }
+      ]
+    },
+    {
+      "id": "github-huggingface-trackio",
+      "repo": "huggingface/skills",
+      "revision": "fabc634a893f62ad5c2039830397efa35fa62715",
+      "upstreamPath": "skills/huggingface-trackio",
+      "sourceUrl": "https://github.com/huggingface/skills/tree/fabc634a893f62ad5c2039830397efa35fa62715/skills/huggingface-trackio",
+      "upstreamSkill": "vendor/skills/github-huggingface-trackio/upstream/SKILL.md",
+      "license": {
+        "spdx": "Apache-2.0",
+        "files": [
+          "vendor/skills/github-huggingface-trackio/upstream-licenses/LICENSE.txt"
+        ]
+      },
+      "requirements": {
+        "zh": "运行指标读写需另有 Python 和 trackio 包；本地模式无需模型 API 密钥。HF Space 同步需联网与账号授权，云资源费用取决于用户选用服务。",
+        "en": "Metric execution requires Python and the trackio package; local mode needs no model API key. HF Space sync requires network and account authorization; cloud resource costs depend on selected services."
+      },
+      "review": {
+        "level": "source-inspected-not-executed",
+        "notesZh": "仅处理用户指定的本地实验日志；默认不云同步、不设置 webhook、不自动改参重跑或持续监控。HF 自动创建 Space 可能默认公开。其 references/retrieving_metrics.md 尾部 docs/source/cli_commands.md 和 docs/source/api_mcp_server.md 不在技能包或本仓库中，是外部 Trackio 项目文档引用；如需要应查官方 Trackio 文档而非假定本地存在。",
+        "notesEn": "Handle only user-designated local experiment logs. No cloud sync, webhooks, autonomous reruns or ongoing monitoring by default. Auto-created HF Spaces may be public. references/retrieving_metrics.md links docs/source/cli_commands.md and docs/source/api_mcp_server.md, absent from this package and repository; consult official Trackio documentation instead of assuming local files exist.",
+        "restrictedScripts": [],
+        "crossSkillDependencies": [],
+        "scriptEffects": [],
+        "commitEvidence": "GitHub codeload branch ZIP git archive comment; downloaded again at exact SHA with trusted skill installer; byte comparison against branch archive passed."
+      },
+      "files": [
+        {
+          "path": "vendor/skills/github-huggingface-trackio/upstream-licenses/LICENSE.txt",
+          "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+          "bytes": 11357
+        },
+        {
+          "path": "vendor/skills/github-huggingface-trackio/upstream/references/alerts.md",
+          "sha256": "4065538fd2d090a145cdb66b7b84019d448becd3038740c87708b8fa1bdaef08",
+          "bytes": 5950
+        },
+        {
+          "path": "vendor/skills/github-huggingface-trackio/upstream/references/logging_metrics.md",
+          "sha256": "238849c975496dad8b6b7816d8d0ef1868c1a61456e0063c6a88db390ea89b29",
+          "bytes": 5576
+        },
+        {
+          "path": "vendor/skills/github-huggingface-trackio/upstream/references/retrieving_metrics.md",
+          "sha256": "fa1339a8f6a7f88d2d83b191324eb8412d80ee837e9779fbc70cda81408e5e90",
+          "bytes": 8707
+        },
+        {
+          "path": "vendor/skills/github-huggingface-trackio/upstream/SKILL.md",
+          "sha256": "540f52974f4f77c2455a7b37ed983da0dbfb0f5af3d2c482e4736f14f1cc8724",
+          "bytes": 5128
+        }
+      ]
+    },
+    {
+      "id": "github-humanizer",
+      "repo": "blader/humanizer",
+      "revision": "8c307f367c91bd974002f10f2be2965d642c13df",
+      "upstreamPath": ".",
+      "sourceUrl": "https://github.com/blader/humanizer/tree/8c307f367c91bd974002f10f2be2965d642c13df",
+      "upstreamSkill": "vendor/skills/github-humanizer/upstream/SKILL.md",
+      "license": {
+        "spdx": "MIT",
+        "files": [
+          "vendor/skills/github-humanizer/upstream-licenses/LICENSE.txt"
+        ]
+      },
+      "requirements": {
+        "zh": "纯文本编辑工作流无需额外软件包、账号或模型 API 密钥；由当前 AI 客户端读取用户提供的文本。",
+        "en": "Prose editing needs no extra package, account, or model API key; the active AI client edits user-provided text."
+      },
+      "review": {
+        "level": "source-inspected-not-executed",
+        "notesZh": "用于清晰自然的表达，不承诺规避 AI 检测；学术使用须保留科学含义、限定条件、引文和真实作者信息。完整根目录已保留；附带 validate-package.py 为静态包校验脚本，已审读、未运行。嵌套 AGENTS.md 仅描述上游包维护，不覆盖项目约定。",
+        "notesEn": "Use for clear natural prose, with no promise to evade AI detection. Preserve scientific meaning, qualifications, citations and real authorship. Complete root directory preserved. Included validate-package.py performs static package checks; inspected but not executed. Nested AGENTS.md describes upstream package maintenance and does not override project rules.",
+        "restrictedScripts": [],
+        "crossSkillDependencies": [],
+        "scriptEffects": [],
+        "commitEvidence": "GitHub codeload branch ZIP git archive comment; downloaded again at exact SHA with trusted skill installer; byte comparison against branch archive passed."
+      },
+      "files": [
+        {
+          "path": "vendor/skills/github-humanizer/upstream-licenses/LICENSE.txt",
+          "sha256": "4ac4810254ab36d45419141aeb8e69bf50652cfafe5b2dab947d06d44e5cbf96",
+          "bytes": 1066
+        },
+        {
+          "path": "vendor/skills/github-humanizer/upstream/.claude-plugin/marketplace.json",
+          "sha256": "e539740285b660d2288a38b6d9b237396c6769828c671c46b9f91e760db6cc29",
+          "bytes": 521
+        },
+        {
+          "path": "vendor/skills/github-humanizer/upstream/.claude-plugin/plugin.json",
+          "sha256": "054c0afeeb03c12f01a7f156da949edfdec3a2b756588f5ff4ee7357b0c07f6a",
+          "bytes": 526
+        },
+        {
+          "path": "vendor/skills/github-humanizer/upstream/.cursor-plugin/plugin.json",
+          "sha256": "d1e0b50594cf4bbe57fd164b771b401713a91b76b5a213ebe8f4558bb2036546",
+          "bytes": 388
+        },
+        {
+          "path": "vendor/skills/github-humanizer/upstream/.github/ISSUE_TEMPLATE/config.yml",
+          "sha256": "cb7e95de7606d07654024c8d47916796b307033e23ddb2b0a821a9bf89e999ef",
+          "bytes": 393
+        },
+        {
+          "path": "vendor/skills/github-humanizer/upstream/.github/ISSUE_TEMPLATE/new-pattern.yml",
+          "sha256": "7436d578fa0056a09da5da6da950a03cb49f3ce27cf268ae295eb3d7ca19f604",
+          "bytes": 681
+        },
+        {
+          "path": "vendor/skills/github-humanizer/upstream/.github/ISSUE_TEMPLATE/rewrite-problem.yml",
+          "sha256": "ecfe5e82c5b6d44683e0cb63cfad117dfdd16e30cc6f03510ef335414eea4947",
+          "bytes": 1286
+        },
+        {
+          "path": "vendor/skills/github-humanizer/upstream/.github/workflows/validate.yml",
+          "sha256": "f2d6a8780fb0b3cf6fa7d2ffccd72d0fc8bee29b4e63ea0fd65924712c9055fd",
+          "bytes": 815
+        },
+        {
+          "path": "vendor/skills/github-humanizer/upstream/AGENTS.md",
+          "sha256": "de84a449da400454df1225ddb1ced728c35bf0be7811b239e3370c7dbe1f4e69",
+          "bytes": 3439
+        },
+        {
+          "path": "vendor/skills/github-humanizer/upstream/agents/openai.yaml",
+          "sha256": "9d87ff83149a04f86a372948b8ee35fa249de20923867bbc2a49304290aad736",
+          "bytes": 201
+        },
+        {
+          "path": "vendor/skills/github-humanizer/upstream/CHANGELOG.md",
+          "sha256": "b3591fe203429f1a6bd2f713c79272e9a8e58a487843d0908d2bbe0700722afa",
+          "bytes": 5922
+        },
+        {
+          "path": "vendor/skills/github-humanizer/upstream/LICENSE",
+          "sha256": "4ac4810254ab36d45419141aeb8e69bf50652cfafe5b2dab947d06d44e5cbf96",
+          "bytes": 1066
+        },
+        {
+          "path": "vendor/skills/github-humanizer/upstream/README.md",
+          "sha256": "500b53c0d29cd3219d160b5f9a109c0969f706aec74b49a4a081d2026ba48ec7",
+          "bytes": 12926
+        },
+        {
+          "path": "vendor/skills/github-humanizer/upstream/scripts/validate-package.py",
+          "sha256": "941bd99e52b2ba21449719bb7969607ac8117e3dc173d0c9dfe64fd274c65938",
+          "bytes": 5418
+        },
+        {
+          "path": "vendor/skills/github-humanizer/upstream/SKILL.md",
+          "sha256": "0612f1dfb1672b0ea9b97e139bf1f06cabe98d8b27424fe8ff01e1fb4cc99cad",
+          "bytes": 32348
+        }
+      ]
+    },
+    {
+      "id": "github-brainstorming-research-ideas",
+      "repo": "Orchestra-Research/AI-Research-SKILLs",
+      "revision": "773a52944ba4747a18bd4ae9ade53fff041adcbc",
+      "upstreamPath": "21-research-ideation/brainstorming-research-ideas",
+      "sourceUrl": "https://github.com/Orchestra-Research/AI-Research-SKILLs/tree/773a52944ba4747a18bd4ae9ade53fff041adcbc/21-research-ideation/brainstorming-research-ideas",
+      "upstreamSkill": "vendor/skills/github-brainstorming-research-ideas/upstream/SKILL.md",
+      "license": {
+        "spdx": "MIT",
+        "files": [
+          "vendor/skills/github-brainstorming-research-ideas/upstream-licenses/LICENSE.txt"
+        ]
+      },
+      "requirements": {
+        "zh": "纯文本选题工作流，无额外运行包、账号或模型 API 密钥要求；核查新颖性和现有工作需要可用检索工具。",
+        "en": "Text-based research ideation needs no extra runtime package, account or model API key. Checking novelty and prior work requires available search tools."
+      },
+      "review": {
+        "level": "source-inspected-not-executed",
+        "notesZh": "原创上游完整单文件，未改原文；选题方案是 AI 建议，不能作为已完成实验或已核实创新。提及的 scientific-skills:literature-review 是其他技能推荐，不是已安装依赖；本项目可路由到已有文献综述技能。无脚本或跨目录文件依赖。",
+        "notesEn": "Complete upstream single-file skill preserved without edits. Ideas are AI suggestions, not completed experiments or verified novelty. scientific-skills:literature-review is an optional external skill recommendation rather than an installed dependency; route literature tasks to the project’s available review skill. No scripts or cross-directory file dependencies.",
+        "restrictedScripts": [],
+        "crossSkillDependencies": [],
+        "scriptEffects": [],
+        "commitEvidence": "GitHub codeload branch ZIP git archive comment; downloaded again at exact SHA with trusted skill installer; byte comparison against branch archive passed."
+      },
+      "files": [
+        {
+          "path": "vendor/skills/github-brainstorming-research-ideas/upstream-licenses/LICENSE.txt",
+          "sha256": "80b5899a9ab121a2d4aae63724f0c11defba7f23da487086932bb9abfb0f2a00",
+          "bytes": 1095
+        },
+        {
+          "path": "vendor/skills/github-brainstorming-research-ideas/upstream/SKILL.md",
+          "sha256": "8422a1a6dc0a88d05f02b9fbe0f8c2ae06a77024856d18125efa13d19d855d46",
+          "bytes": 19150
+        }
+      ]
+    }
+  ]
+}

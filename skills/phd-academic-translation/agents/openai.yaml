@@ -1,0 +1,4 @@
+interface:
+  display_name: "学术翻译与语言润色"
+  short_description: "保留科学含义、术语、数值和证据强度，完成学术翻译与语言润色"
+  default_prompt: "请使用 $phd-academic-translation，将我提供的学术文本翻译成目标语言，保留科学含义、术语、公式与引用，标出歧义。"

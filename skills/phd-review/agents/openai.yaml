@@ -1,0 +1,4 @@
+interface:
+  display_name: "论文审查"
+  short_description: "结合真实稿件和证据进行模拟审查，提出可核查的问题与修订顺序"
+  default_prompt: "请使用 $phd-review 审查当前论文的论证和实验依据，给出明确标注的 AI 审查建议。"
