@@ -42,7 +42,7 @@ async function fixture(t, options = {}) {
 
 test('source endpoints are POST only, same-origin, strictly validated and require ChatGPT login', async t => {
   const f = await fixture(t);
-  for (const path of ['/sources/list', '/sources/preview', '/sources/import']) {
+  for (const path of ['/sources/list', '/sources/preview', '/sources/import', '/sources/link']) {
     assert.equal((await f.call(path)).status, 404);
     assert.equal((await f.call(path, {}, { origin: 'https://other.test' })).status, 403);
     assert.equal((await f.call(path, {}, { 'sec-fetch-site': 'cross-site' })).status, 403);

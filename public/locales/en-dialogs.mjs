@@ -180,5 +180,17 @@ export default {
   "取消": "Cancel",
   "导出": "Export",
   "关闭": "Close",
-  "完成": "Done"
+  "完成": "Done",
+  "请选择 .txt 或 .md 文本文件；其他内容可以直接粘贴。": "Choose a .txt or .md text file, or paste the content directly.",
+  "文件过大。请导入不超过 30000 字的文本。": "The file is too large. Import text with no more than 30,000 characters.",
+  "正在读取文件…": "Reading file…",
+  "无法读取这个文本文件，请使用 UTF-8 编码的 .txt 或 .md 文件。": "This text file could not be read. Use a UTF-8 .txt or .md file.",
+  "手动导入文件：{name}": "Manually imported file: {name}",
+  "追加后内容超过 30000 字。请缩短已有内容或文件后再导入。": "The combined text exceeds 30,000 characters. Shorten the existing content or file before importing.",
+  "这个文件没有可导入的文本。": "This file contains no text to import.",
+  "已填入表单，可继续编辑；点击「创建记录」或「保存更改」后才会保存。": "Text added to the form. You can edit it before selecting Create record or Save changes.",
+  "文件读取失败，请重新选择或直接粘贴内容。": "The file could not be read. Select it again or paste the content directly.",
+  "从文本文件导入（可选）": "Import a text file (optional)",
+  "也可以直接填写或粘贴下方内容。文件会追加到「分析与判断」，不会覆盖已有文字；请先检查再保存。": "You can also type or paste content below. File text is appended to Analysis and assessment, preserving existing text. Review it before saving.",
+  "填入已有的 AI 建议；真实导师反馈请记录为导师会议。": "Add existing AI advice. Record actual advisor feedback as an advisor meeting."
 };

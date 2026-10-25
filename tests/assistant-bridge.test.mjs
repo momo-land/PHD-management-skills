@@ -36,6 +36,17 @@ test('bridge routes notifications and requests and redacts RPC errors', async t 
   await assert.rejects(pending, error => error.code === 'CODEX_REQUEST_FAILED' && !error.message.includes('SECRET'));
 });
 
+test('linked writers inherit Codex configuration without workspace overrides and safely identify writer locks', async t => {
+  const f = childFixture(); let spawnArgs;
+  const bridge = new CodexBridge({ executable: '/local/codex', root: '/project', dataDir: '/data', preserveThreadConfig: true, env: { PATH: '/bin', PHD_DATA_DIR: '/server-data', CODEX_THREAD_ID: 'parent' }, spawnProcess: (...args) => { spawnArgs = args; return f.child; } });
+  t.after(() => bridge.close()); await bridge.connect();
+  assert.deepEqual(spawnArgs[1], ['app-server', '--listen', 'stdio://']);
+  assert.equal(spawnArgs[2].env.PHD_DATA_DIR, undefined); assert.equal(spawnArgs[2].env.CODEX_THREAD_ID, undefined);
+  const pending = bridge.request('thread/resume', { threadId: 'selected' });
+  f.child.stdout.write(`${JSON.stringify({ id: f.messages.at(-1).id, error: { code: -32600, message: 'thread selected already has an active writer: PRIVATE_PATH' } })}\n`);
+  await assert.rejects(pending, error => error.code === 'SOURCE_THREAD_IN_USE' && error.status === 409 && !error.message.includes('PRIVATE_PATH'));
+});
+
 test('disconnect rejects outstanding calls and malformed protocol stops the owned child', async () => {
   const f = childFixture(); const bridge = new CodexBridge({ executable: 'codex', spawnProcess: () => f.child }); await bridge.connect();
   const pending = bridge.request('thread/start', {}); f.child.stdout.write('not-json\n');

@@ -9,6 +9,7 @@ const words = {
     loginHelp:'打开电脑上的 Codex 并登录，然后回到这里重新连接。无需填写 API Key。',
     connectionHelp:'使用电脑上已登录的 Codex。需要联网，使用量计入你的账号额度。',
     connectionError:'连接暂时中断', connectionRetry:'请检查 Codex 和网络，然后重新连接。', restartWorkspace:'请关闭旧的工作台服务，重新启动后刷新页面以启用 AI 助手。',
+    adviceUnavailable:'当前工作台服务还不支持生成 AI 研究建议。请重新启动工作台服务并刷新页面，再重试。',
     background:'个对话正在运行', errorTitle:'暂时没有完成', retry:'重试', details:'查看详情',
     welcome:'研究的下一步，从一句话开始', welcomeText:'让 Codex 帮你写论文、梳理实验、整理进展。每个对话都可以单独继续。',
     welcomeHint:'先连接 Codex，再选一个操作，或直接描述你的需求。',
@@ -31,6 +32,12 @@ const words = {
     busyLimit:'已有多个对话运行中，可以先继续查看，或等待一个完成。', newMessages:'查看最新消息', listShow:'显示对话', listHide:'收起对话',
     noMessage:'请先输入内容或选择一个快捷操作。', requestError:'提交失败，内容已保留。请重试。', network:'暂时无法连接本地服务，请确认网站仍在运行。',
     largeMessage:'材料过长，请拆成较小的段落后发送（每次最多 1 MB）。', draftKept:'发送未确认，草稿已保留。请先查看对话，再决定是否重试。',
+    linked:'已关联 Codex 原对话', linkedShort:'已关联', linkedHelp:'这里与 Codex 使用同一个对话。用“一键更新”把明确进展保存到科研记录。',
+    linkedProject:'原项目目录', linkedPartial:'网页只展示最近的部分文字；原对话上下文仍由 Codex 保留。',
+    syncNow:'刷新对话', syncing:'正在同步…', synced:'消息已同步', syncFailed:'暂时无法同步，已保留当前消息与草稿。',
+    externalRunning:'Codex 另一窗口正在处理这个对话。请等待完成，或回到 Codex 处理需要确认的内容。草稿已保留。', externalStatus:'原对话处理中',
+    syncBeforeSend:'同步恢复后即可发送；你可以先编辑下一条消息。',
+    sourceInUse:'原对话仍被 Codex 占用。请先停止原对话；若切换后仍被占用，退出 Codex 桌面应用，再在网页继续。', notSent:'这条消息未发送，草稿已保留。',
   },
   en: {
     conversations:'Conversations', newConversation:'New chat', noConversations:'No conversations yet. Start on the right.',
@@ -40,6 +47,7 @@ const words = {
     loginHelp:'Open Codex on this computer and sign in, then reconnect here. No API key is needed.',
     connectionHelp:'Uses Codex signed in on this computer. Internet access is required and account usage limits apply.',
     connectionError:'Connection interrupted', connectionRetry:'Check Codex and your connection, then reconnect.', restartWorkspace:'Close the old workspace service, restart it, then refresh this page to enable the AI assistant.',
+    adviceUnavailable:'This workspace service does not support generating AI research advice yet. Restart the workspace service, refresh this page, then retry.',
     background:'chats running', errorTitle:'Something needs attention', retry:'Retry', details:'View details',
     welcome:'Start your next step with a conversation', welcomeText:'Write papers, plan experiments and organize progress with Codex. Keep each conversation moving at its own pace.',
     welcomeHint:'Connect Codex, then choose an action or describe what you need.',
@@ -62,6 +70,12 @@ const words = {
     busyLimit:'Several chats are already running. You can read them while waiting for one to finish.', newMessages:'Jump to latest', listShow:'Show chats', listHide:'Hide chats',
     noMessage:'Enter a message or choose a quick action first.', requestError:'Could not submit. Your answers are still here. Please retry.', network:'The local service could not be reached. Check that the website is still running.',
     largeMessage:'This material is too long. Split it into smaller parts (up to 1 MB per message).', draftKept:'Sending was not confirmed. Your draft is still here. Check the conversation before retrying.',
+    linked:'Linked to the original Codex chat', linkedShort:'Linked', linkedHelp:'This is the same chat as in Codex. Use “Update progress” to save clear progress to research records.',
+    linkedProject:'Original project directory', linkedPartial:'This page displays only recent text. Codex retains the original chat context.',
+    syncNow:'Refresh chat', syncing:'Syncing…', synced:'Messages synced', syncFailed:'Sync is temporarily unavailable. Your current messages and draft are kept.',
+    externalRunning:'Another Codex window is working in this chat. Wait for it to finish, or return to Codex to handle any requests. Your draft is kept.', externalStatus:'Active in Codex',
+    syncBeforeSend:'Sending will be available when sync recovers. You can prepare your next message now.',
+    sourceInUse:'Codex still owns this chat. Stop the original chat first. If switching away does not release it, quit the Codex desktop app, then continue here.', notSent:'This message was not sent. Your draft is kept.',
   },
 };
 
@@ -70,6 +84,8 @@ export const ASSISTANT_FILE_LIMIT = 1024 * 1024;
 export const ASSISTANT_MESSAGE_LIMIT = 1024 * 1024;
 const languageCode = language => language === 'en' ? 'en' : 'zh';
 const active = conversation => ['running','waiting'].includes(conversation?.status);
+const externalActive = conversation => Boolean(conversation?.linkedSource?.externalRunning);
+const linkedBlocked = conversation => externalActive(conversation) || Boolean(conversation?.linkedSource?.syncError);
 const textValue = value => typeof value === 'string' ? value : '';
 
 export function assistantCopy(language='zh') { return words[languageCode(language)]; }
@@ -133,12 +149,12 @@ function setText(node, value) { if (node.textContent !== value) node.textContent
 export function createAssistantWorkspace({api, language='zh', getProjects=()=>[], getProjectId=()=>'', onResearchChange=()=>{}}={}) {
   if (typeof api !== 'function') throw new TypeError('Assistant workspace requires an api function.');
   let root, mounted=false, timer, mountEpoch=0, pollInFlight=false, lastOverview=0, selectedId=null;
-  let status=null, summaries=[], conversation=null, loading=false, connecting=false, sending=false, stopping=false;
+  let status=null, summaries=[], conversation=null, loading=false, connecting=false, sending=false, stopping=false, refreshingLinked=false;
   let draftProject='', draftProjectInitialized=false, messageError='', info='', selectionVersion=0, mutationVersion=0, errorAction=null, pollError=false;
   let listCollapsed=false, labels=[], requestSignature='', listSignature='', projectSignature='', messageSignature='';
   let currentLanguage='', sendingId=null, requestBusy=new Set(), completedVersions=new Map();
   let sourceImporter;
-  const drafts=new Map(), requestValues=new Map(), messageNodes=new Map(), requestNodes=new Map(), ref={};
+  const drafts=new Map(), requestValues=new Map(), messageNodes=new Map(), requestNodes=new Map(), adviceRequests=new Map(), ref={};
   const lang=()=>languageCode(typeof language==='function'?language():language);
   const copy=()=>assistantCopy(lang());
   const currentDraft=()=>{
@@ -161,6 +177,9 @@ export function createAssistantWorkspace({api, language='zh', getProjects=()=>[]
     catch(error){
       if(error?.status===404 && ['/api/assistant/status','/api/assistant/connect'].includes(path)){
         const unavailable=new Error(copy().restartWorkspace);unavailable.status=404;unavailable.code='ASSISTANT_UNAVAILABLE';throw unavailable;
+      }
+      if(path==='/api/assistant/advice' && (error?.status===404 && error.code==='NOT_FOUND' || error?.status===405 && error.code==='METHOD_NOT_ALLOWED')){
+        const unavailable=new Error(copy().adviceUnavailable);unavailable.status=error.status;unavailable.code='ASSISTANT_ADVICE_UNAVAILABLE';throw unavailable;
       }
       throw error;
     }
@@ -206,6 +225,11 @@ export function createAssistantWorkspace({api, language='zh', getProjects=()=>[]
     const chatTitle=element('div','assistant-chat-title');
     ref.title=element('h2');ref.chatMeta=element('p');ref.chatStatus=element('span','assistant-chat-state');
     append(chatTitle,ref.title,ref.chatMeta);append(chatHeader,chatTitle,ref.chatStatus);
+    ref.linked=element('section','assistant-linked');
+    const linkedTop=element('div','assistant-linked-top');ref.linkedTitle=localized(element('strong'),'linked');ref.linkedRefresh=button('button button-secondary button-small','',refreshLinked);
+    append(linkedTop,ref.linkedTitle,ref.linkedRefresh);ref.linkedHelp=localized(element('p'),'linkedHelp');ref.linkedCwd=element('p','assistant-linked-path');
+    ref.linkedState=element('p','assistant-linked-state');ref.linkedState.setAttribute('role','status');ref.linkedPartial=localized(element('p','assistant-linked-partial'),'linkedPartial');
+    append(ref.linked,linkedTop,ref.linkedHelp,ref.linkedCwd,ref.linkedState,ref.linkedPartial);
     ref.projectWrap=element('div','assistant-project-choice');
     ref.projectLabel=localized(element('label'),'project'); ref.projectLabel.htmlFor='assistant-project';
     ref.project=element('select'); ref.project.id='assistant-project';
@@ -267,16 +291,9 @@ export function createAssistantWorkspace({api, language='zh', getProjects=()=>[]
     const footer=element('div','assistant-composer-footnote');
     append(footer,localized(element('span'),'enterHint'),localized(element('span'),'progressNote'));
     append(ref.composer,shortcuts,ref.actionWrap,ref.actionHint,inputLabel,ref.input,controls,footer);
-    append(chat,chatHeader,ref.projectWrap,ref.scroll,ref.latest,ref.error,ref.info,ref.composer);
+    append(chat,chatHeader,ref.linked,ref.projectWrap,ref.scroll,ref.latest,ref.error,ref.info,ref.composer);
     append(body,sidebar,chat);append(root,connection,body);
-    sourceImporter=createSourceImportDialog({api,language:lang,getProjects,onImported:imported=>{
-      // Import is a separate chat. Existing chat and new-chat drafts stay in their own slots.
-      mutationVersion++;selectionVersion++;selectedId=imported.id;conversation=imported;loading=false;
-      messageSignature='';requestSignature='';messageError='';info='';errorAction=null;
-      summaries=[imported,...summaries.filter(item=>item.id!==imported.id)];lastOverview=0;
-      if(['completed','interrupted','error'].includes(imported.status))Promise.resolve().then(()=>onResearchChange()).catch(()=>{});
-      render();scrollToLatest();poll(true);schedule();
-    }});
+    sourceImporter=createSourceImportDialog({api,language:lang,getProjects,onImported:openCreatedConversation});
     root.append(sourceImporter.element);
   }
 
@@ -304,7 +321,7 @@ export function createAssistantWorkspace({api, language='zh', getProjects=()=>[]
 
   function renderList() {
     const w=copy();
-    const signature=JSON.stringify([lang(),selectedId,summaries.map(item=>[item.id,item.title,item.status,item.projectId])]);
+    const signature=JSON.stringify([lang(),selectedId,summaries.map(item=>[item.id,item.title,item.status,item.projectId,Boolean(item.linkedSource),externalActive(item)])]);
     if(signature!==listSignature){
       const existing=new Map([...ref.list.querySelectorAll('[data-conversation-id]')].map(node=>[node.dataset.conversationId,node]));
       const nodes=summaries.map(summary=>{
@@ -314,7 +331,7 @@ export function createAssistantWorkspace({api, language='zh', getProjects=()=>[]
           append(item,element('strong'),element('span'));
         }
         setText(item.children[0],summary.title || w.newConversation);
-        setText(item.children[1],w[summary.status] || w.idle);
+        setText(item.children[1],`${summary.linkedSource?`${w.linkedShort} · `:''}${externalActive(summary)?w.externalStatus:w[summary.status] || w.idle}`);
         item.classList.toggle('is-selected',summary.id===selectedId);item.dataset.status=summary.status || 'idle';
         item.setAttribute('aria-current',summary.id===selectedId?'true':'false');
         return item;
@@ -423,7 +440,7 @@ export function createAssistantWorkspace({api, language='zh', getProjects=()=>[]
 
   function updateComposer() {
     if(!root)return;
-    const w=copy(), draft=currentDraft(), busy=active(conversation);
+    const w=copy(), draft=currentDraft(), busy=active(conversation),blocked=linkedBlocked(conversation);
     if(ref.input.value!==draft.text)ref.input.value=draft.text;
     ref.input.placeholder=draft.action?w[`${draft.action}Hint`]:w.placeholder;
     ref.shortcuts.setAttribute('aria-label',w.shortcuts);
@@ -432,17 +449,30 @@ export function createAssistantWorkspace({api, language='zh', getProjects=()=>[]
     setText(ref.actionHint,draft.action?w[`${draft.action}Hint`]:'');
     for(const [action,node] of ref.shortcutButtons)node.setAttribute('aria-pressed',String(action===draft.action));
     ref.attach.title=w.attachmentHelp;
-    ref.send.disabled=sending || busy || loading || !ready() || (!draft.text.trim() && !draft.action);
+    ref.send.disabled=sending || busy || blocked || refreshingLinked || loading || !ready() || (!draft.text.trim() && !draft.action);
     setText(ref.send,sending?w.sending:w.send);
-    ref.stop.hidden=!busy;ref.stop.disabled=stopping || sending;
+    ref.stop.hidden=!busy || externalActive(conversation);ref.stop.disabled=stopping || sending;
     setText(ref.stop,stopping?w.stopping:w.stop);
-    ref.continue.hidden=!selectedId || busy || loading || (conversation?.status!=='interrupted' && conversation?.status!=='error');
+    ref.continue.hidden=!selectedId || busy || blocked || loading || (conversation?.status!=='interrupted' && conversation?.status!=='error');
     ref.newChat.disabled=sending && !selectedId;
     ref.sourceImport.disabled=sending;
     setText(ref.sourceImport,sourceImportCopy(lang()).open);
     ref.project.disabled=sending;
     // Users can prepare their next message while another turn is running.
     ref.input.readOnly=sending && sendingId===selectedId;
+  }
+
+  function renderLinked() {
+    const w=copy(),source=conversation?.linkedSource;
+    ref.linked.hidden=!source;
+    if(!source)return;
+    setText(ref.linkedCwd,source.cwd?`${w.linkedProject}: ${source.cwd}`:'');ref.linkedCwd.hidden=!source.cwd;
+    setText(ref.linkedRefresh,refreshingLinked?w.syncing:w.syncNow);ref.linkedRefresh.disabled=refreshingLinked || loading || sending;
+    ref.linkedPartial.hidden=!source.truncated;
+    const date=new Date(source.syncedAt || '');
+    const time=Number.isFinite(date.getTime())?new Intl.DateTimeFormat(lang()==='en'?'en-US':'zh-CN',{hour:'2-digit',minute:'2-digit'}).format(date):'';
+    const state=source.syncError?`${w.syncFailed} ${textValue(source.syncError)} ${w.syncBeforeSend}`:externalActive(conversation)?w.externalRunning:`${w.synced}${time?` · ${time}`:''}`;
+    setText(ref.linkedState,state);ref.linkedState.dataset.error=String(Boolean(source.syncError));
   }
 
   function render() {
@@ -452,10 +482,10 @@ export function createAssistantWorkspace({api, language='zh', getProjects=()=>[]
       currentLanguage=lang();for(const [node,key] of labels)setText(node,w[key]);
       ref.scroll.setAttribute('aria-label',w.conversations);
     }
-    renderConnection();renderList();renderProjects();renderMessages();renderRequests();updateComposer();
+    renderConnection();renderList();renderProjects();renderMessages();renderRequests();updateComposer();renderLinked();
     sourceImporter?.render();
     setText(ref.title,selectedId?(conversation?.title || summaries.find(item=>item.id===selectedId)?.title || w.newConversation):w.newConversation);
-    ref.chatStatus.hidden=!selectedId;setText(ref.chatStatus,w[conversation?.status] || w.idle);ref.chatStatus.dataset.status=conversation?.status || 'idle';
+    ref.chatStatus.hidden=!selectedId;setText(ref.chatStatus,externalActive(conversation)?w.externalStatus:w[conversation?.status] || w.idle);ref.chatStatus.dataset.status=externalActive(conversation)?'running':conversation?.status || 'idle';
     ref.welcome.hidden=Boolean(selectedId);ref.loading.hidden=!loading;
     ref.empty.hidden=!selectedId || loading || Boolean(conversation?.messages?.length) || active(conversation);
     ref.thinking.hidden=!active(conversation);setText(ref.thinking,conversation?.status==='waiting'?w.waitingHelp:w.thinking);
@@ -487,6 +517,14 @@ export function createAssistantWorkspace({api, language='zh', getProjects=()=>[]
   function schedule() {
     clearTimeout(timer);
     if(mounted)timer=setTimeout(()=>poll(),active(conversation)?750:2500);
+  }
+  async function refreshLinked() {
+    if(!selectedId || !conversation?.linkedSource || refreshingLinked)return;
+    const id=selectedId,epoch=mountEpoch,version=selectionVersion;
+    refreshingLinked=true;render();
+    try{const result=await callApi(requestPath(id));if(epoch===mountEpoch && version===selectionVersion)updateConversation(result.conversation);}
+    catch(error){if(epoch===mountEpoch && version===selectionVersion)fail(error,'network',refreshLinked);}
+    finally{refreshingLinked=false;render();}
   }
   async function poll(force=false) {
     if(!mounted || pollInFlight){if(mounted)schedule();return;}
@@ -542,6 +580,44 @@ export function createAssistantWorkspace({api, language='zh', getProjects=()=>[]
     render();if(root && mounted){ref.input.focus();scrollToLatest();}schedule();
   }
 
+  function openCreatedConversation(created) {
+    // Imported, linked and advice chats have separate drafts. Opening one never
+    // consumes the current chat draft or the draft for a future new chat.
+    mutationVersion++;selectionVersion++;selectedId=created.id;conversation=created;loading=false;
+    messageSignature='';requestSignature='';messageError='';info='';errorAction=null;
+    summaries=[created,...summaries.filter(item=>item.id!==created.id)];lastOverview=0;
+    if(['completed','interrupted','error'].includes(created.status))Promise.resolve().then(()=>onResearchChange()).catch(()=>{});
+    render();if(root)scrollToLatest();poll(true);schedule();
+  }
+
+  function startAdvice({requestId,projectId,focus='',language:requestedLanguage}={}) {
+    if(typeof requestId!=='string' || !requestId.trim())return Promise.reject(new TypeError('Advice requires a request ID.'));
+    const scope={projectId:textValue(projectId),focus:textValue(focus)};
+    let request=adviceRequests.get(requestId);
+    if(request && (request.payload.projectId!==scope.projectId || request.payload.focus!==scope.focus)){
+      return Promise.reject(new TypeError('An advice request ID cannot be reused for a different project or question.'));
+    }
+    if(!request){
+      // The first language and scope survive a lost reply, so an explicit retry
+      // asks the server for the same idempotent operation rather than a new turn.
+      request={payload:{requestId,...scope,language:requestedLanguage===undefined?lang():languageCode(requestedLanguage)},promise:null};
+      adviceRequests.set(requestId,request);
+    }
+    if(request.promise)return request.promise;
+    request.promise=callApi('/api/assistant/advice',{method:'POST',body:request.payload}).then(result=>{
+      const created=result?.conversation;
+      if(!created?.id)throw new Error(copy().missingConversation);
+      openCreatedConversation(created);
+      return created;
+    }).catch(error=>{
+      // A failed request leaves the selected chat untouched. The caller owns
+      // the error/retry UI; retrying this ID keeps its original payload.
+      request.promise=null;
+      throw error;
+    });
+    return request.promise;
+  }
+
   function startAction(action, options={}) {
     if(!assistantActionIds.includes(action))return;
     initializeDraftProject();
@@ -558,12 +634,12 @@ export function createAssistantWorkspace({api, language='zh', getProjects=()=>[]
 
   async function send() {
     const draft=currentDraft();const text=draft.text.trim() || (draft.action?copy()[draft.action]:'');
-    if(sending || active(conversation) || loading)return;
+    if(sending || active(conversation) || linkedBlocked(conversation) || refreshingLinked || loading)return;
     if(!ready()){messageError=copy().disconnected;errorAction=connect;render();return;}
     if(!text){info=copy().noMessage;render();return;}
     if(!assistantMessageFits(text)){messageError=copy().largeMessage;render();return;}
     sending=true;sendingId=selectedId;messageError='';info='';errorAction=null;mutationVersion++;
-    const initialId=selectedId, selection=selectionVersion, original={...draft};let targetId=selectedId;
+    const initialId=selectedId, selection=selectionVersion, original={...draft}, linkedTarget=Boolean(conversation?.linkedSource);let targetId=selectedId;
     render();
     try{
       if(!targetId){
@@ -581,12 +657,15 @@ export function createAssistantWorkspace({api, language='zh', getProjects=()=>[]
       if(selectedId===targetId){updateConversation(result.conversation);scrollToLatest();}
       summaries=[result.conversation,...summaries.filter(item=>item.id!==targetId)];lastOverview=0;
     }catch(error){
-      if(selectedId===targetId || (selectedId===initialId && selection===selectionVersion))fail(new Error(`${error?.message || copy().network} ${copy().draftKept}`),'network',()=>poll(true));
+      const inUse=linkedTarget && ['SOURCE_THREAD_IN_USE','LINKED_THREAD_IN_USE'].includes(error?.code);
+      const detail=inUse?copy().sourceInUse:error?.message || copy().network;
+      const note=inUse || error?.status>=400 && error.status<500?copy().notSent:copy().draftKept;
+      if(selectedId===targetId || (selectedId===initialId && selection===selectionVersion))fail(new Error(`${detail} ${note}`),'network',()=>poll(true));
     }finally{sending=false;sendingId=null;mutationVersion++;render();poll(true);schedule();}
   }
 
   async function stop() {
-    if(!selectedId || !active(conversation) || stopping)return;
+    if(!selectedId || !active(conversation) || externalActive(conversation) || stopping)return;
     const id=selectedId;stopping=true;mutationVersion++;messageError='';render();
     try{const result=await callApi(`${requestPath(id)}/stop`,{method:'POST',body:{}});if(selectedId===id && result?.conversation)updateConversation(result.conversation);}
     catch(error){if(selectedId===id)fail(error,'network',()=>{if(selectedId===id)stop();});}
@@ -636,5 +715,5 @@ export function createAssistantWorkspace({api, language='zh', getProjects=()=>[]
     mounted=false;mountEpoch++;clearTimeout(timer);root?.remove();
     // The detached DOM retains drafts, history and local controls for the next visit.
   }
-  return {mount,unmount,newConversation,startAction};
+  return {mount,unmount,newConversation,startAction,startAdvice};
 }

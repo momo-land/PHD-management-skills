@@ -46,17 +46,29 @@ For example, in a conversation linked to your project, enter “The methods draf
 
 Up to three conversations can run tasks at once; each conversation handles one message at a time. Conversations created by this website remain available after reopening it. Interrupted tasks are not automatically resent when the service restarts: check the current state before continuing. Stopping a task does not undo files or records it has already changed. The website offers limited one-time approvals; continue in the Codex client when a task needs additional file access or broader permissions.
 
-This uses the installed Codex App Server without clicking the Codex desktop window. Synchronization with the Codex desktop sidebar is outside this version's guarantees. Claude Code and WorkBuddy continue to work through the skills described below.
+This uses the installed Codex App Server without clicking the Codex desktop window. Linking an existing chat reads its recent text and sends subsequent messages to that same original chat. The Codex client controls when its desktop sidebar refreshes; this is not a keystroke-synchronized editor. Claude Code and WorkBuddy continue to work through the skills described below.
 
 Conversation records are stored separately in `assistant/` inside your data directory and are not included in the research JSON backup. An assistant reply alone does not establish that records were saved; check execution results, readback and the activity log. The assistant does not start research tasks on its own.
 
 ### Import progress from existing Codex conversations
 
-Open **AI Assistant → Import from Codex**, filter by source project or search, select up to five conversations and click **Review selected text**. Choose an existing research project in the workspace and click **Organize and import**. If there is no target project, create one first. A new workspace conversation linked to that project runs `phd-import` to match records, deduplicate, save and read back the changes. Original Codex conversations remain unchanged.
+Open **AI Assistant → Import from Codex**. The default **Link original chat** mode lets you select one conversation, **Review selected text**, choose a target research project and **Link and continue chatting**. You can then send messages from the website or return to that same chat in Codex. The workspace refreshes recent text while the linked chat is open. Create a target research project first if you do not have one.
+
+**Linking a chat does not record research achievements.** Continue your discussion as usual; send **Update progress** or **Import progress** when you want supported facts saved to papers, experiments or tasks. Send from one client at a time: Codex may keep a chat locked while it is loaded, even when it is not generating a reply. If the website reports that the chat is in use, finish its task in Codex and leave the chat. If it stays locked, open the workspace URL in a separate browser, quit the Codex desktop app and retry there while keeping the workspace service running. Requests owned by Codex must be handled there.
+
+To extract old material without continuing its source chat, switch to **Import progress only**. Select up to five conversations, preview them, choose the target project and click **Organize and import**. This mode starts a new workspace conversation that runs `phd-import` to match, deduplicate, save and read back research records. Original Codex conversations remain unchanged.
 
 The list includes conversations available through this computer's Codex. “Source project” groups their working directories; it is not the complete desktop sidebar project list and does not determine the target research project. Load more, search or switch the archive filter as needed. Paste material manually if a conversation is unavailable. Previews include user and assistant text, exclude tool output, images and attachments, and disclose partial content for long conversations.
 
-Listing and previewing neither call the model nor change research data. Importing sends the previewed text to the signed-in Codex, using its existing account allowance without an API key. Refresh expired previews. Retrying the same import does not start duplicate tasks; later imports still compare facts and sources against existing records. Check the new conversation's save/readback result and the resulting workspace records.
+Listing, previewing and linking neither call the model nor change research data. Sending a message or choosing **Organize and import** invokes the signed-in Codex using its existing account allowance without an API key. Refresh expired previews. Retrying the same request does not create duplicate links or import tasks; later imports still compare facts and sources against existing records. Research progress is saved only after the CLI workflow and readback succeed.
+
+## Generate or manually import AI research advice
+
+Open **Guidance → AI suggestions**, select a research project and optionally describe what you want to discuss. **Generate AI advice** creates a separate Codex conversation, reads that project's existing records and saves the resulting analysis and recommendations as AI advice through the CLI. The website opens the new conversation so you can follow progress and ask further questions. Return to the advice page to check the saved result. Viewing the page alone does not run a model.
+
+Use **Import advice manually** to enter or paste existing advice, or add text from a `.txt` / `.md` file. Review the project and contents before saving. This path needs no Codex connection and does not run a model.
+
+AI advice stays separate from real advisor meetings and does not automatically complete papers, experiments or tasks. Missing information remains explicit. Continue an interrupted generation in its existing conversation. If startup was not confirmed, retry the same request instead of creating another conversation.
 
 ## Activate a skill, then use short commands
 
