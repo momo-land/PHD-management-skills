@@ -130,3 +130,9 @@ npm test
 ```
 
 Tests use temporary data directories. See the [implementation contract](docs/IMPLEMENTATION_CONTRACT.md) for fields and interfaces and the [validation record](docs/VALIDATION.md) for checked behavior. The application is intended for individual local use; it does not provide cloud sync, multiple accounts, autonomous background research or automatic Zotero integration.
+
+## License
+
+Original project code, documentation, research skills and skill adapters are licensed under the [MIT License](LICENSE), copyright momo-land.
+
+Third-party content in `vendor/skills/` retains its own MIT or Apache-2.0 license, copyright and attribution notices. The root license does not replace those upstream licenses. See the [third-party skills inventory](docs/THIRD_PARTY_SKILLS.en.md) for details.

@@ -1,6 +1,7 @@
 {
   "name": "phd-management-skills",
   "version": "0.2.0",
+  "license": "MIT",
   "private": true,
   "description": "Local research workspace and portable AI skills for PhD research management",
   "type": "module",

@@ -225,3 +225,9 @@ npm test
 首版验收范围见 [验收记录](docs/VALIDATION.md)。
 
 当前是面向个人本地使用的首版。没有云同步、多人账号、后台自主科研或自动连接 Zotero；文献、文件路径和实验结果通过界面或 AI 命令录入，skills 可在你提供的材料和授权范围内辅助研究。
+
+## 开源许可
+
+本项目原创代码、文档、科研技能与技能适配入口采用 [MIT License](LICENSE)，版权归 momo-land 所有。
+
+`vendor/skills/` 中的第三方内容继续适用各自的 MIT 或 Apache-2.0 许可证，保留原作者版权、许可与来源声明；根目录许可证不替代这些上游许可。完整清单见 [第三方技能说明](docs/THIRD_PARTY_SKILLS.md)。
