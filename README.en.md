@@ -62,6 +62,21 @@ The list includes conversations available through this computer's Codex. “Sour
 
 Listing, previewing and linking neither call the model nor change research data. Sending a message or choosing **Organize and import** invokes the signed-in Codex using its existing account allowance without an API key. Refresh expired previews. Retrying the same request does not create duplicate links or import tasks; later imports still compare facts and sources against existing records. Research progress is saved only after the CLI workflow and readback succeed.
 
+### If a Windows chat cannot be read
+
+Older workspace versions reported “Update Codex” for several different history-read failures. That message alone does not establish an outdated installation. Even a recent Codex can hold older-format chats without support for message-by-message pagination, so updating Codex alone may not resolve it. The current reader tries alternate read-only interfaces when a method is explicitly unsupported, and distinguishes unsupported reading, failed reading and oversized responses. After updating this workspace, restart its service with the original data directory and refresh the page.
+
+Check that the affected chat opens in Codex. Then run these commands in the same PowerShell used to start the workspace:
+
+```powershell
+codex --version
+where.exe codex
+```
+
+These show the command-line version and candidate installation paths. The CLI found by the workspace may differ from the desktop app; updating the desktop app may leave another CLI installation unchanged. If multiple paths appear, check their versions. Update the relevant installation through its original installation method if needed, reopen the launch shell and restart the workspace. With WSL, check that the workspace and target chat use the same environment, since native Windows and WSL can have separate installations and local records.
+
+Record the version, paths and whether all chats or only one fail when requesting help. For an oversized response, reconnect and choose a shorter chat or paste only the needed text. Manual text import remains available without clearing research data. Automated compatibility checks use protocol fixtures; actual Windows behavior still depends on the installed Codex and its local chats.
+
 ## Generate or manually import AI research advice
 
 Open **Guidance → AI suggestions**, select a research project and optionally describe what you want to discuss. **Generate AI advice** creates a separate Codex conversation, reads that project's existing records and saves the resulting analysis and recommendations as AI advice through the CLI. The website opens the new conversation so you can follow progress and ask further questions. Return to the advice page to check the saved result. Viewing the page alone does not run a model.

@@ -10,7 +10,11 @@ const strings = {
     linkBehavior:'关联后可在这里继续原对话，新消息会定期同步。同一时间请只用一个窗口发送；若原对话被占用，先停止原对话，切换后仍被占用时需退出 Codex 桌面应用。用“一键更新”保存科研进度，关联本身不会修改科研记录。',
     linkPrivacy:'列表、预览和关联仅在本机处理，不调用模型。之后点击“发送”会在原 Codex 对话中执行，需要联网并计入账号额度。',
     linkTruncated:'这里只预览最近的部分文字；长消息可能被截短。关联后仍使用原 Codex 对话的上下文，网页只展示近期文字消息。',
-    linkUncertain:'尚未确认关联是否完成。请点击重试，系统会沿用同一预览，避免重复关联。', readUnavailable:'暂时无法读取这段 Codex 对话。请稍后重试，或换一个对话。',
+    linkUncertain:'尚未确认关联是否完成。请点击重试，系统会沿用同一预览，避免重复关联。',
+    readUnavailable:'工作台连接的 Codex 暂不支持读取这个对话，可能与对话历史格式有关。请检查实际使用的 Codex CLI 路径和版本；它可能与桌面应用不同。也可以粘贴需要的文字。',
+    readFailed:'Codex 未能读取这个对话。请先在 Codex 中确认对话能打开，再重新连接并重试；这不一定是版本问题。',
+    methodUnsupported:'工作台连接的 Codex 不支持这项操作。请检查实际使用的 Codex CLI 路径和版本；它可能与桌面应用不同。',
+    responseTooLarge:'Codex 返回的内容超过单次读取上限，连接已停止。请重新连接并选择较短的对话，或粘贴需要的文字。',
     chooseStep:'1 · 选择来源', previewStep:'2 · 查看原文并导入', search:'搜索对话标题', searchPlaceholder:'输入标题关键词',
     cwd:'来源项目目录（可选）', cwdPlaceholder:'选择已加载目录，或输入完整目录', cwdHelp:'这里按对话的本机目录分组。候选项只包含已加载的目录，不是 Codex 侧栏的完整项目列表。',
     archived:'查看已归档对话', filter:'筛选', refresh:'刷新列表', clear:'清空选择', selectLoaded:'选择已显示对话（最多 5 个）',
@@ -38,7 +42,11 @@ const strings = {
     linkBehavior:'Continue the original chat here, with new messages synced regularly. Send from one window at a time. If Codex still owns the chat, stop it; if switching away does not release it, quit the Codex desktop app. Use “Update progress” to save research records. Linking alone does not change them.',
     linkPrivacy:'Listing, previewing and linking happen locally without running a model. Later, Send runs your request in the original Codex chat. Internet access and account usage limits apply.',
     linkTruncated:'This preview shows only recent text, and long messages may be shortened. Linking retains the original Codex chat context; this page displays recent text messages.',
-    linkUncertain:'Linking has not been confirmed. Retry to reuse the same preview and avoid a duplicate link.', readUnavailable:'This Codex chat could not be read right now. Retry later, or choose another chat.',
+    linkUncertain:'Linking has not been confirmed. Retry to reuse the same preview and avoid a duplicate link.',
+    readUnavailable:'The Codex connected to this workspace does not support reading this chat, possibly because of its history format. Check the Codex CLI path and version in use; it may differ from the desktop app. You can also paste the needed text.',
+    readFailed:'Codex could not read this chat. Check that it opens in Codex, then reconnect and retry; this does not necessarily mean a version problem.',
+    methodUnsupported:'The Codex connected to this workspace does not support this operation. Check the Codex CLI path and version in use; it may differ from the desktop app.',
+    responseTooLarge:'Codex returned more content than can be read in one response, so the connection was stopped. Reconnect and choose a shorter chat, or paste the needed text.',
     chooseStep:'1 · Choose sources', previewStep:'2 · Review and import', search:'Search chat titles', searchPlaceholder:'Enter words from the title',
     cwd:'Source project directory (optional)', cwdPlaceholder:'Choose a loaded directory, or enter its full path', cwdHelp:'Chats are grouped by their local directory. Suggestions include loaded directories only, not the full Codex sidebar project list.',
     archived:'Show archived chats', filter:'Filter', refresh:'Refresh list', clear:'Clear selection', selectLoaded:'Select displayed chats (up to 5)',
@@ -66,7 +74,8 @@ export function sourceImportError(error, language='zh', operation='list') {
   if(/EXPIRED|PREVIEW_NOT_FOUND/.test(code))return w.expired;
   if(/SOURCE.*NOT_FOUND|SOURCE_NOT_LISTED|THREAD_NOT_FOUND/.test(code))return w.sourceMissing;
   if(/NOT_LOGGED|CHATGPT_REQUIRED|NOT_CONNECTED/.test(code))return w.connect;
-  if(code==='SOURCE_READ_UNAVAILABLE')return error?.message && error.message!==code?error.message:w.readUnavailable;
+  const readErrors={SOURCE_READ_UNAVAILABLE:'readUnavailable',SOURCE_READ_FAILED:'readFailed',CODEX_METHOD_UNSUPPORTED:'methodUnsupported',CODEX_RESPONSE_TOO_LARGE:'responseTooLarge'};
+  if(readErrors[code])return error?.message && error.message!==code?error.message:w[readErrors[code]];
   if(/LIMIT|BUSY/.test(code) && ['import','link'].includes(operation))return error?.message && error.message!==code?error.message:w.busy;
   if(code==='METHOD_NOT_FOUND' || [404,405,501].includes(error?.status))return w.unavailable;
   if(['import','link'].includes(operation) && (error?.name==='AbortError' || !error?.status))return operation==='link'?w.linkUncertain:w.uncertain;

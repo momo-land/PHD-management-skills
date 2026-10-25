@@ -102,17 +102,17 @@ test('content limits and empty source ranges are explicit, and cache lifetime is
   f.advance(20 * 60_000); await assert.rejects(f.sources.preview({ threadIds: ['a'] }), { code: 'SOURCE_NOT_LISTED' });
 });
 
-test('empty preview cannot be imported, malformed pages fail closed, and unsupported paged read has a clear error', async () => {
-  for (const outcome of ['empty', 'mismatch', 'unsupported', 'loop']) {
+test('empty preview cannot be imported, malformed pages fail closed, and generic read failures are not version errors', async () => {
+  for (const outcome of ['empty', 'mismatch', 'failed', 'loop']) {
     const f = fixture({ request(method, params) {
       if (method === 'thread/list') return { data: [thread('a')] };
       if (method === 'thread/read') return { thread: thread(outcome === 'mismatch' ? 'different' : 'a') };
-      if (outcome === 'unsupported') throw new AssistantError('CODEX_REQUEST_FAILED');
+      if (outcome === 'failed') throw new AssistantError('CODEX_REQUEST_FAILED');
       return { data: [], nextCursor: outcome === 'loop' ? 'again' : null };
     } });
     await f.sources.list({});
     if (outcome === 'empty') { const { preview } = await f.sources.preview({ threadIds: ['a'] }); assert.equal(preview.messageCount, 0); assert.throws(() => f.sources.getPreview(preview.id), { code: 'SOURCE_EMPTY' }); }
-    else await assert.rejects(f.sources.preview({ threadIds: ['a'] }), { code: outcome === 'unsupported' ? 'SOURCE_READ_UNAVAILABLE' : 'CODEX_PROTOCOL_ERROR' });
+    else await assert.rejects(f.sources.preview({ threadIds: ['a'] }), { code: outcome === 'failed' ? 'SOURCE_READ_FAILED' : 'CODEX_PROTOCOL_ERROR' });
   }
 });
 

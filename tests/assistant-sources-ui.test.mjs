@@ -161,6 +161,14 @@ test('bilingual source errors distinguish unreadable chats from missing server r
   assert.equal(sourceImportError(responseError('SOURCE_PREVIEW_EXPIRED'),'en','import'),en.expired);
   assert.equal(sourceImportError(responseError('SOURCE_READ_UNAVAILABLE',501),'en'),en.readUnavailable);
   assert.equal(sourceImportError(Object.assign(responseError('SOURCE_READ_UNAVAILABLE',503),{message:'This chat has no readable messages.'}),'en'), 'This chat has no readable messages.');
+  for(const [code,key] of Object.entries({SOURCE_READ_FAILED:'readFailed',CODEX_METHOD_UNSUPPORTED:'methodUnsupported',CODEX_RESPONSE_TOO_LARGE:'responseTooLarge'})){
+    for(const [language,copy] of [['en',en],['zh',zh]]){
+      assert.equal(sourceImportError(responseError(code,501),language),copy[key]);
+      assert.equal(sourceImportError(Object.assign(responseError(code,503),{message:'Specific read error'}),language),'Specific read error');
+      assert.notEqual(copy[key],copy.unavailable);
+    }
+  }
+  assert.doesNotMatch(en.readFailed,/update|outdated/i);assert.match(en.readUnavailable,/CLI path and version/);
   assert.equal(sourceImportError(responseError('NOT_FOUND',404),'en'),en.unavailable);
   assert.equal(sourceImportError(responseError('CODEX_UNAVAILABLE',503),'en'),'CODEX_UNAVAILABLE');
   assert.equal(sourceImportError(responseError('CODEX_NOT_LOGGED_IN',401),'en'),en.connect);

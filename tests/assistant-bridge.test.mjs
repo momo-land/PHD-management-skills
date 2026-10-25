@@ -47,6 +47,31 @@ test('linked writers inherit Codex configuration without workspace overrides and
   await assert.rejects(pending, error => error.code === 'SOURCE_THREAD_IN_USE' && error.status === 409 && !error.message.includes('PRIVATE_PATH'));
 });
 
+test('bridge distinguishes missing read methods from other errors without exposing diagnostics', async t => {
+  const f = childFixture(); const bridge = new CodexBridge({ executable: 'codex', spawnProcess: () => f.child }); t.after(() => bridge.close()); await bridge.connect();
+  for (const [method, code, message, expected] of [
+    ['thread/items/list', -32601, 'Method not found PRIVATE', 'CODEX_METHOD_UNSUPPORTED'],
+    ['thread/items/list', -32600, 'unknown variant `thread/items/list`, expected thread/read PRIVATE', 'CODEX_METHOD_UNSUPPORTED'],
+    ['thread/items/list', -32600, 'thread/items/list is not supported yet PRIVATE', 'CODEX_METHOD_UNSUPPORTED'],
+    ['thread/turns/list', -32600, 'thread/turns/list is unavailable before first user message PRIVATE', 'CODEX_REQUEST_FAILED'],
+    ['thread/items/list', -32603, 'Could not read history: unsupported encoding PRIVATE', 'CODEX_REQUEST_FAILED'],
+    ['thread/items/list', -32602, 'Invalid cursor for thread/items/list PRIVATE', 'CODEX_REQUEST_FAILED'],
+    ['thread/read', -32600, 'ephemeral threads do not support includeTurns PRIVATE', 'CODEX_REQUEST_FAILED'],
+  ]) {
+    const pending = bridge.request(method, { threadId: 'test' });
+    f.child.stdout.write(`${JSON.stringify({ id: f.messages.at(-1).id, error: { code, message } })}\n`);
+    await assert.rejects(pending, error => error.code === expected && !JSON.stringify(error).includes('PRIVATE') && !error.message.includes('PRIVATE'));
+  }
+});
+
+test('oversized history responses disconnect with an actionable size error', async t => {
+  const f = childFixture(); const bridge = new CodexBridge({ executable: 'codex', spawnProcess: () => f.child }); t.after(() => bridge.close()); await bridge.connect();
+  const pending = bridge.request('thread/read', { threadId: 'test', includeTurns: true });
+  f.child.stdout.write('x'.repeat(8 * 1024 * 1024 + 1));
+  await assert.rejects(pending, { code: 'CODEX_RESPONSE_TOO_LARGE' });
+  assert.equal(bridge.child, null); assert.equal(f.child.killedWith, 'SIGTERM');
+});
+
 test('disconnect rejects outstanding calls and malformed protocol stops the owned child', async () => {
   const f = childFixture(); const bridge = new CodexBridge({ executable: 'codex', spawnProcess: () => f.child }); await bridge.connect();
   const pending = bridge.request('thread/start', {}); f.child.stdout.write('not-json\n');

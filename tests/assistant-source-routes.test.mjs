@@ -70,6 +70,27 @@ test('preview shows real message dates, has no writes, and requires an explicit 
   assert.equal((await f.call('/sources/import', { previewId: p.id, projectId: 'project-one', language: 'en' })).body.code, 'SOURCE_PREVIEW_EXPIRED');
 });
 
+test('history read failures have distinct bilingual HTTP errors without falsely requiring an upgrade', async t => {
+  const f = await fixture(t); await f.call('/sources/list', {});
+  const request = f.rpc.request.bind(f.rpc);
+  for (const [failure, code] of [['CODEX_REQUEST_FAILED', 'SOURCE_READ_FAILED'], ['CODEX_METHOD_UNSUPPORTED', 'SOURCE_READ_UNAVAILABLE'], ['CODEX_RESPONSE_TOO_LARGE', 'CODEX_RESPONSE_TOO_LARGE']]) {
+    f.rpc.request = async (method, params) => {
+      if (method === 'thread/items/list' || method === 'thread/turns/list' || (method === 'thread/read' && params.includeTurns)) throw new AssistantError(failure);
+      return request(method, params);
+    };
+    const errors = [];
+    for (const language of ['zh', 'en']) {
+      const response = await f.call('/sources/preview', { threadIds: ['source-one'] }, { 'accept-language': language });
+      assert.equal(response.status, 503); assert.equal(response.body.code, code);
+      assert.doesNotMatch(response.body.error, /请更新 Codex|Update Codex|当前工作台服务没有/i);
+      assert.notEqual(response.body.error, code); errors.push(response.body.error);
+    }
+    assert.notEqual(errors[0], errors[1]);
+  }
+  assert.deepEqual((await f.call('/conversations')).body.conversations, []);
+  assert.equal(f.rpc.calls.some(call => /resume|start|fork/.test(call.method)), false);
+});
+
 test('import creates one owned chat with fixed workspace/data and source provenance; repeated requests never replay a turn', async t => {
   const f = await fixture(t); const p = await f.preview(); const request = { previewId: p.id, projectId: 'project-one', language: 'en' };
   const [first, duplicate] = await Promise.all([f.call('/sources/import', request), f.call('/sources/import', request)]);
