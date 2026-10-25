@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { EventEmitter } from 'node:events';
-import { mkdtemp, rm } from 'node:fs/promises';
-import { realpathSync } from 'node:fs';
+import { mkdtemp, rm, mkdir, rename } from 'node:fs/promises';
+import { realpathSync, readFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { resolve } from 'node:path';
 import { createServer } from 'node:http';
@@ -21,7 +21,7 @@ class FakeRpc extends EventEmitter {
     const thread = { id: params.threadId || 'source-one', name: 'Original research', cwd: '/original/research', updatedAt: 1_700_000_000, status: { type: 'notLoaded' } };
     if (method === 'account/read') return { account: { type: 'chatgpt' } };
     if (method === 'thread/list') return { data: [thread, { ...thread, id: 'source-two' }] };
-    if (method === 'thread/read') return { thread };
+    if (method === 'thread/read') { this.state.onRead?.(); if (this.state.readGate) await this.state.readGate; return { thread }; }
     if (method === 'thread/turns/list') return { data: [{ id: 'old-turn', status: this.state.externalRunning ? 'inProgress' : 'completed' }] };
     if (method === 'thread/items/list') return { data: [...this.state.entries].reverse(), nextCursor: null };
     if (method === 'thread/resume') { if (this.state.locked) throw new AssistantError('SOURCE_THREAD_IN_USE', 409); this.state.locked = true; return { thread, cwd: '/original/research', model: 'original-model', approvalPolicy: 'never', sandbox: { type: 'readOnly' } }; }
@@ -41,16 +41,81 @@ class FakeRpc extends EventEmitter {
 async function fixture(t) {
   const root = realpathSync(await mkdtemp(resolve(tmpdir(), 'phd-linked-test-'))); const state = { entries: [entry('old-user', 'A real report.'), entry('old-answer', 'Needs evidence.', 'assistant')], turns: 0 };
   const reader = new FakeRpc(state); const writers = [];
-  const routes = createAssistantRoutes({ root, dataDir: resolve(root, 'data'), store: { state: () => ({ projects: [{ id: 'project-one' }, { id: 'project-two' }] }) }, rpcFactory: () => reader, linkedRpcFactory: () => { const client = new FakeRpc(state, true); writers.push(client); return client; } });
+  const options = { root, dataDir: resolve(root, 'data'), store: { state: () => ({ projects: [{ id: 'project-one' }, { id: 'project-two' }] }) }, rpcFactory: () => reader, linkedRpcFactory: () => { const client = new FakeRpc(state, true); writers.push(client); return client; } };
+  let routes = createAssistantRoutes(options);
   const server = createServer((req, res) => routes.handle(req, res, new URL(req.url, 'http://localhost')));
   await new Promise(done => server.listen(0, '127.0.0.1', done)); const origin = `http://127.0.0.1:${server.address().port}`;
-  const call = async (path, body) => { const response = await fetch(`${origin}/api/assistant${path}`, { method: body === undefined ? 'GET' : 'POST', headers: { origin, 'content-type': 'application/json', 'accept-language': 'en' }, ...(body === undefined ? {} : { body: JSON.stringify(body) }) }); return { status: response.status, body: await response.json() }; };
+  const call = async (path, body, headers = {}) => { const response = await fetch(`${origin}/api/assistant${path}`, { method: body === undefined ? 'GET' : 'POST', headers: { origin, 'content-type': 'application/json', 'accept-language': 'en', ...headers }, ...(body === undefined ? {} : { body: JSON.stringify(body) }) }); return { status: response.status, body: await response.json() }; };
   const preview = async (threadIds = ['source-one']) => { await call('/sources/list', {}); return (await call('/sources/preview', { threadIds })).body.preview; };
   const link = async () => call('/sources/link', { previewId: (await preview()).id, projectId: 'project-one', language: 'en' });
   const finish = (id, answer = 'A new answer.') => { const writer = writers.at(-1); const turnId = `web-turn-${state.turns}`; const item = entry(`assistant-${turnId}`, answer, 'assistant', turnId); state.entries.push(item); writer.emit('notification', { method: 'item/completed', params: { threadId: 'source-one', turnId, item: item.item } }); writer.emit('notification', { method: 'turn/completed', params: { threadId: 'source-one', turn: { id: turnId, status: 'completed' } } }); };
   t.after(async () => { routes.close(); await new Promise(done => server.close(done)); await rm(root, { recursive: true, force: true }); });
-  return { root, state, reader, writers, routes, call, preview, link, finish };
+  const reload = () => { routes.close(); routes = createAssistantRoutes({ ...options, rpcFactory: () => new FakeRpc(state) }); };
+  return { root, state, reader, writers, routes, call, preview, link, finish, reload };
 }
+
+test('unlink persists only the local removal, keeps other chats and allows the original to be linked again', async t => {
+  const f = await fixture(t); const c = (await f.link()).body.conversation;
+  const other = (await f.call('/conversations', { language: 'en', title: 'Keep this chat' })).body.conversation;
+  const sourceBefore = structuredClone(f.state.entries); const callsBefore = f.reader.calls.length;
+  assert.deepEqual((await f.call(`/conversations/${c.id}/unlink`, {})), { status: 200, body: { unlinked: true, id: c.id } });
+  assert.equal(f.reader.calls.length, callsBefore); assert.equal(f.writers.length, 0); assert.deepEqual(f.state.entries, sourceBefore);
+  assert.deepEqual(JSON.parse(readFileSync(resolve(f.root, 'data/assistant/conversations.json'))).conversations.map(item => item.id), [other.id]);
+  f.reload();
+  assert.deepEqual((await f.call('/conversations')).body.conversations.map(item => item.id), [other.id]);
+  assert.equal((await f.call(`/conversations/${c.id}`)).status, 404);
+  assert.equal((await f.call(`/conversations/${c.id}/unlink`, {})).status, 404);
+  assert.equal((await f.call(`/conversations/${other.id}/unlink`, {})).body.code, 'SOURCE_NOT_LINKED');
+  const linkedAgain = (await f.link()).body.conversation;
+  assert.notEqual(linkedAgain.id, c.id); assert.equal(linkedAgain.linkedSource.threadId, c.linkedSource.threadId);
+});
+
+test('unlink rejects a local active turn without interruption but permits an externally active source', async t => {
+  const f = await fixture(t); const c = (await f.link()).body.conversation;
+  await f.call(`/conversations/${c.id}/messages`, { text: 'Continue' });
+  const writer = f.writers[0]; const before = writer.calls.length;
+  assert.equal((await f.call(`/conversations/${c.id}/unlink`, {})).body.code, 'CODEX_BUSY');
+  assert.equal(writer.calls.length, before); assert.equal(writer.closed, false);
+  f.finish(c.id); f.state.externalRunning = true;
+  assert.equal((await f.call(`/conversations/${c.id}`)).body.conversation.linkedSource.externalRunning, true);
+  const readBefore = f.reader.calls.length;
+  assert.equal((await f.call(`/conversations/${c.id}/unlink`, {})).status, 200);
+  assert.equal(f.reader.calls.length, readBefore); assert.equal(f.state.externalRunning, true);
+});
+
+test('unlink validates JSON and same-origin writes without removing the entry on rejection', async t => {
+  const f = await fixture(t); const c = (await f.link()).body.conversation;
+  const path = `/conversations/${c.id}/unlink`;
+  assert.equal((await f.call(path, {}, { origin: 'https://outside.example' })).body.code, 'BAD_ORIGIN');
+  assert.equal((await f.call(path, {}, { 'sec-fetch-site': 'cross-site' })).status, 403);
+  assert.equal((await f.call(path, {}, { 'content-type': 'text/plain' })).body.code, 'JSON_REQUIRED');
+  assert.equal((await f.call(path, { deleteSource: true })).body.code, 'INVALID_BODY');
+  assert.equal((await f.call('/conversations')).body.conversations[0].id, c.id);
+});
+
+for (const operation of ['read', 'send']) test(`unlink during a pending ${operation} cannot resurrect the entry or start a detached turn`, async t => {
+  const f = await fixture(t); const c = (await f.link()).body.conversation;
+  let release, entered; const started = new Promise(resolve => { entered = resolve; });
+  f.state.readGate = new Promise(resolve => { release = resolve; }); f.state.onRead = entered;
+  const pending = f.call(`/conversations/${c.id}${operation === 'send' ? '/messages' : ''}`, operation === 'send' ? { text: 'Continue' } : undefined);
+  await started;
+  assert.equal((await f.call(`/conversations/${c.id}/unlink`, {})).status, 200);
+  release(); const result = await pending;
+  assert.equal(result.status, 404); assert.equal(f.writers.length, 0);
+  assert.deepEqual((await f.call('/conversations')).body.conversations, []);
+  assert.deepEqual(JSON.parse(readFileSync(resolve(f.root, 'data/assistant/conversations.json'))).conversations, []);
+});
+
+test('a persistence failure restores the local entry and preserves the original saved history', async t => {
+  const f = await fixture(t); const c = (await f.link()).body.conversation;
+  const file = resolve(f.root, 'data/assistant/conversations.json'), backup = `${file}.backup`;
+  await rename(file, backup); await mkdir(file);
+  try {
+    assert.equal((await f.call(`/conversations/${c.id}/unlink`, {})).body.code, 'CODEX_STORAGE_FAILED');
+    assert.equal((await f.call('/conversations')).body.conversations[0].id, c.id);
+    assert.equal(JSON.parse(readFileSync(backup)).conversations[0].id, c.id); assert.equal(f.writers.length, 0);
+  } finally { await rm(file, { recursive: true }); await rename(backup, file); }
+});
 
 test('link binds one previewed source, reuses its descriptor and does not load a writer or run a model', async t => {
   const f = await fixture(t); const status = await f.call('/status'); assert.deepEqual(status.body.capabilities, { sourceImport: true, linkedChats: true });

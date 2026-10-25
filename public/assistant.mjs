@@ -35,6 +35,8 @@ const words = {
     linked:'已关联 Codex 原对话', linkedShort:'已关联', linkedHelp:'这里与 Codex 使用同一个对话。用“一键更新”把明确进展保存到科研记录。',
     linkedProject:'原项目目录', linkedPartial:'网页只展示最近的部分文字；原对话上下文仍由 Codex 保留。',
     syncNow:'刷新对话', syncing:'正在同步…', synced:'消息已同步', syncFailed:'暂时无法同步，已保留当前消息与草稿。',
+    unlink:'删除关联', unlinkConfirm:'确认解除关联', unlinkCancel:'取消', unlinking:'正在解除…', unlinked:'已解除关联，Codex 原对话和科研记录已保留。',
+    unlinkHelp:'仅删除此工作台入口、本地聊天缓存及未发送草稿。Codex 原对话和已经保存的科研记录都会保留，以后可重新关联。', unlinkBusy:'请等待工作台回复完成或先点击停止，再解除关联。',
     externalRunning:'Codex 另一窗口正在处理这个对话。请等待完成，或回到 Codex 处理需要确认的内容。草稿已保留。', externalStatus:'原对话处理中',
     syncBeforeSend:'同步恢复后即可发送；你可以先编辑下一条消息。',
     sourceInUse:'原对话仍被 Codex 占用。请先停止原对话；若切换后仍被占用，退出 Codex 桌面应用，再在网页继续。', notSent:'这条消息未发送，草稿已保留。',
@@ -73,6 +75,8 @@ const words = {
     linked:'Linked to the original Codex chat', linkedShort:'Linked', linkedHelp:'This is the same chat as in Codex. Use “Update progress” to save clear progress to research records.',
     linkedProject:'Original project directory', linkedPartial:'This page displays only recent text. Codex retains the original chat context.',
     syncNow:'Refresh chat', syncing:'Syncing…', synced:'Messages synced', syncFailed:'Sync is temporarily unavailable. Your current messages and draft are kept.',
+    unlink:'Remove link', unlinkConfirm:'Confirm unlink', unlinkCancel:'Cancel', unlinking:'Unlinking…', unlinked:'Link removed. The original Codex chat and research records are kept.',
+    unlinkHelp:'Removes this workspace entry, its local chat cache and unsent draft. The original Codex chat and saved research records are kept. You can link the chat again later.', unlinkBusy:'Wait for the workspace reply or stop it before unlinking.',
     externalRunning:'Another Codex window is working in this chat. Wait for it to finish, or return to Codex to handle any requests. Your draft is kept.', externalStatus:'Active in Codex',
     syncBeforeSend:'Sending will be available when sync recovers. You can prepare your next message now.',
     sourceInUse:'Codex still owns this chat. Stop the original chat first. If switching away does not release it, quit the Codex desktop app, then continue here.', notSent:'This message was not sent. Your draft is kept.',
@@ -154,6 +158,7 @@ export function createAssistantWorkspace({api, language='zh', getProjects=()=>[]
   let listCollapsed=false, labels=[], requestSignature='', listSignature='', projectSignature='', messageSignature='';
   let currentLanguage='', sendingId=null, requestBusy=new Set(), completedVersions=new Map();
   let sourceImporter;
+  let unlinkTarget=null, unlinkingId=null;
   const drafts=new Map(), requestValues=new Map(), messageNodes=new Map(), requestNodes=new Map(), adviceRequests=new Map(), ref={};
   const lang=()=>languageCode(typeof language==='function'?language():language);
   const copy=()=>assistantCopy(lang());
@@ -227,9 +232,18 @@ export function createAssistantWorkspace({api, language='zh', getProjects=()=>[]
     append(chatTitle,ref.title,ref.chatMeta);append(chatHeader,chatTitle,ref.chatStatus);
     ref.linked=element('section','assistant-linked');
     const linkedTop=element('div','assistant-linked-top');ref.linkedTitle=localized(element('strong'),'linked');ref.linkedRefresh=button('button button-secondary button-small','',refreshLinked);
-    append(linkedTop,ref.linkedTitle,ref.linkedRefresh);ref.linkedHelp=localized(element('p'),'linkedHelp');ref.linkedCwd=element('p','assistant-linked-path');
+    ref.unlink=localizedButton('button button-secondary button-small','unlink',()=>{unlinkTarget=selectedId;render();ref.unlinkCancel.focus();});
+    const linkedActions=element('div','assistant-linked-actions');append(linkedActions,ref.linkedRefresh,ref.unlink);
+    append(linkedTop,ref.linkedTitle,linkedActions);ref.linkedHelp=localized(element('p'),'linkedHelp');ref.linkedCwd=element('p','assistant-linked-path');
     ref.linkedState=element('p','assistant-linked-state');ref.linkedState.setAttribute('role','status');ref.linkedPartial=localized(element('p','assistant-linked-partial'),'linkedPartial');
     append(ref.linked,linkedTop,ref.linkedHelp,ref.linkedCwd,ref.linkedState,ref.linkedPartial);
+    ref.unlinkPanel=element('div','assistant-unlink-confirm');ref.unlinkPanel.setAttribute('role','group');
+    ref.unlinkPanel.setAttribute('aria-labelledby','assistant-unlink-help');
+    const unlinkHelp=localized(element('p'),'unlinkHelp');unlinkHelp.id='assistant-unlink-help';
+    ref.unlinkCancel=localizedButton('button button-secondary button-small','unlinkCancel',()=>{unlinkTarget=null;render();ref.unlink.focus();});
+    ref.unlinkConfirm=button('button button-secondary button-small','',unlinkConversation);
+    const unlinkActions=element('div','assistant-linked-actions');append(unlinkActions,ref.unlinkCancel,ref.unlinkConfirm);
+    append(ref.unlinkPanel,unlinkHelp,unlinkActions);ref.linked.append(ref.unlinkPanel);
     ref.projectWrap=element('div','assistant-project-choice');
     ref.projectLabel=localized(element('label'),'project'); ref.projectLabel.htmlFor='assistant-project';
     ref.project=element('select'); ref.project.id='assistant-project';
@@ -449,7 +463,7 @@ export function createAssistantWorkspace({api, language='zh', getProjects=()=>[]
     setText(ref.actionHint,draft.action?w[`${draft.action}Hint`]:'');
     for(const [action,node] of ref.shortcutButtons)node.setAttribute('aria-pressed',String(action===draft.action));
     ref.attach.title=w.attachmentHelp;
-    ref.send.disabled=sending || busy || blocked || refreshingLinked || loading || !ready() || (!draft.text.trim() && !draft.action);
+    ref.send.disabled=sending || unlinkingId===selectedId && Boolean(selectedId) || busy || blocked || refreshingLinked || loading || !ready() || (!draft.text.trim() && !draft.action);
     setText(ref.send,sending?w.sending:w.send);
     ref.stop.hidden=!busy || externalActive(conversation);ref.stop.disabled=stopping || sending;
     setText(ref.stop,stopping?w.stopping:w.stop);
@@ -468,6 +482,11 @@ export function createAssistantWorkspace({api, language='zh', getProjects=()=>[]
     if(!source)return;
     setText(ref.linkedCwd,source.cwd?`${w.linkedProject}: ${source.cwd}`:'');ref.linkedCwd.hidden=!source.cwd;
     setText(ref.linkedRefresh,refreshingLinked?w.syncing:w.syncNow);ref.linkedRefresh.disabled=refreshingLinked || loading || sending;
+    const unlinkBusy=active(conversation) && !externalActive(conversation) || sending || stopping;
+    ref.unlink.disabled=unlinkBusy || Boolean(unlinkingId);ref.unlink.title=unlinkBusy?w.unlinkBusy:w.unlinkHelp;
+    ref.unlinkPanel.hidden=unlinkTarget!==selectedId;
+    setText(ref.unlinkConfirm,unlinkingId===selectedId?w.unlinking:w.unlinkConfirm);
+    ref.unlinkConfirm.disabled=unlinkBusy || Boolean(unlinkingId);ref.unlinkCancel.disabled=Boolean(unlinkingId);
     ref.linkedPartial.hidden=!source.truncated;
     const date=new Date(source.syncedAt || '');
     const time=Number.isFinite(date.getTime())?new Intl.DateTimeFormat(lang()==='en'?'en-US':'zh-CN',{hour:'2-digit',minute:'2-digit'}).format(date):'';
@@ -527,7 +546,7 @@ export function createAssistantWorkspace({api, language='zh', getProjects=()=>[]
     finally{refreshingLinked=false;render();}
   }
   async function poll(force=false) {
-    if(!mounted || pollInFlight){if(mounted)schedule();return;}
+    if(!mounted || pollInFlight || unlinkingId){if(mounted)schedule();return;}
     pollInFlight=true;
     const epoch=mountEpoch, version=selectionVersion, selected=selectedId, writes=mutationVersion;
     try{
@@ -565,9 +584,24 @@ export function createAssistantWorkspace({api, language='zh', getProjects=()=>[]
     finally{connecting=false;render();poll(true);}
   }
 
+  async function unlinkConversation() {
+    if(!selectedId || unlinkTarget!==selectedId || !conversation?.linkedSource || unlinkingId || sending)return;
+    const id=selectedId,version=selectionVersion;
+    unlinkingId=id;mutationVersion++;messageError='';errorAction=null;render();
+    try {
+      await callApi(`${requestPath(id)}/unlink`,{method:'POST',body:{}});
+      summaries=summaries.filter(item=>item.id!==id);drafts.delete(id);completedVersions.delete(id);lastOverview=0;
+      if(selectedId===id){newConversation();info=copy().unlinked;}
+    } catch(error) {
+      if(selectedId===id && version===selectionVersion)fail(error,'network',unlinkConversation);
+    } finally {
+      unlinkingId=null;mutationVersion++;render();poll(true);schedule();
+    }
+  }
+
   async function selectConversation(id) {
     if(id===selectedId && conversation)return;
-    selectedId=id;conversation=null;loading=true;selectionVersion++;messageSignature='';requestSignature='';info='';messageError='';errorAction=null;
+    unlinkTarget=null;selectedId=id;conversation=null;loading=true;selectionVersion++;messageSignature='';requestSignature='';info='';messageError='';errorAction=null;
     const version=selectionVersion;render();
     try{const result=await callApi(requestPath(id));if(version===selectionVersion){updateConversation(result.conversation);scrollToLatest();}}
     catch(error){if(version===selectionVersion){loading=false;fail(error,'missingConversation',()=>selectConversation(id));}}
@@ -575,12 +609,14 @@ export function createAssistantWorkspace({api, language='zh', getProjects=()=>[]
   }
 
   function newConversation() {
+    unlinkTarget=null;
     selectedId=null;conversation=null;loading=false;selectionVersion++;messageSignature='';requestSignature='';info='';messageError='';errorAction=null;
     const id=getProjectId();draftProject=(getProjects() || []).some(project=>project.id===id)?id:'';draftProjectInitialized=true;
     render();if(root && mounted){ref.input.focus();scrollToLatest();}schedule();
   }
 
   function openCreatedConversation(created) {
+    unlinkTarget=null;
     // Imported, linked and advice chats have separate drafts. Opening one never
     // consumes the current chat draft or the draft for a future new chat.
     mutationVersion++;selectionVersion++;selectedId=created.id;conversation=created;loading=false;
@@ -634,7 +670,7 @@ export function createAssistantWorkspace({api, language='zh', getProjects=()=>[]
 
   async function send() {
     const draft=currentDraft();const text=draft.text.trim() || (draft.action?copy()[draft.action]:'');
-    if(sending || active(conversation) || linkedBlocked(conversation) || refreshingLinked || loading)return;
+    if(sending || unlinkingId===selectedId && Boolean(selectedId) || active(conversation) || linkedBlocked(conversation) || refreshingLinked || loading)return;
     if(!ready()){messageError=copy().disconnected;errorAction=connect;render();return;}
     if(!text){info=copy().noMessage;render();return;}
     if(!assistantMessageFits(text)){messageError=copy().largeMessage;render();return;}

@@ -199,6 +199,52 @@ class ModelElement {
 function modelDocument(){const doc={activeElement:null};doc.createElement=tag=>new ModelElement(tag,doc);return doc;}
 function find(root,predicate){if(predicate(root))return root;for(const child of root.children){const result=find(child,predicate);if(result)return result;}return null;}
 
+test('unlink confirms local removal, preserves drafts on cancel/failure and clears the selected entry after success',async()=>{
+  const previous=globalThis.document;globalThis.document=modelDocument();let workspace;
+  try {
+    let linked=true,failUnlink=true;
+    let current={id:'linked-chat',title:'Original <chat>',status:'idle',messages:[],pendingRequests:[],activity:[],linkedSource:{threadId:'source-one',externalRunning:true}};
+    const calls=[];let researchWrites=0;
+    const api=async(path,options={})=>{
+      calls.push({path,...options});
+      if(path.endsWith('/status'))return {connected:true,loggedIn:true,authMode:'chatgpt'};
+      if(path==='/api/assistant/conversations')return {conversations:linked?[current]:[]};
+      if(path.endsWith('/linked-chat'))return {conversation:current};
+      if(path.endsWith('/unlink')){if(failUnlink)throw new Error('Unable to save history');linked=false;return {unlinked:true,id:'linked-chat'};}
+      throw new Error(`Unexpected path ${path}`);
+    };
+    workspace=createAssistantWorkspace({api,language:'en',onResearchChange:()=>researchWrites++});
+    const container=document.createElement('main');container.connected=true;workspace.mount(container);await tick();
+    const input=find(container,node=>node.id==='assistant-message');input.value='New chat draft';input.dispatch('input');
+    find(container,node=>node.dataset.conversationId==='linked-chat').dispatch('click');await tick();
+    input.value='Linked chat draft';input.dispatch('input');
+    const remove=find(container,node=>node.textContent==='Remove link' && node.tagName==='button');
+    const confirm=find(container,node=>node.textContent==='Confirm unlink' && node.tagName==='button');
+    const cancel=find(container,node=>node.textContent==='Cancel' && node.tagName==='button');
+    const panel=find(container,node=>node.className==='assistant-unlink-confirm');
+    assert.equal(remove.disabled,false,'external activity does not block local unlink');assert.equal(panel.hidden,true);
+    remove.dispatch('click');assert.equal(panel.hidden,false);assert.equal(document.activeElement,cancel);
+    assert.match(panel.textContent,/original Codex chat and saved research records are kept/);
+    cancel.dispatch('click');assert.equal(panel.hidden,true);assert.equal(input.value,'Linked chat draft');
+    assert.equal(calls.filter(item=>item.path.endsWith('/unlink')).length,0);
+    remove.dispatch('click');confirm.dispatch('click');await tick();
+    assert.equal(input.value,'Linked chat draft');assert.equal(panel.hidden,false);
+    assert.match(find(container,node=>node.className==='assistant-error').textContent,/Unable to save history/);
+    current={...current,status:'running',linkedSource:{...current.linkedSource,externalRunning:false}};
+    find(container,node=>node.textContent==='Refresh chat' && node.tagName==='button').dispatch('click');await tick();
+    assert.equal(remove.disabled,true);assert.equal(confirm.disabled,true);
+    current={...current,status:'idle'};
+    find(container,node=>node.textContent==='Refresh chat' && node.tagName==='button').dispatch('click');await tick();
+    failUnlink=false;confirm.dispatch('click');await tick();await tick();
+    assert.equal(find(container,node=>node.dataset.conversationId==='linked-chat'),null);
+    assert.equal(find(container,node=>node.className==='assistant-linked').hidden,true);
+    assert.equal(input.value,'New chat draft');assert.equal(researchWrites,0);
+    assert.match(find(container,node=>node.className==='assistant-info').textContent,/original Codex chat and research records are kept/);
+    assert.equal(calls.filter(item=>item.path.endsWith('/unlink')).length,2);
+    assert.equal(calls.filter(item=>item.path.endsWith('/unlink')).every(item=>item.method==='POST' && Object.keys(item.body).length===0),true);
+  } finally {workspace?.unmount();globalThis.document=previous;}
+});
+
 test('dialog renders hostile source text literally, keeps keyboard focus and guides an empty workspace to projects',async()=>{
   const previous=globalThis.document;globalThis.document=modelDocument();
   try{
